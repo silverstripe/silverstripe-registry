@@ -1,2 +1,2 @@
-silverstripe-registry
+SilverStripe Registry
 =====================
