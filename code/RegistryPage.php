@@ -99,7 +99,7 @@ class RegistryPage_Controller extends Page_Controller {
 		));
 
 		$form = new Form($this, 'Form', $fields, new FieldList(
-			new FormAction('search', 'Search')
+			new FormAction('doRegistrySearch', 'Search')
 		));
 
 		// load existing request GET data into the form if available
@@ -147,7 +147,7 @@ class RegistryPage_Controller extends Page_Controller {
 	 * @param SS_HTTPRequest
 	 * @return array
 	 */
-	public function search($data, $form, $request) {
+	public function doRegistrySearch($data, $form, $request) {
 		$pageLength = $this->dataRecord->getPageLength();
 		$start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 		$paged = isset($data['Unpaged']) ? false : true;
@@ -185,7 +185,7 @@ class RegistryPage_Controller extends Page_Controller {
 		$vars = $request->getVars();
 		$vars['Unpaged'] = true;
 
-		$search = $this->search(
+		$search = $this->doRegistrySearch(
 			$vars,
 			new Form($this, 'Form', new FieldList(), new FieldList()),
 			new SS_HTTPRequest('GET', '')
@@ -315,7 +315,7 @@ class RegistryPage_Controller extends Page_Controller {
 		$arr = array_merge(
 			$columns,
 			array(
-				'action_search' => 'Search',
+				'action_doRegistrySearch' => 'Search',
 				'Sort' => '',
 				'Dir' => ''
 			)
