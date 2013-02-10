@@ -10,9 +10,9 @@ for a particular type of data.
  * SilverStripe 3.0.2+
  * MySQL 5.1+ or SQL Server 2008+ database
 
-PostgreSQL might have problems with searches, as queries done using LIKE are case sensitive.
-Unfortunately, you'd have to replace everything with ILIKE, but that's not great for database
-abstraction.
+## Known issues
+
+PostgreSQL databases might have problems with searches, as queries done using `LIKE` are case sensitive.
 
 ## Installation
 
@@ -27,14 +27,16 @@ to search through the data.
 ### Defining the data
 
 Each registry is a list of a single type of DataObject. These DataObject definitions must implement
-the RegistryDataInterface and the getSearchFields abstract function, so:
+the `RegistryDataInterface` and the `getSearchFields` abstract function.
+
+Here's an example of what a staff member definition might look like:
 
 	class StaffMember extends DataObject implements RegistryDataInterface {
-		static $db = array(
+		public static $db = array(
 			'Name' => 'Varchar(255)',
 			'PhoneNumber' => 'Varchar(50)'
 		);
-
+		
 		public function getSearchFields() {
 			return new FieldList(
 				new TextField('Name'),
@@ -43,8 +45,8 @@ the RegistryDataInterface and the getSearchFields abstract function, so:
 		}
 	}
 
-Run /dev/build and now the Registry tab will appear in the CMS. From here you can use it like any
-other ModelAdmin.
+Run /dev/build and now the Registry tab will appear in the CMS. From here you can use this tab to manage
+your registry data. All DataObject classes that implement `RegistryDataInterface` will appear in here.
 
 ### Viewing the data
 
@@ -56,15 +58,11 @@ Save and Publish the page and view it in the front end.
 ### Overriding the template
 
 While the default template does its best to be functional and easy-to-style, it's quite likely that
-you'll need to change the templates. You can do so by placing the templates RegistryPage.ss and
-RegistryPage_show.ss in your themes templates/Layout folder. You can base these off the files found
+you'll need to change the templates. You can do so by placing the templates `RegistryPage.ss` and
+`RegistryPage_show.ss` in your themes templates/Layout folder. You can base these off the files found
 in registry/templates/Layout.
 
 As a further layer of customisation, you can create templates that will be only used when viewing
 specific registries. So if you wanted to create a template that would only be used to view the
-StaffMember registry, you would create RegistryPage_StaffMember.ss and RegistryPage_StaffMember_show.ss
+StaffMember registry, you would create `RegistryPage_StaffMember.ss` and `RegistryPage_StaffMember_show.ss`
 
-
-## TODO
-
- * Scaffolding of getSearchFields or getResultColumns if not present, use FormScaffolder class?
