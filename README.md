@@ -31,6 +31,8 @@ the `RegistryDataInterface` and the `getSearchFields` abstract function.
 
 Here's an example of what a staff member definition might look like:
 
+	:::php
+	<?php
 	class StaffMember extends DataObject implements RegistryDataInterface {
 		public static $db = array(
 			'Name' => 'Varchar(255)',
