@@ -1,0 +1,4 @@
+Director:
+    rules:
+        'registry-feed': 'RegistryImportFeed_Controller'
+

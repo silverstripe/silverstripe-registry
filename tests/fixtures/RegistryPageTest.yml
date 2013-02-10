@@ -1,0 +1,14 @@
+RegistryPage:
+    contact-registrypage:
+        Title: Contact search
+        URLSegment: contact-search
+        DataClass: RegistryPageTestContact
+    contact-registrypage-with-length:
+        Title: Contact search with limit
+        URLSegment: contact-search-with-limit
+        DataClass: RegistryPageTestContact
+        PageLength: 20
+RegistryPageTestSubclass:
+    registrypage-subclass:
+        Title: Subclass
+        DataClass: RegistryPageTestContact
