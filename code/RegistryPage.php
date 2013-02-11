@@ -177,7 +177,7 @@ class RegistryPage_Controller extends Page_Controller {
 
 		return array(
 			'BackLink' => Convert::raw2xml(urlencode(http_build_query($data))),
-			'Results' => $results
+			'RegistryEntries' => $results
 		);
 	}
 
