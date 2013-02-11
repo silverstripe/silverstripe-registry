@@ -21,6 +21,10 @@ class RegistryPage extends Page {
 	}
 
 	public function getDataSingleton() {
+		$class = $this->getDataClass();
+		if (!$class) {
+			return NULL;
+		}
 		return singleton($this->getDataClass());
 	}
 
@@ -130,7 +134,12 @@ class RegistryPage_Controller extends Page_Controller {
 	}
 
 	public function Form() {
-		$fields = $this->dataRecord->getDataSingleton()->getSearchFields();
+		$singleton = $this->dataRecord->getDataSingleton();
+		if (!$singleton) {
+			return;
+		}
+
+		$fields = $singleton->getSearchFields();
 		$fields->merge(new FieldList(
 			new HiddenField('Sort', ''),
 			new HiddenField('Dir', '')
@@ -308,6 +317,10 @@ class RegistryPage_Controller extends Page_Controller {
 	 */
 	protected function queryList($where = array(), $orderby = array(), $start, $pageLength, $paged = true) {
 		$dataClass = $this->dataRecord->getDataClass();
+		if (!$dataClass) {
+			return new PaginatedList(new ArrayList());
+		}
+
 		$resultColumns = $this->dataRecord->getDataSingleton()->summaryFields();
 		$resultColumns['ID'] = 'ID';
 		$results = new ArrayList();
