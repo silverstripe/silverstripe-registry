@@ -94,7 +94,7 @@ You can do this by defining the `Link` method on your registry DataObject. For e
 	class StaffMember extends DataObject implements RegistryDataInterface {
 		//...
 		public function Link($action = 'show') {
-			$page = RegistryPage::get()->filter('DataClass', get_class($this))->First();
+			$page = RegistryPage::get()->filter('DataClass', 'StaffMember')->First();
 			return Controller::join_links($page->Link(), $action, $this->ID);
 		}
 		//...
