@@ -5,19 +5,7 @@
 This module allows a website user to search, find details for, and export search results
 for a particular type of data.
 
-## Requirements
-
- * SilverStripe 3.0.2+
- * MySQL 5.1+ or SQL Server 2008+ database
-
-## Known issues
-
-PostgreSQL databases might have problems with searches, as queries done using `LIKE` are case sensitive.
-
-## Installation
-
-Copy the registry directory into your SilverStripe project, then append dev/build?flush=all
-to the website URL in your browser. e.g. http://mysite.com/dev/build?flush=all
+One example this could be used for is a listing of staff members.
 
 ## Instructions
 
