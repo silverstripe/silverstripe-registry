@@ -197,7 +197,7 @@ class RegistryPage_Controller extends Page_Controller {
 			new SS_HTTPRequest('GET', '')
 		);
 
-		if(!isset($search['Results'])) return array();
+		if(!isset($search['RegistryEntries'])) return array();
 
 		if (!file_exists(REGISTRY_EXPORT_PATH)) {
 			mkdir(REGISTRY_EXPORT_PATH);
@@ -215,7 +215,7 @@ class RegistryPage_Controller extends Page_Controller {
 		fputcsv($file, $cols, ',', '"');
 
 		// put the data in the rows after
-		foreach($search['Results'] as $result) {
+		foreach($search['RegistryEntries'] as $result) {
 			$item = array();
 			foreach($cols as $col) {
 				$item[] = $result->$col;
