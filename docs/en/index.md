@@ -107,6 +107,12 @@ The default template `RegistryPage_show.ss` is very simple and only shows a debu
 representation of the data. See "Overriding templates" below on how to change this
 template.
 
+### Breadcrumbs
+
+When viewing data through the `show` action, the title of the current item will be appended to the
+end of the breadcrumbs array. The title will be picked up in the default way of DataObject: it will
+first look for `Title`, then for `Name`, then default to the `ID`.
+
 ### Overriding templates
 
 While the default template does its best to be functional and easy-to-style, it's quite likely that
