@@ -57,7 +57,53 @@ and set it to the DataObject that you just created, in this case "Staff Member".
 
 Save and Publish the page and view it in the front end.
 
-### Overriding the template
+### Changing the search results columns
+
+SilverStripe has a built-in way of defining summary fields on a DataObject. You can do that by defining
+the static `$summary_fields` in the DataObject definition. The array is a map of `$db` column name to
+a viewable title the user will see. In this example we're adding the phone number to the summary list.
+
+	:::php
+	<?php
+	class StaffMember extends DataObject implements RegistryDataInterface {
+		//...
+		public static $summary_fields = array(
+			'Name' => 'Name',
+			'PhoneNumber' => 'Phone number'
+		);
+		//...
+	}
+
+Now when you view the staff member listing on the `RegistryPage` it will show the two columns we
+defined above.
+
+This summary definition will also be used in the Registry tab of the CMS.
+
+### Creating a detailed view of a search result
+
+Sometimes the records listed you'll want a user to click through and see more details.
+
+You can do this by defining the `Link` method on your registry DataObject. For example:
+
+	:::php
+	<?php
+	class StaffMember extends DataObject implements RegistryDataInterface {
+		//...
+		public function Link($action = 'show') {
+			$page = RegistryPage::get()->filter('DataClass', get_class($this))->First();
+			return Controller::join_links($page->Link(), $action, $this->ID);
+		}
+		//...
+	}
+
+This method can return a link to any place you wish. The above example will link to
+the `show` action on the RegistryPage for StaffMember.
+
+The default template `RegistryPage_show.ss` is very simple and only shows a debug
+representation of the data. See "Overriding templates" below on how to change this
+template.
+
+### Overriding templates
 
 While the default template does its best to be functional and easy-to-style, it's quite likely that
 you'll need to change the templates. You can do so by placing the templates `RegistryPage.ss` and

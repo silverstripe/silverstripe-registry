@@ -20,7 +20,7 @@ $Content
 		<% control RegistryEntries %>
 			<tr class="<% if FirstLast %>$FirstLast <% end_if %>$EvenOdd">
 				<% control Columns %>
-				<td>$Value</td>
+				<td><% if Link %><a href="$Link">$Value</a><% else %>$Value<% end_if %></td>
 				<% end_control %>
 			</tr>
 		<% end_control %>

@@ -138,6 +138,7 @@ class RegistryPage_Controller extends Page_Controller {
 			$list->push(new ArrayData(array(
 				'Name' => $name,
 				'Title' => $title,
+				'Link' => (($result && $result->hasMethod('Link')) ? $result->Link() : ''),
 				'Value' => ($result ? $result->obj($name) : '')
 			)));
 		}
@@ -335,7 +336,27 @@ class RegistryPage_Controller extends Page_Controller {
 	}
 
 	public function getTemplateList($action) {
-		$templates = parent::getTemplateList($action);
+		// Add action-specific templates for inheritance chain
+		$templates = array();
+		$parentClass = $this->class;
+		if($action && $action != 'index') {
+			$parentClass = $this->class;
+			while($parentClass != "Controller") {
+				$templates[] = strtok($parentClass,'_') . '_' . $action;
+				$parentClass = get_parent_class($parentClass);
+			}
+		}
+		// Add controller templates for inheritance chain
+		$parentClass = $this->class;
+		while($parentClass != "Controller") {
+			$templates[] = strtok($parentClass,'_');
+			$parentClass = get_parent_class($parentClass);
+		}
+
+		$templates[] = 'Controller';
+
+		// remove duplicates
+		$templates = array_unique($templates);
 
 		$actionlessTemplates = array();
 
