@@ -45,6 +45,44 @@ class RegistryPage extends Page {
 		return $lastUpdated;
 	}
 
+	/**
+	 * Modified version of Breadcrumbs, to cater for viewing items.
+	 */
+	public function Breadcrumbs($maxDepth = 20, $unlinked = false, $stopAtPageType = false, $showHidden = false) {
+		$page = $this;
+		$pages = array();
+		
+		while(
+			$page  
+ 			&& (!$maxDepth || count($pages) < $maxDepth) 
+ 			&& (!$stopAtPageType || $page->ClassName != $stopAtPageType)
+ 		) {
+			if($showHidden || $page->ShowInMenus || ($page->ID == $this->ID)) { 
+				$pages[] = $page;
+			}
+			
+			$page = $page->Parent;
+		}
+
+		// Add on the item we're currently showing.
+		$controller = Controller::curr();
+		if ($controller) {
+			$request = $controller->getRequest();
+			if ($request->param('Action') == 'show') {
+				$id = $request->param('ID');
+				if ($id) {
+					$object = DataObject::get_by_id($this->getDataClass(), $id);
+					array_unshift($pages, $object);
+				}
+			}
+		}
+		
+		$template = new SSViewer('BreadcrumbsTemplate');
+		
+		return $template->process($this->customise(new ArrayData(array(
+			'Pages' => new ArrayList(array_reverse($pages))
+		))));
+	}
 }
 class RegistryPage_Controller extends Page_Controller {
 
