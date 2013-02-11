@@ -38,6 +38,22 @@ Here's an example of what a staff member definition might look like:
 Run /dev/build and now the Registry tab will appear in the CMS. From here you can use this tab to manage
 your registry data. All DataObject classes that implement `RegistryDataInterface` will appear in here.
 
+### Managing the data
+
+![Registry admin](_images/registry-admin.jpg)
+
+Pictured above is a summary of the admin area for managing registry data.
+
+Multiple tabs will appear if you have multiple classes implementing `RegistryDataInterface`.
+
+#### Importing data
+
+On the left under "Filter" is a panel for uploading a CSV with data for that particular registry. A link
+for toggling the specification is provided, so you can match the column headers in your CSV file to the
+database columns. "Clear Database before import" will truncate the table for that data before importing
+the new one, useful if you have a master CSV copy of staff members, for example, and you don't want it
+to create duplicates on each import.
+
 ### Viewing the data
 
 Create a new page of the "Registry Page" type. In the Content tab, find the "Data class" drop down
