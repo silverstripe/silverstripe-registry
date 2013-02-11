@@ -121,8 +121,14 @@ class RegistryPage_Controller extends Page_Controller {
 	public function RegistryEntries() {
 		$pageLength = $this->dataRecord->getPageLength();
 		$start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+		$sort = isset($_GET['Sort']) ? $_GET['Sort'] : 'ID';
+		
+		$orderby = array();
+		$direction = (!empty($_GET['Dir']) && in_array($_GET['Dir'], array('ASC', 'DESC'))) ? $_GET['Dir'] : 'ASC';
+		$orderby = array();
+		if ($sort) $orderby[$sort] = $direction;
 
-		return $this->queryList(array(), array(), $start, $pageLength, true);
+		return $this->queryList(array(), $orderby, $start, $pageLength, true);
 	}
 
 	public function Columns($result = null) {
