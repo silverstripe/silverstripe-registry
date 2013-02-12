@@ -14,10 +14,12 @@ to search through the data.
 
 ### Defining the data
 
-Each registry is a list of a single type of DataObject. These DataObject definitions must implement
-the `RegistryDataInterface` and the `getSearchFields` abstract function.
+Each registry is a list of a single class of DataObject.
 
-Here's an example of what a staff member definition might look like:
+A DataObject must implement `RegistryDataInterface` and the
+`getSearchFields` abstract function to be picked up by this module.
+
+In this example we've created a `StaffMember` class:
 
 	:::php
 	<?php
@@ -35,8 +37,7 @@ Here's an example of what a staff member definition might look like:
 		}
 	}
 
-Run /dev/build and now the Registry tab will appear in the CMS. From here you can use this tab to manage
-your registry data. All DataObject classes that implement `RegistryDataInterface` will appear in here.
+Once that's defined, we run `dev/build?flush=1` to build the database with the new class.
 
 ### Managing the data
 
@@ -48,16 +49,16 @@ Multiple tabs will appear if you have multiple classes implementing `RegistryDat
 
 #### Importing data
 
-On the left under "Filter" is a panel for uploading a CSV with data for that particular registry. A link
+On the left under *Filter* is a panel for uploading a CSV with data for that particular registry. A link
 for toggling the specification is provided, so you can match the column headers in your CSV file to the
-database columns. "Clear Database before import" will truncate the table for that data before importing
+database columns. *Clear Database before import* will truncate the table for that data before importing
 the new one, useful if you have a master CSV copy of staff members, for example, and you don't want it
 to create duplicates on each import.
 
 ### Viewing the data
 
-Create a new page of the "Registry Page" type. In the Content tab, find the "Data class" drop down
-and set it to the DataObject that you just created, in this case "Staff Member".
+Create a new **Registry Page**. In the Content tab, find the *Data class* drop down
+and set it to the class you just created, in this case **Staff Member**.
 
 Save and Publish the page and view it in the front end.
 
@@ -78,16 +79,16 @@ a viewable title the user will see. In this example we're adding the phone numbe
 		//...
 	}
 
-Now when you view the staff member listing on the `RegistryPage` it will show the two columns we
+Now when you view the staff member listing on the **Registry Page** it will show the two columns we
 defined above.
 
-This summary definition will also be used in the Registry tab of the CMS.
+This summary definition will also be used in the *Registry* tab of the CMS.
 
 ### Creating a detailed view of a search result
 
 Sometimes the records listed you'll want a user to click through and see more details.
 
-You can do this by defining the `Link` method on your registry DataObject. For example:
+You can do this by defining the `Link` method on your registry class. For example:
 
 	:::php
 	<?php
@@ -101,13 +102,13 @@ You can do this by defining the `Link` method on your registry DataObject. For e
 	}
 
 This method can return a link to any place you wish. The above example will link to
-the `show` action on the RegistryPage for StaffMember.
+the `show` action on `RegistryPage` for `StaffMember`.
 
 The default template `RegistryPage_show.ss` is very simple and only shows a debug
-representation of the data. See "Overriding templates" below on how to change this
+representation of the data. See *Overriding templates* below on how to change this
 template.
 
-### Breadcrumbs
+### Navigation breadcrumbs
 
 When viewing data through the `show` action, the title of the current item will be appended to the
 end of the breadcrumbs array. The title will be picked up in the default way of DataObject: it will
