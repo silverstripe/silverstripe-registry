@@ -210,14 +210,14 @@ class RegistryPage_Controller extends Page_Controller {
 		$this->redirect($this->AbsoluteLink());
 	}
 
-	public function RegistryEntries() {
+	public function RegistryEntries($paginated = true) {
 		$variables = $this->request->getVars();
 
 		// Pagination
 		$start = isset($variables['start']) ? (int)$variables['start'] : 0;
 
 		// Ordering
-		$sort = isset($variables['Sort']) ? $variables['Sort'] : 'ID';
+		$sort = isset($variables['Sort']) && $variables['Sort'] ? $variables['Sort'] : 'ID';
 		$direction = (!empty($variables['Dir']) && in_array($variables['Dir'], array('ASC', 'DESC'))) ? $variables['Dir'] : 'ASC';
 		$orderby = array($sort => $direction);
 		
@@ -229,7 +229,7 @@ class RegistryPage_Controller extends Page_Controller {
 			}
 		}
 
-		return $this->queryList($where, $orderby, $start, $this->dataRecord->getPageLength());
+		return $this->queryList($where, $orderby, $start, $this->dataRecord->getPageLength(), $paginated);
 	}
 
 	public function Columns($result = null) {
@@ -253,16 +253,6 @@ class RegistryPage_Controller extends Page_Controller {
 	public function export($request) {
 		$dataClass = $this->dataRecord->getDataClass();
 		$resultColumns = $this->dataRecord->getDataSingleton()->fieldLabels();
-		$vars = $request->getVars();
-		$vars['Unpaged'] = true;
-
-		$search = $this->doRegistrySearch(
-			$vars,
-			new Form($this, 'RegistrySearchForm', new FieldList(), new FieldList()),
-			new SS_HTTPRequest('GET', '')
-		);
-
-		if(!isset($search['RegistryEntries'])) return array();
 
 		if (!file_exists(REGISTRY_EXPORT_PATH)) {
 			mkdir(REGISTRY_EXPORT_PATH);
@@ -280,7 +270,7 @@ class RegistryPage_Controller extends Page_Controller {
 		fputcsv($file, $cols, ',', '"');
 
 		// put the data in the rows after
-		foreach($search['RegistryEntries'] as $result) {
+		foreach($this->RegistryEntries(false) as $result) {
 			$item = array();
 			foreach($cols as $col) {
 				$item[] = $result->$col;
