@@ -1,7 +1,7 @@
 $Content
 
 <div id="{$DataClass}_searchform" class="searchForm">
-	$Form
+	$RegistryFilterForm
 </div>
 
 <a class="historyFeedLink" href="registry-feed/latest/{$DataClass}" title="View imported data history">View imported data history</a>

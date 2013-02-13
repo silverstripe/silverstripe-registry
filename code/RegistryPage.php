@@ -91,7 +91,7 @@ class RegistryPage extends Page {
 class RegistryPage_Controller extends Page_Controller {
 
 	public static $allowed_actions = array(
-		'Form',
+		'RegistryFilterForm',
 		'show',
 		'export'
 	);
@@ -117,7 +117,7 @@ class RegistryPage_Controller extends Page_Controller {
 		unset($vars['Sort']);
 		unset($vars['Dir']);
 
-		return Convert::raw2xml($this->Link('Form') . '?' . http_build_query($vars));
+		return Convert::raw2xml($this->Link('RegistryFilterForm') . '?' . http_build_query($vars));
 	}
 
 	public function Sort() {
@@ -133,49 +133,103 @@ class RegistryPage_Controller extends Page_Controller {
 		return (isset($_GET['Dir']) && $_GET['Dir'] == 'ASC') ? 'DESC' : 'ASC';
 	}
 
-	public function Form() {
+	public function RegistryFilterForm() {
 		$singleton = $this->dataRecord->getDataSingleton();
 		if (!$singleton) {
 			return;
 		}
 
 		$fields = $singleton->getSearchFields();
-		$fields->merge(new FieldList(
-			new HiddenField('Sort', ''),
-			new HiddenField('Dir', '')
-		));
 
-		$form = new Form($this, 'Form', $fields, new FieldList(
-			new FormAction('doRegistrySearch', 'Search')
-		));
-
-		// load existing request GET data into the form if available
+		// Add the sort information.
 		$vars = $this->getRequest()->getVars();
-		if($vars) {
-			// default sorting when no sort/direction set
-			if(empty($vars['Sort'])) $vars['Sort'] = 'ID';
-			if(empty($vars['Dir'])) $vars['Dir'] = 'ASC';
+		$fields->merge(new FieldList(
+			new HiddenField('Sort', 'Sort', (!$vars || empty($vars['Sort'])) ? 'ID' : $vars['Sort']),
+			new HiddenField('Dir', 'Dir', (!$vars || empty($vars['Dir'])) ? 'ASC' : $vars['Dir'])
+		));
 
-			$form->loadDataFrom($vars);
-		}
+		$actions = new FieldList(
+			FormAction::create('doRegistryFilter')->setTitle('Filter')->addExtraClass('btn btn-primary'),
+			FormAction::create('doRegistryFilterReset')->setTitle('Clear')->addExtraClass('btn')
+		);
 
-		$form->setFormMethod('GET');
+		$form = new Form($this, 'RegistryFilterForm', $fields, $actions);
+		$form->loadDataFrom($this->request->getVars());
 		$form->disableSecurityToken();
+		$form->setFormMethod('get');
 
 		return $form;
 	}
 
-	public function RegistryEntries() {
-		$pageLength = $this->dataRecord->getPageLength();
-		$start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
-		$sort = isset($_GET['Sort']) ? $_GET['Sort'] : 'ID';
-		
-		$orderby = array();
-		$direction = (!empty($_GET['Dir']) && in_array($_GET['Dir'], array('ASC', 'DESC'))) ? $_GET['Dir'] : 'ASC';
-		$orderby = array();
-		if ($sort) $orderby[$sort] = $direction;
+	/**
+	 * Build up search filters from user's search criteria and hand off
+	 * to the {@link query()} method to search against the database.
+	 *
+	 * @param array $data Form request data
+	 * @param Form Form object for submitted form
+	 * @param SS_HTTPRequest
+	 * @return array
+	 */
+	public function doRegistryFilter($data, $form, $request) {
+		// Basic parameters
+		$parameters = array(
+			'start' => 0,
+			'Sort' => 'ID',
+			'Dir' => 'ASC'
+		);
 
-		return $this->queryList(array(), $orderby, $start, $pageLength, true);
+		// Data record-specific parameters
+		$singleton = $this->dataRecord->getDataSingleton();
+		if ($singleton) {
+			$fields = $singleton->getSearchFields();
+			if ($fields) foreach ($fields as $field) {
+				$parameters[$field->Name] = '';
+			}
+		}
+
+		// Read them from the request
+		foreach ($parameters as $key => $default) {
+			$value = $this->request->getVar($key);
+			if (!$value || $value == $default) {
+				unset($parameters[$key]);
+			} else {
+				$parameters[$key] = $value;
+			}
+		}
+
+		// Link back to this page with the relevant parameters.
+		$link = $this->AbsoluteLink();
+		foreach ($parameters as $key => $value) {
+			$link = HTTP::setGetVar($key, $value, $link, '&');
+		}
+		$this->redirect($link);
+	}
+
+	public function doRegistryFilterReset($data, $form, $request) {
+		// Link back to this page with no relevant parameters.
+		$this->redirect($this->AbsoluteLink());
+	}
+
+	public function RegistryEntries() {
+		$variables = $this->request->getVars();
+
+		// Pagination
+		$start = isset($variables['start']) ? (int)$variables['start'] : 0;
+
+		// Ordering
+		$sort = isset($variables['Sort']) ? $variables['Sort'] : 'ID';
+		$direction = (!empty($variables['Dir']) && in_array($variables['Dir'], array('ASC', 'DESC'))) ? $variables['Dir'] : 'ASC';
+		$orderby = array($sort => $direction);
+		
+		// Filtering
+		$where = array();
+		foreach($this->dataRecord->getDataSingleton()->getSearchFields() as $field) {
+			if(!empty($variables[$field->getName()])) {
+				$where[] = sprintf('"%s" LIKE \'%%%s%%\'', $field->getName(), Convert::raw2sql($variables[$field->getName()]));
+			}
+		}
+
+		return $this->queryList($where, $orderby, $start, $this->dataRecord->getPageLength());
 	}
 
 	public function Columns($result = null) {
@@ -193,43 +247,6 @@ class RegistryPage_Controller extends Page_Controller {
 	}
 
 	/**
-	 * Build up search filters from user's search criteria and hand off
-	 * to the {@link query()} method to search against the database.
-	 *
-	 * @param array $data Form request data
-	 * @param Form Form object for submitted form
-	 * @param SS_HTTPRequest
-	 * @return array
-	 */
-	public function doRegistrySearch($data, $form, $request) {
-		$pageLength = $this->dataRecord->getPageLength();
-		$start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
-		$paged = isset($data['Unpaged']) ? false : true;
-		$sort = isset($data['Sort']) ? $data['Sort'] : 'ID';
-		$direction = (!empty($data['Dir']) && in_array($data['Dir'], array('ASC', 'DESC'))) ? $data['Dir'] : 'ASC';
-		$orderby = array();
-		$where = array();
-		$results = new ArrayList();
-
-		foreach($this->dataRecord->getDataSingleton()->getSearchFields() as $field) {
-			if(!empty($data[$field->getName()])) {
-				$where[] = sprintf('"%s" LIKE \'%%%s%%\'', $field->getName(), Convert::raw2sql($data[$field->getName()]));
-			}
-		}
-
-		if ($sort) $orderby[$sort] = $direction;
-
-		$results = $this->queryList($where, $orderby, $start, $pageLength, $paged);
-
-		unset($data['url']);
-
-		return array(
-			'BackLink' => Convert::raw2xml(urlencode(http_build_query($data))),
-			'RegistryEntries' => $results
-		);
-	}
-
-	/**
 	 * Exports out all the data for the current search results.
 	 * Sends the data to the browser as a CSV file.
 	 */
@@ -241,7 +258,7 @@ class RegistryPage_Controller extends Page_Controller {
 
 		$search = $this->doRegistrySearch(
 			$vars,
-			new Form($this, 'Form', new FieldList(), new FieldList()),
+			new Form($this, 'RegistrySearchForm', new FieldList(), new FieldList()),
 			new SS_HTTPRequest('GET', '')
 		);
 
@@ -373,7 +390,7 @@ class RegistryPage_Controller extends Page_Controller {
 		$arr = array_merge(
 			$columns,
 			array(
-				'action_doRegistrySearch' => 'Search',
+				'action_doRegistryFilter' => 'Filter',
 				'Sort' => '',
 				'Dir' => ''
 			)
