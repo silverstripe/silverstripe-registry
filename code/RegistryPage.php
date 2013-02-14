@@ -237,7 +237,8 @@ class RegistryPage_Controller extends Page_Controller {
 		
 		// Filtering
 		$where = array();
-		foreach($this->dataRecord->getDataSingleton()->getSearchFields() as $field) {
+		$singleton = $this->dataRecord->getDataSingleton();
+		if ($singleton) foreach($singleton->getSearchFields() as $field) {
 			if(!empty($variables[$field->getName()])) {
 				$where[] = sprintf('"%s" LIKE \'%%%s%%\'', $field->getName(), Convert::raw2sql($variables[$field->getName()]));
 			}
