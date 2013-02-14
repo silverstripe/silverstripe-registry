@@ -102,7 +102,8 @@ You can do this by defining the `Link` method on your registry class. For exampl
 	}
 
 This method can return a link to any place you wish. The above example will link to
-the `show` action on `RegistryPage` for `StaffMember`.
+the `show` action on the `RegistryPage` for `StaffMember`. Note that this assumes that there is
+only a single `RegistryPage` displaying that type of data object.
 
 The default template `RegistryPage_show.ss` is very simple and only shows a debug
 representation of the data. See *Overriding templates* below on how to change this
