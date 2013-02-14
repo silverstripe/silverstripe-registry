@@ -125,12 +125,26 @@ class RegistryPage_Controller extends Page_Controller {
 	}
 
 	/**
-	 * If a direction is already set, return the opposite direction.
-	 * Otherwise, just return a default sorting direction.
+	 * Return the opposite direction from the currently sorted column's direction.
 	 * @return string
 	 */
-	public function Direction() {
-		return (isset($_GET['Dir']) && $_GET['Dir'] == 'ASC') ? 'DESC' : 'ASC';
+	public function OppositeDirection() {
+		// If direction is set, then just reverse it.
+		$direction = $this->request->getVar('Dir');
+		if ($direction) {
+			if ($direction == 'ASC') {
+				return 'DESC';
+			}
+			return 'ASC';
+		}
+
+		// If the sort column is set, then we're sorting by ASC (default is omitted)
+		if ($this->request->getVar('Sort')) {
+			return 'DESC';
+		}
+
+		// Otherwise we're not sorting at all so default to ASC.
+		return 'ASC';
 	}
 
 	public function RegistryFilterForm() {
