@@ -163,7 +163,7 @@ class RegistryPage_Controller extends Page_Controller {
 		));
 
 		$actions = new FieldList(
-			FormAction::create('doRegistryFilter')->setTitle('Filter')->addExtraClass('btn btn-primary'),
+			FormAction::create('doRegistryFilter')->setTitle('Filter')->addExtraClass('btn btn-primary primary'),
 			FormAction::create('doRegistryFilterReset')->setTitle('Clear')->addExtraClass('btn')
 		);
 
