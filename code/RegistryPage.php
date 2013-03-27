@@ -226,18 +226,21 @@ class RegistryPage_Controller extends Page_Controller {
 
 	public function RegistryEntries($paginated = true) {
 		$variables = $this->request->getVars();
+		$singleton = $this->dataRecord->getDataSingleton();
 
 		// Pagination
 		$start = isset($variables['start']) ? (int)$variables['start'] : 0;
 
 		// Ordering
-		$sort = isset($variables['Sort']) && $variables['Sort'] ? $variables['Sort'] : 'ID';
+		$sort = isset($variables['Sort']) && $variables['Sort'] ? Convert::raw2sql($variables['Sort']) : 'ID';
+		if (!$singleton->hasDatabaseField($sort)) {
+			$sort = 'ID';
+		}
 		$direction = (!empty($variables['Dir']) && in_array($variables['Dir'], array('ASC', 'DESC'))) ? $variables['Dir'] : 'ASC';
 		$orderby = array($sort => $direction);
 		
 		// Filtering
 		$where = array();
-		$singleton = $this->dataRecord->getDataSingleton();
 		if ($singleton) foreach($singleton->getSearchFields() as $field) {
 			if(!empty($variables[$field->getName()])) {
 				$where[] = sprintf('"%s" LIKE \'%%%s%%\'', $field->getName(), Convert::raw2sql($variables[$field->getName()]));
