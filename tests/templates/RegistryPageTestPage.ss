@@ -11,19 +11,19 @@ $Content
 	<table class="results" summary="Search results for $DataClass">
 		<thead>
 			<tr>
-				<% control Columns %>
+				<% loop Columns %>
 				<th><a href="$Top.QueryLink&amp;Sort={$Name}&amp;Dir={$Top.Direction}#results">$Title</a></th>
-				<% end_control %>
+				<% end_loop %>
 			</tr>
 		</thead>
 		<tbody>
-		<% control Results %>
+		<% loop Results %>
 			<tr class="<% if FirstLast %>$FirstLast <% end_if %>$EvenOdd">
-				<% control Columns %>
+				<% loop Columns %>
 				<td>$Value</td>
-				<% end_control %>
+				<% end_loop %>
 			</tr>
-		<% end_control %>
+		<% end_loop %>
 		</tbody>
 	</table>
 
@@ -40,7 +40,7 @@ $Content
 		<% if Results.NotFirstPage %>
 			<li class="prev"><a href="$Results.PrevLink" title="View the previous page">&lt;</a></li>
 		<% end_if %>
-		<% control Results.PaginationSummary(5) %>
+		<% loop Results.PaginationSummary(5) %>
 		<% if CurrentBool %>
 			<li class="active"><a href="$Link" title="View page number $PageNum">$PageNum</a></li>
 		<% else %>
@@ -50,7 +50,7 @@ $Content
 			<li><span class="disabled">...</span></li>
 			<% end_if %>
 		<% end_if %>
-		<% end_control %>
+		<% end_loop %>
 		<% if Results.NotLastPage %>
 			<li class="next"><a href="$Results.NextLink" title="View the next page">&gt;</a></li>
 		<% end_if %>
