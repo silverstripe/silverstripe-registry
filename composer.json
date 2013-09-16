@@ -8,6 +8,10 @@
 		{
 			"name": "Sean Harvey",
 			"email": "sean@silverstripe.com"
+		},
+		{
+			"name": "Robert Curry",
+			"email": "robert@silverstripe.com"
 		}
 	],
 	"require":
