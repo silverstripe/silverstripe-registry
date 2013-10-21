@@ -15,9 +15,9 @@ class RegistryPageFunctionalTest extends FunctionalTest {
 
 	public function testFilteredSearchResults() {
 		$page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
-		$response = $this->get($page->AbsoluteLink('Form') . '?' . http_build_query(array(
+		$response = $this->get($page->AbsoluteLink('RegistryFilterForm') . '?' . http_build_query(array(
 			'FirstName' => 'Alexander',
-			'action_search' => 'Search'
+			'action_doRegistryFilter' => 'Filter'
 		)));
 
 		$parser = new CSSContentParser($response->getBody());
@@ -31,10 +31,10 @@ class RegistryPageFunctionalTest extends FunctionalTest {
 
 	public function testSearchResultsLimitAndStart() {
 		$page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage-limit');
-		$response = $this->get($page->AbsoluteLink('Form') . '?' . http_build_query(array(
+		$response = $this->get($page->AbsoluteLink('RegistryFilterForm') . '?' . http_build_query(array(
 			'Sort' => 'FirstName',
 			'Dir' => 'DESC',
-			'action_search' => 'Search'
+			'action_doRegistryFilter' => 'Filter'
 		)));
 
 		$parser = new CSSContentParser($response->getBody());
@@ -44,7 +44,6 @@ class RegistryPageFunctionalTest extends FunctionalTest {
 		$this->assertEquals(3, count($rows), 'Limited to 3 search results');
 		$this->assertEquals(4, count($anchors), '4 paging anchors, including next');
 
-		$this->assertContains('Form?', (string) $anchors[0]['href']);
 		$this->assertContains('Sort=FirstName', (string) $anchors[0]['href']);
 		$this->assertContains('Dir=DESC', (string) $anchors[0]['href']);
 
@@ -55,17 +54,17 @@ class RegistryPageFunctionalTest extends FunctionalTest {
 
 	public function testGetParamsPopulatesSearchForm() {
 		$page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
-		$response = $this->get($page->AbsoluteLink('Form') . '?' . http_build_query(array(
+		$response = $this->get($page->AbsoluteLink('RegistryFilterForm') . '?' . http_build_query(array(
 			'FirstName' => 'Alexander',
 			'Sort' => 'FirstName',
 			'Dir' => 'DESC',
-			'action_search' => 'Search'
+			'action_doRegistryFilter' => 'Filter'
 		)));
 
 		$parser = new CSSContentParser($response->getBody());
-		$firstNameField = $parser->getBySelector('#Form_Form_FirstName');
-		$sortField = $parser->getBySelector('#Form_Form_Sort');
-		$dirField = $parser->getBySelector('#Form_Form_Dir');
+		$firstNameField = $parser->getBySelector('#Form_RegistryFilterForm_FirstName');
+		$sortField = $parser->getBySelector('#Form_RegistryFilterForm_Sort');
+		$dirField = $parser->getBySelector('#Form_RegistryFilterForm_Dir');
 
 		$this->assertEquals('Alexander', (string) $firstNameField[0]['value']);
 		$this->assertEquals('FirstName', (string) $sortField[0]['value']);
@@ -74,9 +73,9 @@ class RegistryPageFunctionalTest extends FunctionalTest {
 
 	public function testQueryLinks() {
 		$page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
-		$response = $this->get($page->AbsoluteLink('Form') . '?' . http_build_query(array(
+		$response = $this->get($page->AbsoluteLink('RegistryFilterForm') . '?' . http_build_query(array(
 			'FirstName' => 'Alexander',
-			'action_search' => 'Search'
+			'action_doRegistryFilter' => 'Filter'
 		)));
 
 		$parser = new CSSContentParser($response->getBody());
@@ -87,7 +86,7 @@ class RegistryPageFunctionalTest extends FunctionalTest {
 		$this->assertContains('Surname=', (string) $anchors[0]['href']);
 		$this->assertContains('Sort=FirstName', (string) $anchors[0]['href']);
 		$this->assertContains('Dir=ASC', (string) $anchors[0]['href']);
-		$this->assertContains('action_search=Search', (string) $anchors[0]['href']);
+		$this->assertContains('action_doRegistryFilter=Filter', (string) $anchors[0]['href']);
 	}
 
 	public function testShowExistingRecord() {
@@ -106,8 +105,8 @@ class RegistryPageFunctionalTest extends FunctionalTest {
 
 	public function testColumnName() {
 		$page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
-		$response = $this->get($page->AbsoluteLink('Form') . '?' . http_build_query(array(
-			'action_search' => 'Search'
+		$response = $this->get($page->AbsoluteLink('RegistryFilterForm') . '?' . http_build_query(array(
+			'action_doRegistryFilter' => 'Filter'
 		)));
 
 		$parser = new CSSContentParser($response->getBody());
@@ -119,11 +118,11 @@ class RegistryPageFunctionalTest extends FunctionalTest {
 
 	public function testExportLink() {
 		$page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
-		$response = $this->get($page->AbsoluteLink('Form') . '?' . http_build_query(array(
+		$response = $this->get($page->AbsoluteLink('RegistryFilterForm') . '?' . http_build_query(array(
 			'FirstName' => 'Alexander',
 			'Sort' => 'FirstName',
 			'Dir' => 'DESC',
-			'action_search' => 'Search'
+			'action_doRegistryFilter' => 'Filter'
 		)));
 
 		$parser = new CSSContentParser($response->getBody());
@@ -134,7 +133,7 @@ class RegistryPageFunctionalTest extends FunctionalTest {
 		$this->assertContains('Surname=', (string) $anchor[0]['href']);
 		$this->assertContains('Sort=FirstName', (string) $anchor[0]['href']);
 		$this->assertContains('Dir=DESC', (string) $anchor[0]['href']);
-		$this->assertContains('action_search=Search', (string) $anchor[0]['href']);
+		$this->assertContains('action_doRegistryFilter=Filter', (string) $anchor[0]['href']);
 	}
 
 }
