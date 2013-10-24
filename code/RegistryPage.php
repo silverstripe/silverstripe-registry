@@ -10,6 +10,14 @@ class RegistryPage extends Page {
 
 	public static $page_length_default = 10;
 
+	public function fieldLabels($includerelations = true) {
+		$labels = parent::fieldLabels($includerelations);
+		$labels['DataClass'] = _t('RegistryPage.DataClassFieldLabel', "Data Class");
+		$labels['PageLength'] = _t('RegistryPage.PageLengthFieldLabel', "Results page length");
+		
+		return $labels;
+	}
+
 	public function getDataClasses() {
 		$map = array();
 		foreach(ClassInfo::implementorsOf('RegistryDataInterface') as $class) {
@@ -37,10 +45,10 @@ class RegistryPage extends Page {
 
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
-		$classDropdown = new DropdownField('DataClass', 'Data class', $this->getDataClasses());
-		$classDropdown->setEmptyString('Select one');
+		$classDropdown = new DropdownField('DataClass', $this->fieldLabel('DataClass'), $this->getDataClasses());
+		$classDropdown->setEmptyString(_t('RegistryPage.SelectDropdownDefault','Select one'));
 		$fields->addFieldToTab('Root.Main', $classDropdown, 'Content');
-		$fields->addFieldToTab('Root.Main', new NumericField('PageLength', 'Results page length'), 'Content');
+		$fields->addFieldToTab('Root.Main', new NumericField('PageLength', $this->fieldLabel('PageLength')), 'Content');
 		return $fields;
 	}
 
