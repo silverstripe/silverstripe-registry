@@ -1,0 +1,27 @@
+zh:
+  RegistryAdmin:
+    MENUTITLE: 注册
+  ModelAdmin:
+    DELETEDRECORDS: '删除 {count} 个记录。'
+    IMPORTEDRECORDS: '导入 {count} 个记录。'
+    NOCSVFILE: '请浏览将导入的 CSV 文件'
+    NOIMPORT: '无导入内容'
+    UPDATEDRECORDS: '更新了 {count} 个记录。'
+  RegistryPage:
+    DESCRIPTION: '通过可筛选，可搜索，可分页的列表显示大量数据'
+    DataClassFieldLabel: '数据类'
+    ExportAll: '导出结果至 CSV'
+    ExportAllTitle: '将所有结果导出至一个 CSV 电子表格文件'
+    NoResults: '没有结果显示'
+    PLURALNAME: '基本页面'
+    PageLengthFieldLabel: '结果页面长度'
+    ResultsFor: '搜索结果'
+    SINGULARNAME: '注册页面'
+    SelectDropdownDefault: '选择一个'
+    ViewHistory: '查看导入的数据历史'
+    ViewNext: '查看下一页'
+    ViewPageNum: '查看页码'
+    ViewPrev: '查看上一页'
+  SiteTree:
+    PLURALNAME: 页面
+    SINGULARNAME: 页面
