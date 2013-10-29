@@ -1,5 +1,7 @@
 # Registry module
 
+[![Build Status](https://secure.travis-ci.org/silverstripe-labs/silverstripe-registry.png)](http://travis-ci.org/silverstripe-labs/silverstripe-registry)
+
 ## Requirements
 
  * SilverStripe 3.0.2+
