@@ -1,0 +1,27 @@
+en:
+  RegistryAdmin:
+    MENUTITLE: Registry
+  ModelAdmin:
+    DELETEDRECORDS: 'Deleted {count} records.'
+    IMPORTEDRECORDS: 'Imported {count} records.'
+    NOCSVFILE: 'Please browse for a CSV file to import'
+    NOIMPORT: 'Nothing to import'
+    UPDATEDRECORDS: 'Updated {count} records.'
+  RegistryPage:
+    DESCRIPTION: 'Shows large series of data in a filterable, searchable, and paginated list'
+    DataClassFieldLabel: 'Data Class'
+    ExportAll: 'Export results to CSV'
+    ExportAllTitle: 'Export all results to a CSV spreadsheet file'
+    NoResults: 'No results to show'
+    PLURALNAME: 'Base Pages'
+    PageLengthFieldLabel: 'Results page length'
+    ResultsFor: 'Search results for'
+    SINGULARNAME: 'Registry Page'
+    SelectDropdownDefault: 'Select one'
+    ViewHistory: 'View imported data history'
+    ViewNext: 'View the next page'
+    ViewPageNum: 'View page number'
+    ViewPrev: 'View the previous page'
+  SiteTree:
+    PLURALNAME: Pages
+    SINGULARNAME: Page
