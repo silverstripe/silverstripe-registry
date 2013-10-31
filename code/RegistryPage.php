@@ -1,7 +1,7 @@
 <?php
 class RegistryPage extends Page {
 
-	private static $description = 'Shows large series of data in a filterable, searchable, and paginated list';
+	public static $description = 'Shows large series of data in a filterable, searchable, and paginated list';
 
 	public static $db = array(
 		'DataClass' => 'Varchar(100)',
