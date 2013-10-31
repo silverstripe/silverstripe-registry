@@ -1,12 +1,12 @@
 <?php
 class RegistryPageTestContact extends DataObject implements RegistryDataInterface, TestOnly {
 
-	public static $db = array(
+	private static $db = array(
 		'FirstName' => 'Varchar(50)',
 		'Surname' => 'Varchar(50)'
 	);
 
-	public static $summary_fields = array(
+	private static $summary_fields = array(
 		'FirstName' => 'First name',
 		'Surname' => 'Surname'
 	);

@@ -3,7 +3,7 @@ class RegistryPage extends Page {
 
 	private static $description = 'Shows large series of data in a filterable, searchable, and paginated list';
 
-	public static $db = array(
+	private static $db = array(
 		'DataClass' => 'Varchar(100)',
 		'PageLength' => 'Int'
 	);
@@ -100,7 +100,7 @@ class RegistryPage extends Page {
 }
 class RegistryPage_Controller extends Page_Controller {
 
-	public static $allowed_actions = array(
+	private static $allowed_actions = array(
 		'RegistryFilterForm',
 		'show',
 		'export'

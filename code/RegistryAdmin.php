@@ -1,7 +1,7 @@
 <?php
 class RegistryAdmin extends ModelAdmin {
 
-	public static $url_segment = 'registry';
+	private static $url_segment = 'registry';
 
 	// Hide the registry section completely if we have no registries to manage.
 	public function canView($member = null) {

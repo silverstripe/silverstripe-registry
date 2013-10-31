@@ -1,7 +1,7 @@
 <?php
 class RegistryPageTest extends SapphireTest {
 
-	public static $fixture_file = array(
+	static $fixture_file = array(
 		'fixtures/RegistryPageTestContact.yml',
 		'fixtures/RegistryPageTest.yml'
 	);

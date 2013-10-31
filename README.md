@@ -4,7 +4,7 @@
 
 ## Requirements
 
- * SilverStripe 3.0.2+
+ * SilverStripe 3.1 or newer
  * MySQL 5.1+ or SQL Server 2008+ database
 
 ## Installation
