@@ -67,6 +67,10 @@ class RegistryImportFeed_Entry extends ViewableData {
 }
 class RegistryImportFeed_Controller extends Controller {
 
+	private static $allowed_actions = array(
+		'latest'
+	);
+
 	public static $url_handlers = array(
 		'$Action/$ModelClass' => 'handleAction',
 	);
