@@ -1,5 +1,5 @@
 <?php
-class RegistryPageTestContact extends DataObject implements RegistryDataInterface, TestOnly {
+class RegistryPageTestContact extends DataObject implements RegistryDataInterface {
 
 	private static $db = array(
 		'FirstName' => 'Varchar(50)',
