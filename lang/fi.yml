@@ -1,0 +1,27 @@
+fi:
+  RegistryAdmin:
+    MENUTITLE: Rekisteri
+  ModelAdmin:
+    DELETEDRECORDS: '{count} poistettua tietuetta.'
+    IMPORTEDRECORDS: '{count} tuotua tietuetta.'
+    NOCSVFILE: 'Selaa CSV-tiedosto tuotavaksi'
+    NOIMPORT: 'Ei tuotavia'
+    UPDATEDRECORDS: '{count} päivitettyä tietuetta.'
+  RegistryPage:
+    DESCRIPTION: 'Näytä laajat data-sarjat suodatettavana, haettavana ja sivutettuna listana'
+    DataClassFieldLabel: 'Dataluokka'
+    ExportAll: 'Vie tulokset CSV-tiedostoksi'
+    ExportAllTitle: 'Vie kaikki tulokset CSV-muotoiseksi tiedostoksi'
+    NoResults: 'Ei näytettäviä tuloksia'
+    PLURALNAME: 'Perussivut'
+    PageLengthFieldLabel: 'Tulossivun pituus'
+    ResultsFor: 'Hakutulokset kohteelle'
+    SINGULARNAME: 'Rekisterisivu'
+    SelectDropdownDefault: 'Valitse yksi'
+    ViewHistory: 'Selaa tuodun datan historiaa'
+    ViewNext: 'Katso seuraavaa sivua'
+    ViewPageNum: 'Katso sivunumeroa'
+    ViewPrev: 'Katso edellinen sivu'
+  SiteTree:
+    PLURALNAME: Sivut
+    SINGULARNAME: Sivu
