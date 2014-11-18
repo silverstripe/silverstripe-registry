@@ -1,0 +1,27 @@
+eo:
+  RegistryAdmin:
+    MENUTITLE: Registrejo
+  ModelAdmin:
+    DELETEDRECORDS: 'Forigis {count} rikordojn.'
+    IMPORTEDRECORDS: 'Importis {count} rikordojn.'
+    NOCSVFILE: 'Bonvole foliumu por CSV-dosiero importota'
+    NOIMPORT: 'Nenio importota'
+    UPDATEDRECORDS: 'Ĝisdatigis {count} rikordojn.'
+  RegistryPage:
+    DESCRIPTION: 'Vidigas grandan serion de datumoj en filtrebla, serĉebla, kaj enpaĝigita listo.'
+    DataClassFieldLabel: 'Klaso de datumoj'
+    ExportAll: 'Eksporti rezultojn al CSV'
+    ExportAllTitle: 'Eksporti ĉiujn rezultojn al CSV-kalkultabela dosiero'
+    NoResults: 'Mankas rezultoj vidigotaj'
+    PLURALNAME: 'Bazaj paĝoj'
+    PageLengthFieldLabel: 'Longo de rezulta paĝo'
+    ResultsFor: 'Serĉi rezultojn por'
+    SINGULARNAME: 'Registeja paĝo'
+    SelectDropdownDefault: 'Elekti unu'
+    ViewHistory: 'Vidigi historion de importitaj datumoj'
+    ViewNext: 'Vidigi la sekvan paĝon'
+    ViewPageNum: 'Vidigi paĝnumeron'
+    ViewPrev: 'Vidigi la antaŭan paĝon'
+  SiteTree:
+    PLURALNAME: Paĝoj
+    SINGULARNAME: 'Paĝo:'
