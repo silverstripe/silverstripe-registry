@@ -113,7 +113,7 @@ class RegistryPageFunctionalTest extends FunctionalTest {
 		$rows = $parser->getBySelector('table.results thead tr');
 		$anchors = $rows[0]->th->a;
 
-		$this->assertEquals('First Name', (string) $anchors[0]);
+		$this->assertEquals('First name', (string) $anchors[0]);
 	}
 
 	public function testExportLink() {
