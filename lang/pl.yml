@@ -1,0 +1,18 @@
+pl:
+  ModelAdmin:
+    DELETEDRECORDS: 'Usunięto {count} rekordów.'
+    IMPORTEDRECORDS: 'Zaktualizowano {count} rekordów.'
+    NOCSVFILE: 'Wybierz plik CSV do zaimportowania'
+    NOIMPORT: 'Nie ma niczego do zaimportowania'
+    UPDATEDRECORDS: 'Zaktualizowano {count} rekordów.'
+  RegistryPage:
+    ExportAll: 'Eksportuj do CSV'
+    NoResults: 'Brak rezultatów do pokazania'
+    PLURALNAME: 'Podstawowe strony'
+    ResultsFor: 'Wyniki wyszukiwania dla'
+    SelectDropdownDefault: 'Wybierz jeden'
+    ViewNext: 'Zobacz następną stronę'
+    ViewPrev: 'Zobacz poprzednią stronę'
+  SiteTree:
+    PLURALNAME: Strony
+    SINGULARNAME: Strona

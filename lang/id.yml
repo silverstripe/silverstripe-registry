@@ -1,0 +1,27 @@
+id:
+  RegistryAdmin:
+    MENUTITLE: Registri
+  ModelAdmin:
+    DELETEDRECORDS: 'Dihapus {count} rekod'
+    IMPORTEDRECORDS: 'Diimpor {count} rekod'
+    NOCSVFILE: 'Mohon lihat sebuah berkas CSV untuk impor'
+    NOIMPORT: 'Tidak ada yang diimpor'
+    UPDATEDRECORDS: 'Memperbaharui {count} rekod'
+  RegistryPage:
+    DESCRIPTION: 'Menunjukkan serangkaian besar data dalam daftar disaring, dicari, dan daftar paginasi'
+    DataClassFieldLabel: 'Klas Data'
+    ExportAll: 'Ekspor hasil ke CSV'
+    ExportAllTitle: 'Ekspor semua hasil ke sebuah berkas CSV'
+    NoResults: 'Tidak ada hasil untuk ditampilkan'
+    PLURALNAME: 'Halaman Basis'
+    PageLengthFieldLabel: 'Hasil panjang halaman'
+    ResultsFor: 'Hasil pencarian untuk'
+    SINGULARNAME: 'Halaman Registri'
+    SelectDropdownDefault: 'Pilih satu'
+    ViewHistory: 'Menampilkan sejarah data impor'
+    ViewNext: 'Menampilkan halaman selanjutnya'
+    ViewPageNum: 'Menampilkan nomor halaman'
+    ViewPrev: 'Menampilkan halaman sebelumnya'
+  SiteTree:
+    PLURALNAME: Halaman
+    SINGULARNAME: Halaman
