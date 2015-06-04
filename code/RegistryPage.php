@@ -243,7 +243,7 @@ class RegistryPage_Controller extends Page_Controller {
 
 		// Ordering
 		$sort = isset($variables['Sort']) && $variables['Sort'] ? Convert::raw2sql($variables['Sort']) : 'ID';
-		if (!$singleton->hasDatabaseField($sort)) {
+		if ($singleton && !$singleton->hasDatabaseField($sort)) {
 			$sort = 'ID';
 		}
 		$direction = (!empty($variables['Dir']) && in_array($variables['Dir'], array('ASC', 'DESC'))) ? $variables['Dir'] : 'ASC';
