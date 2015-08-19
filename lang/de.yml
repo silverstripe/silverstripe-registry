@@ -1,0 +1,20 @@
+de:
+  ModelAdmin:
+    DELETEDRECORDS: '{count} Einträge gelöscht.'
+    IMPORTEDRECORDS: '{count} Einträge importiert.'
+    NOCSVFILE: 'Bitte suchen Sie nach einer CSV-Datei zum Importieren'
+    UPDATEDRECORDS: '{count} Einträge aktualisiert.'
+  RegistryPage:
+    DataClassFieldLabel: 'Datenklasse'
+    ExportAll: 'Ergebnisse als CSV exportieren'
+    NoResults: 'Keine anzuzeigenden Ergebnisse'
+    PLURALNAME: 'Grundseiten'
+    PageLengthFieldLabel: 'Ergebnisseitenlänge'
+    ResultsFor: 'Suchergebnisse für'
+    SelectDropdownDefault: 'Eines auswählen'
+    ViewNext: 'Nächste Seite anzeigen'
+    ViewPageNum: 'Seitennummer anzeigen'
+    ViewPrev: 'Vorherige Seite anzeigen'
+  SiteTree:
+    PLURALNAME: Seiten
+    SINGULARNAME: Seite

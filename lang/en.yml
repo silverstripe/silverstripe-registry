@@ -1,12 +1,12 @@
 en:
-  RegistryAdmin:
-    MENUTITLE: Registry
   ModelAdmin:
     DELETEDRECORDS: 'Deleted {count} records.'
     IMPORTEDRECORDS: 'Imported {count} records.'
     NOCSVFILE: 'Please browse for a CSV file to import'
     NOIMPORT: 'Nothing to import'
     UPDATEDRECORDS: 'Updated {count} records.'
+  RegistryAdmin:
+    MENUTITLE: Registry
   RegistryPage:
     DESCRIPTION: 'Shows large series of data in a filterable, searchable, and paginated list'
     DataClassFieldLabel: 'Data Class'
