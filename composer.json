@@ -2,7 +2,7 @@
 	"name": "silverstripe/registry",
 	"description": "Provide search and export interfaces for datasets.",
 	"type": "silverstripe-module",
-	"keywords": ["silverstripe"],
+	"keywords": ["silverstripe", "cwp"],
 	"license": "BSD-3-Clause",
 	"authors": [
 		{
