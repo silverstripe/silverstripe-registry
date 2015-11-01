@@ -247,7 +247,7 @@ class RegistryPage_Controller extends Page_Controller {
 			$sort = 'ID';
 		}
 		$direction = (!empty($variables['Dir']) && in_array($variables['Dir'], array('ASC', 'DESC'))) ? $variables['Dir'] : 'ASC';
-		$orderby = array($sort => $direction);
+		$orderby = array("\"{$sort}\"" => $direction);
 		
 		// Filtering
 		$where = array();
@@ -361,7 +361,9 @@ class RegistryPage_Controller extends Page_Controller {
 		$results = new ArrayList();
 
 		$query = new SQLQuery();
-		$query->setSelect(array_keys($resultColumns))->setFrom($dataClass);
+		$query
+			->setSelect($this->escapeSelect(array_keys($resultColumns)))
+			->setFrom("\"{$dataClass}\"");
 		$query->addWhere($where);
 		$query->addOrderBy($orderby);
 		$query->setConnective('AND');
@@ -387,6 +389,16 @@ class RegistryPage_Controller extends Page_Controller {
 		}
 
 		return $list;
+	}
+
+	/**
+	 * Safely escape a list of "select" candidates for a query
+	 *
+	 * @param array $names List of select fields
+	 * @return array List of names, with each name double quoted
+	 */
+	protected function escapeSelect($names) {
+		return array_map(function($var) { return "\"{$var}\""; }, $names);
 	}
 
 	/**
