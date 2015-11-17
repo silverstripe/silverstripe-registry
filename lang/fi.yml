@@ -1,12 +1,12 @@
 fi:
-  RegistryAdmin:
-    MENUTITLE: Rekisteri
   ModelAdmin:
     DELETEDRECORDS: '{count} poistettua tietuetta.'
     IMPORTEDRECORDS: '{count} tuotua tietuetta.'
     NOCSVFILE: 'Selaa CSV-tiedosto tuotavaksi'
     NOIMPORT: 'Ei tuotavia'
     UPDATEDRECORDS: '{count} päivitettyä tietuetta.'
+  RegistryAdmin:
+    MENUTITLE: Rekisteri
   RegistryPage:
     DESCRIPTION: 'Näytä laajat data-sarjat suodatettavana, haettavana ja sivutettuna listana'
     DataClassFieldLabel: 'Dataluokka'

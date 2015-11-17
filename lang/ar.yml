@@ -1,12 +1,12 @@
 ar:
-  RegistryAdmin:
-    MENUTITLE: التسجيل
   ModelAdmin:
     DELETEDRECORDS: 'التسجيلات {count} الحذوفة'
     IMPORTEDRECORDS: 'تسجيلات {count} مستوردة.'
     NOCSVFILE: 'من فضلك قم بالتصفح من أجل استيراد ملف سى إس فى'
     NOIMPORT: 'لا شئ ليتم استيراده'
     UPDATEDRECORDS: 'تسجيلات {count} محدثة'
+  RegistryAdmin:
+    MENUTITLE: التسجيل
   RegistryPage:
     DESCRIPTION: 'يقوم بعرض سلسلة كبيرة من البيانات فى قائمة قائمة قابلة للتصنيف, البحث و ترقيم الصفحات'
     DataClassFieldLabel: 'تصنيف البيانات'

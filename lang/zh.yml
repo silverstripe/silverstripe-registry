@@ -1,12 +1,12 @@
 zh:
-  RegistryAdmin:
-    MENUTITLE: 注册
   ModelAdmin:
     DELETEDRECORDS: '删除 {count} 个记录。'
     IMPORTEDRECORDS: '导入 {count} 个记录。'
     NOCSVFILE: '请浏览将导入的 CSV 文件'
     NOIMPORT: '无导入内容'
     UPDATEDRECORDS: '更新了 {count} 个记录。'
+  RegistryAdmin:
+    MENUTITLE: 注册
   RegistryPage:
     DESCRIPTION: '通过可筛选，可搜索，可分页的列表显示大量数据'
     DataClassFieldLabel: '数据类'

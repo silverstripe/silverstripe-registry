@@ -1,12 +1,12 @@
 mi:
-  RegistryAdmin:
-    MENUTITLE: Rēhita
   ModelAdmin:
     DELETEDRECORDS: 'I mukua e {count} ngā pūkete.'
     IMPORTEDRECORDS: 'I kawea mai e {count} ngā pūkete.'
     NOCSVFILE: 'Pūtirotiro kia kitea he kōnae CSV hei kawemai'
     NOIMPORT: 'Kāore he mea hei kawemai'
     UPDATEDRECORDS: 'I whakahōutia e {count} ngā pūkete.'
+  RegistryAdmin:
+    MENUTITLE: Rēhita
   RegistryPage:
     DESCRIPTION: 'Ka whakaatu i te rārangi rahi o ngā raraunga mā te rārangi ka taea te tātari, te rapu, kua whakawhārangitia hoki'
     DataClassFieldLabel: 'Tauaha Raraunga'

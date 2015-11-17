@@ -1,12 +1,12 @@
 id:
-  RegistryAdmin:
-    MENUTITLE: Registri
   ModelAdmin:
     DELETEDRECORDS: 'Dihapus {count} rekod'
     IMPORTEDRECORDS: 'Diimpor {count} rekod'
     NOCSVFILE: 'Mohon lihat sebuah berkas CSV untuk impor'
     NOIMPORT: 'Tidak ada yang diimpor'
     UPDATEDRECORDS: 'Memperbaharui {count} rekod'
+  RegistryAdmin:
+    MENUTITLE: Registri
   RegistryPage:
     DESCRIPTION: 'Menunjukkan serangkaian besar data dalam daftar disaring, dicari, dan daftar paginasi'
     DataClassFieldLabel: 'Klas Data'
