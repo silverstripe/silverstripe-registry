@@ -14,7 +14,9 @@ to the website URL in your browser. e.g. http://mysite.com/dev/build?flush=all
 
 ## Instructions
 
-See `index.md` in the docs folder for more details.
+See [developer documentation](docs/en/index.md) for more setup details.
+
+[User documentation](docs/en/userguide/index.md)
 
 ## Known issues
 

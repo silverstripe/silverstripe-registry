@@ -41,7 +41,7 @@ Once that's defined, we run `dev/build?flush=1` to build the database with the n
 
 ### Managing the data
 
-![Registry admin](_images/registry-admin.jpg)
+![Registry admin](userguide/_images/registry-admin.jpg)
 
 Pictured above is a summary of the admin area for managing registry data.
 
