@@ -1,0 +1,12 @@
+fa_IR:
+  ModelAdmin:
+    DELETEDRECORDS: 'حذف {count} رکورد'
+    IMPORTEDRECORDS: '{count} رکورد وارد‌شده'
+    NOCSVFILE: 'لطفاً یک فایل CSV برای وارد‌کردن پیدا کنید'
+    NOIMPORT: 'چیزی برای وارد‌کردن وجود ندارد'
+    UPDATEDRECORDS: 'به‌روز‌رسانی {count} رکورد'
+  RegistryPage:
+    PLURALNAME: 'صفحه اصلی'
+  SiteTree:
+    PLURALNAME: صفحات
+    SINGULARNAME: صفحه
