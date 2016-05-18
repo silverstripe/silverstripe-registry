@@ -1,0 +1,6 @@
+lt:
+  RegistryPage:
+    PLURALNAME: 'Baziniai puslapiai'
+  SiteTree:
+    PLURALNAME: Puslapiai
+    SINGULARNAME: Puslapis

@@ -1,0 +1,6 @@
+sk:
+  RegistryPage:
+    PLURALNAME: 'Základné stránky'
+  SiteTree:
+    PLURALNAME: Stránky
+    SINGULARNAME: Stránka
