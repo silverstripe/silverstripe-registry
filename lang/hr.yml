@@ -1,0 +1,27 @@
+hr:
+  ModelAdmin:
+    DELETEDRECORDS: 'Obrisano {count} zapisa.'
+    IMPORTEDRECORDS: 'Uveženo {count} zapisa.'
+    NOCSVFILE: 'Molimo pretražite CSV datoteku za uvoz'
+    NOIMPORT: 'Ništa za uvoz'
+    UPDATEDRECORDS: 'Osvježeno {count} zapisa.'
+  RegistryAdmin:
+    MENUTITLE: Registar
+  RegistryPage:
+    DESCRIPTION: 'Prikazuje veliki set podatka u filtiranoj, pretraživanoj i paginiranoj listi'
+    DataClassFieldLabel: 'Klasa podataka'
+    ExportAll: 'Izvezi rezultate u CSV'
+    ExportAllTitle: 'Izvoz svih rezultata u CSV datoteku'
+    NoResults: 'Nema rezultata za prikaz'
+    PLURALNAME: 'Bazna stranica'
+    PageLengthFieldLabel: 'Duljina stranice rezultata'
+    ResultsFor: 'Rezultati pretraživanja za'
+    SINGULARNAME: 'Registar stranica'
+    SelectDropdownDefault: 'odaberite jedan'
+    ViewHistory: 'Pregledaj povijest uvezenih podataka'
+    ViewNext: 'Pregledaj slijedeću stranicu'
+    ViewPageNum: 'Pregledaj broj stranice'
+    ViewPrev: 'Pregledaj prethodnu stranicu'
+  SiteTree:
+    PLURALNAME: Stranice
+    SINGULARNAME: Stranica
