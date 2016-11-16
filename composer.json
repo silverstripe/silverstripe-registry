@@ -1,29 +1,25 @@
 {
-	"name": "silverstripe/registry",
-	"description": "Provide search and export interfaces for datasets.",
-	"type": "silverstripe-module",
-	"keywords": ["silverstripe", "cwp"],
-	"license": "BSD-3-Clause",
-	"authors": [
-		{
-			"name": "Sean Harvey",
-			"email": "sean@silverstripe.com"
-		},
-		{
-			"name": "Robert Curry",
-			"email": "robert@silverstripe.com"
-		}
-	],
-	"require":
-	{
-		"silverstripe/framework": "~3.1",
-		"silverstripe/cms": "~3.1"
-	},
-	"extra": 
-	{
-		"branch-alias": 
-		{
-			"dev-master": "1.0.x-dev"
-		}
-	}
+    "name": "silverstripe/registry",
+    "description": "Provide search and export interfaces for datasets.",
+    "type": "silverstripe-module",
+    "keywords": [
+        "silverstripe",
+        "cwp"
+    ],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Sean Harvey",
+            "email": "sean@silverstripe.com"
+        },
+        {
+            "name": "Robert Curry",
+            "email": "robert@silverstripe.com"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "~3.1",
+        "silverstripe/cms": "~3.1"
+    },
+    "extra": []
 }
