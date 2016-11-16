@@ -3,13 +3,15 @@ de:
     DELETEDRECORDS: '{count} Einträge gelöscht.'
     IMPORTEDRECORDS: '{count} Einträge importiert.'
     NOCSVFILE: 'Bitte suchen Sie nach einer CSV-Datei zum Importieren'
+    NOIMPORT: 'Kein Import notwendig.'
     UPDATEDRECORDS: '{count} Einträge aktualisiert.'
   RegistryPage:
-    DataClassFieldLabel: 'Datenklasse'
+    DataClassFieldLabel: Datenklasse
     ExportAll: 'Ergebnisse als CSV exportieren'
+    ExportAllTitle: 'Alle Ergebnisse als CSV-Tabelle exportieren'
     NoResults: 'Keine anzuzeigenden Ergebnisse'
-    PLURALNAME: 'Grundseiten'
-    PageLengthFieldLabel: 'Ergebnisseitenlänge'
+    PLURALNAME: Grundseiten
+    PageLengthFieldLabel: Ergebnisseitenlänge
     ResultsFor: 'Suchergebnisse für'
     SelectDropdownDefault: 'Eines auswählen'
     ViewNext: 'Nächste Seite anzeigen'
