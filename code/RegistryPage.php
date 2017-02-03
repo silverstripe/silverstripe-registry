@@ -15,7 +15,7 @@ class RegistryPage extends Page
         $labels = parent::fieldLabels($includerelations);
         $labels['DataClass'] = _t('RegistryPage.DataClassFieldLabel', "Data Class");
         $labels['PageLength'] = _t('RegistryPage.PageLengthFieldLabel', "Results page length");
-        
+
         return $labels;
     }
 
@@ -55,6 +55,9 @@ class RegistryPage extends Page
         $classDropdown->setEmptyString(_t('RegistryPage.SelectDropdownDefault', 'Select one'));
         $fields->addFieldToTab('Root.Main', $classDropdown, 'Content');
         $fields->addFieldToTab('Root.Main', new NumericField('PageLength', $this->fieldLabel('PageLength')), 'Content');
+
+        $this->extend('updateCMSFields', $fields);
+
         return $fields;
     }
 
@@ -73,7 +76,7 @@ class RegistryPage extends Page
     {
         $page = $this;
         $pages = array();
-        
+
         while (
             $page
             && (!$maxDepth || count($pages) < $maxDepth)
@@ -82,7 +85,7 @@ class RegistryPage extends Page
             if ($showHidden || $page->ShowInMenus || ($page->ID == $this->ID)) {
                 $pages[] = $page;
             }
-            
+
             $page = $page->Parent;
         }
 
@@ -98,9 +101,9 @@ class RegistryPage extends Page
                 }
             }
         }
-        
+
         $template = new SSViewer('BreadcrumbsTemplate');
-        
+
         return $template->process($this->customise(new ArrayData(array(
             'Pages' => new ArrayList(array_reverse($pages))
         ))));
@@ -266,7 +269,7 @@ class RegistryPage_Controller extends Page_Controller
         }
         $direction = (!empty($variables['Dir']) && in_array($variables['Dir'], array('ASC', 'DESC'))) ? $variables['Dir'] : 'ASC';
         $orderby = array("\"{$sort}\"" => $direction);
-        
+
         // Filtering
         $where = array();
         if ($singleton) {
