@@ -345,10 +345,10 @@ class RegistryPage_Controller extends Page_Controller
             flush();
             readfile($filepath);
 
-            unlink($filePath);
+            unlink($filepath);
         } else {
             $contents = file_get_contents($filepath);
-            unlink($filePath);
+            unlink($filepath);
             return $contents;
         }
     }
