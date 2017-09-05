@@ -355,6 +355,12 @@ class RegistryPage_Controller extends Page_Controller
 
     public function show($request)
     {
+        // if Id is empty or it is not numeric, then return an error page
+        if(empty($request->param('ID')) || !is_numeric($request->param('ID')))
+        {
+            return $this->httpError(404);
+        }
+        
         $data = DataObject::get_by_id($this->DataClass, $request->param('ID'));
         if (!($data && $data->exists())) {
             return $this->httpError(404);
