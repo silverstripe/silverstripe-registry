@@ -1,0 +1,27 @@
+ru:
+  ModelAdmin:
+    DELETEDRECORDS: 'Удалено {count} записей.'
+    IMPORTEDRECORDS: 'Импортировано {count} записей.'
+    NOCSVFILE: 'Выберите CSV-файл для импорта'
+    NOIMPORT: 'Нечего импортировать'
+    UPDATEDRECORDS: 'Обновлено {count} записей.'
+  RegistryAdmin:
+    MENUTITLE: 'Регистр'
+  RegistryPage:
+    DESCRIPTION: 'Показывает большие списки данных в фильтрованных, постраничных списках с возможностью поиска.'
+    DataClassFieldLabel: 'Тип Данных'
+    ExportAll: 'Экспорт в CSV'
+    ExportAllTitle: 'Экспорт в табличный CSV файл'
+    NoResults: 'Нет данных для отображения'
+    PLURALNAME: 'Базовые страницы'
+    PageLengthFieldLabel: 'Кол-во позиций на странице'
+    ResultsFor: 'Результаты поиска по'
+    SINGULARNAME: 'Регистр'
+    SelectDropdownDefault: Выберите
+    ViewHistory: 'История импорта данных'
+    ViewNext: 'Перейти к следующей странице'
+    ViewPageNum: 'Просмотреть страницу №'
+    ViewPrev: 'Перейти к предыдущей странице'
+  SiteTree:
+    PLURALNAME: Страницы
+    SINGULARNAME: Страница
