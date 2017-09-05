@@ -15,7 +15,7 @@ class RegistryPage extends Page
         $labels = parent::fieldLabels($includerelations);
         $labels['DataClass'] = _t('RegistryPage.DataClassFieldLabel', "Data Class");
         $labels['PageLength'] = _t('RegistryPage.PageLengthFieldLabel', "Results page length");
-        
+
         return $labels;
     }
 
@@ -73,7 +73,7 @@ class RegistryPage extends Page
     {
         $page = $this;
         $pages = array();
-        
+
         while (
             $page
             && (!$maxDepth || count($pages) < $maxDepth)
@@ -82,7 +82,7 @@ class RegistryPage extends Page
             if ($showHidden || $page->ShowInMenus || ($page->ID == $this->ID)) {
                 $pages[] = $page;
             }
-            
+
             $page = $page->Parent;
         }
 
@@ -98,9 +98,9 @@ class RegistryPage extends Page
                 }
             }
         }
-        
+
         $template = new SSViewer('BreadcrumbsTemplate');
-        
+
         return $template->process($this->customise(new ArrayData(array(
             'Pages' => new ArrayList(array_reverse($pages))
         ))));
@@ -266,7 +266,7 @@ class RegistryPage_Controller extends Page_Controller
         }
         $direction = (!empty($variables['Dir']) && in_array($variables['Dir'], array('ASC', 'DESC'))) ? $variables['Dir'] : 'ASC';
         $orderby = array("\"{$sort}\"" => $direction);
-        
+
         // Filtering
         $where = array();
         if ($singleton) {
@@ -355,7 +355,13 @@ class RegistryPage_Controller extends Page_Controller
 
     public function show($request)
     {
+        // If Id is not numeric, then return an error page
+        if (!is_numeric($request->param('ID'))) {
+            return $this->httpError(404);
+        }
+
         $data = DataObject::get_by_id($this->DataClass, $request->param('ID'));
+
         if (!($data && $data->exists())) {
             return $this->httpError(404);
         }
