@@ -21,7 +21,7 @@ class RegistryImportFeed
 
     public function getLatest()
     {
-        $files = new ArrayList();
+        $files = ArrayList::create();
 
         $path = REGISTRY_IMPORT_PATH . '/' . $this->modelClass;
         if (file_exists($path)) {
@@ -32,7 +32,7 @@ class RegistryImportFeed
 
             if (($registryPage && $registryPage->exists())) {
                 foreach (array_diff(scandir($path), array('.', '..')) as $file) {
-                    $files->push(new RegistryImportFeedEntry(
+                    $files->push(RegistryImportFeedEntry::create(
                         $file,
                         '',
                         filemtime($path . '/' . $file),
@@ -42,7 +42,7 @@ class RegistryImportFeed
             }
         }
 
-        return new RSSFeed(
+        return RSSFeed::create(
             $files,
             'registry-feed/latest/' . $this->modelClass,
             singleton($this->modelClass)->singular_name() . ' data import history'
