@@ -1,4 +1,9 @@
 <?php
+
+namespace SilverStripe\Registry;
+
+use SilverStripe\Forms\FieldList;
+
 interface RegistryDataInterface
 {
     /**
@@ -8,11 +13,12 @@ interface RegistryDataInterface
      * Example:
      *
      * <code>
-     * public function getSearchFields() {
-     *	return new FieldList(
-     *		new TextField('FirstName', 'First name'),
-     *		new TextField('Surname', 'Surname')
-     *	);
+     * public function getSearchFields()
+     * {
+     *     return new FieldList(
+     *         new TextField('FirstName', 'First name'),
+     *         new TextField('Surname', 'Surname')
+     *     );
      * }
      * </code>
      *

@@ -1,4 +1,10 @@
 <?php
+
+namespace SilverStripe\Registry;
+
+use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Core\ClassInfo;
+
 class RegistryAdmin extends ModelAdmin
 {
     private static $url_segment = 'registry';
@@ -16,7 +22,7 @@ class RegistryAdmin extends ModelAdmin
 
     public function getManagedModels()
     {
-        $models = ClassInfo::implementorsOf('RegistryDataInterface');
+        $models = ClassInfo::implementorsOf(RegistryDataInterface::class);
 
         foreach ($models as $k => $v) {
             if (is_numeric($k)) {
@@ -54,7 +60,9 @@ class RegistryAdmin extends ModelAdmin
 
     public function import($data, $form, $request)
     {
-        if (!$this->showImportForm || (is_array($this->showImportForm) && !in_array($this->modelClass, $this->showImportForm))) {
+        if (!$this->showImportForm
+            || (is_array($this->showImportForm) && !in_array($this->modelClass, $this->showImportForm))
+        ) {
             return false;
         }
 
@@ -62,9 +70,8 @@ class RegistryAdmin extends ModelAdmin
         $loader = $importers[$this->modelClass];
 
         // File wasn't properly uploaded, show a reminder to the user
-        if (
-            empty($_FILES['_CsvFile']['tmp_name']) ||
-            file_get_contents($_FILES['_CsvFile']['tmp_name']) == ''
+        if (empty($_FILES['_CsvFile']['tmp_name'])
+            || file_get_contents($_FILES['_CsvFile']['tmp_name']) == ''
         ) {
             $form->sessionMessage(_t('ModelAdmin.NOCSVFILE', 'Please browse for a CSV file to import'), 'good');
             $this->redirectBack();
@@ -78,29 +85,35 @@ class RegistryAdmin extends ModelAdmin
         $results = $loader->load($_FILES['_CsvFile']['tmp_name']);
 
         // copy the uploaded file into the export path
-        copy($_FILES['_CsvFile']['tmp_name'], sprintf('%s/import-%s.csv', $this->getCsvImportsPath(), date('Y-m-dHis')));
+        copy(
+            $_FILES['_CsvFile']['tmp_name'],
+            sprintf('%s/import-%s.csv', $this->getCsvImportsPath(), date('Y-m-dHis'))
+        );
 
         $message = '';
         if ($results->CreatedCount()) {
             $message .= _t(
-            'ModelAdmin.IMPORTEDRECORDS', "Imported {count} records.",
-            array('count' => $results->CreatedCount())
-        );
+                'SilverStripe\\Admin\\ModelAdmin.IMPORTEDRECORDS',
+                "Imported {count} records.",
+                ['count' => $results->CreatedCount()]
+            );
         }
         if ($results->UpdatedCount()) {
             $message .= _t(
-            'ModelAdmin.UPDATEDRECORDS', "Updated {count} records.",
-            array('count' => $results->UpdatedCount())
-        );
+                'SilverStripe\\Admin\\ModelAdmin.UPDATEDRECORDS',
+                "Updated {count} records.",
+                ['count' => $results->UpdatedCount()]
+            );
         }
         if ($results->DeletedCount()) {
             $message .= _t(
-            'ModelAdmin.DELETEDRECORDS', "Deleted {count} records.",
-            array('count' => $results->DeletedCount())
-        );
+                'SilverStripe\\Admin\\ModelAdmin.DELETEDRECORDS',
+                "Deleted {count} records.",
+                ['count' => $results->DeletedCount()]
+            );
         }
         if (!$results->CreatedCount() && !$results->UpdatedCount()) {
-            $message .= _t('ModelAdmin.NOIMPORT', "Nothing to import");
+            $message .= _t('SilverStripe\\Admin\\ModelAdmin.NOIMPORT', "Nothing to import");
         }
 
         $form->sessionMessage($message, 'good');

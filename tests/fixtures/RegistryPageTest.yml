@@ -1,14 +1,15 @@
-RegistryPage:
-    contact-registrypage:
-        Title: Contact search
-        URLSegment: contact-search
-        DataClass: RegistryPageTestContact
-    contact-registrypage-with-length:
-        Title: Contact search with limit
-        URLSegment: contact-search-with-limit
-        DataClass: RegistryPageTestContact
-        PageLength: 20
-RegistryPageTestSubclass:
-    registrypage-subclass:
-        Title: Subclass
-        DataClass: RegistryPageTestContact
+SilverStripe\Registry\RegistryPage:
+  contact-registrypage:
+    Title: Contact search
+    URLSegment: contact-search
+    DataClass: SilverStripe\Registry\Tests\Stub\RegistryPageTestContact
+  contact-registrypage-with-length:
+    Title: Contact search with limit
+    URLSegment: contact-search-with-limit
+    DataClass: SilverStripe\Registry\Tests\Stub\RegistryPageTestContact
+    PageLength: 20
+
+SilverStripe\Registry\Tests\Stub\RegistryPageTestSubclass:
+  registrypage-subclass:
+    Title: Subclass
+    DataClass: SilverStripe\Registry\Tests\Stub\RegistryPageTestContact
