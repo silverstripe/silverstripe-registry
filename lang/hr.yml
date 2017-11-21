@@ -1,13 +1,7 @@
 hr:
-  ModelAdmin:
-    DELETEDRECORDS: 'Obrisano {count} zapisa.'
-    IMPORTEDRECORDS: 'Uveženo {count} zapisa.'
-    NOCSVFILE: 'Molimo pretražite CSV datoteku za uvoz'
-    NOIMPORT: 'Ništa za uvoz'
-    UPDATEDRECORDS: 'Osvježeno {count} zapisa.'
-  RegistryAdmin:
+  SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Registar
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     DESCRIPTION: 'Prikazuje veliki set podatka u filtiranoj, pretraživanoj i paginiranoj listi'
     DataClassFieldLabel: 'Klasa podataka'
     ExportAll: 'Izvezi rezultate u CSV'
@@ -22,6 +16,3 @@ hr:
     ViewNext: 'Pregledaj slijedeću stranicu'
     ViewPageNum: 'Pregledaj broj stranice'
     ViewPrev: 'Pregledaj prethodnu stranicu'
-  SiteTree:
-    PLURALNAME: Stranice
-    SINGULARNAME: Stranica

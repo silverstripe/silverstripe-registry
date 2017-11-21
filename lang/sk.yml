@@ -1,6 +1,3 @@
 sk:
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     PLURALNAME: 'Základné stránky'
-  SiteTree:
-    PLURALNAME: Stránky
-    SINGULARNAME: Stránka

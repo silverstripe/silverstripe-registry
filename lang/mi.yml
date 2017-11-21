@@ -1,13 +1,7 @@
 mi:
-  ModelAdmin:
-    DELETEDRECORDS: 'I mukua e {count} ngā pūkete.'
-    IMPORTEDRECORDS: 'I kawea mai e {count} ngā pūkete.'
-    NOCSVFILE: 'Pūtirotiro kia kitea he kōnae CSV hei kawemai'
-    NOIMPORT: 'Kāore he mea hei kawemai'
-    UPDATEDRECORDS: 'I whakahōutia e {count} ngā pūkete.'
-  RegistryAdmin:
+  SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Rēhita
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     DESCRIPTION: 'Ka whakaatu i te rārangi rahi o ngā raraunga mā te rārangi ka taea te tātari, te rapu, kua whakawhārangitia hoki'
     DataClassFieldLabel: 'Tauaha Raraunga'
     ExportAll: 'Kawea ake ngā hua ki CSV'
@@ -22,6 +16,3 @@ mi:
     ViewNext: 'Tirohia te whārangi ka whai ake'
     ViewPageNum: 'Tirohia te tau whārangi'
     ViewPrev: 'Tirohia te whārangi o mua'
-  SiteTree:
-    PLURALNAME: 'Ngā Whārangi'
-    SINGULARNAME: Whārangi

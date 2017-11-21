@@ -1,13 +1,7 @@
 fi:
-  ModelAdmin:
-    DELETEDRECORDS: '{count} poistettua tietuetta.'
-    IMPORTEDRECORDS: '{count} tuotua tietuetta.'
-    NOCSVFILE: 'Selaa CSV-tiedosto tuotavaksi'
-    NOIMPORT: 'Ei tuotavia'
-    UPDATEDRECORDS: '{count} päivitettyä tietuetta.'
-  RegistryAdmin:
+  SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Rekisteri
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     DESCRIPTION: 'Näytä laajat data-sarjat suodatettavana, haettavana ja sivutettuna listana'
     DataClassFieldLabel: Dataluokka
     ExportAll: 'Vie tulokset CSV-tiedostoksi'
@@ -22,6 +16,3 @@ fi:
     ViewNext: 'Katso seuraavaa sivua'
     ViewPageNum: 'Katso sivunumeroa'
     ViewPrev: 'Katso edellinen sivu'
-  SiteTree:
-    PLURALNAME: Sivut
-    SINGULARNAME: Sivu

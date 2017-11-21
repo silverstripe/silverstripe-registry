@@ -1,13 +1,7 @@
 id:
-  ModelAdmin:
-    DELETEDRECORDS: 'Dihapus {count} rekod'
-    IMPORTEDRECORDS: 'Diimpor {count} rekod'
-    NOCSVFILE: 'Mohon lihat sebuah berkas CSV untuk impor'
-    NOIMPORT: 'Tidak ada yang diimpor'
-    UPDATEDRECORDS: 'Memperbaharui {count} rekod'
-  RegistryAdmin:
+  SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Registri
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     DESCRIPTION: 'Menunjukkan serangkaian besar data dalam daftar disaring, dicari, dan daftar paginasi'
     DataClassFieldLabel: 'Klas Data'
     ExportAll: 'Ekspor hasil ke CSV'
@@ -22,6 +16,3 @@ id:
     ViewNext: 'Menampilkan halaman selanjutnya'
     ViewPageNum: 'Menampilkan nomor halaman'
     ViewPrev: 'Menampilkan halaman sebelumnya'
-  SiteTree:
-    PLURALNAME: Halaman
-    SINGULARNAME: Halaman
