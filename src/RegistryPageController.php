@@ -2,28 +2,36 @@
 
 namespace SilverStripe\Registry;
 
-use SQLQuery;
-use ArrayList;
-use ArrayData;
-use Convert;
-use FieldList;
-use FormAction;
-use HTTP;
-use DataObject;
-use PaginatedList;
-use HTTPRequest;
-use HiddenField;
-use Controller;
-use Form;
 use PageController;
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\HTTP;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Core\Convert;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\PaginatedList;
+use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\View\ArrayData;
 
 class RegistryPageController extends PageController
 {
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         'RegistryFilterForm',
         'show',
-        'export'
-    );
+        'export',
+    ];
+
+    /**
+     * Whether to output headers when sending the export file. This can be disabled for example in unit tests.
+     *
+     * @config
+     * @var bool
+     */
+    private static $output_headers = true;
 
     /**
      * Get all search query vars, compiled into a query string for a URL.
@@ -33,7 +41,7 @@ class RegistryPageController extends PageController
      */
     public function AllQueryVars()
     {
-        return Convert::raw2xml(http_build_query($this->_queryVars()));
+        return Convert::raw2xml(http_build_query($this->queryVars()));
     }
 
     /**
@@ -44,7 +52,7 @@ class RegistryPageController extends PageController
      */
     public function QueryLink()
     {
-        $vars = $this->_queryVars();
+        $vars = $this->queryVars();
         unset($vars['Sort']);
         unset($vars['Dir']);
 
@@ -91,17 +99,17 @@ class RegistryPageController extends PageController
 
         // Add the sort information.
         $vars = $this->getRequest()->getVars();
-        $fields->merge(new FieldList(
-            new HiddenField('Sort', 'Sort', (!$vars || empty($vars['Sort'])) ? 'ID' : $vars['Sort']),
-            new HiddenField('Dir', 'Dir', (!$vars || empty($vars['Dir'])) ? 'ASC' : $vars['Dir'])
+        $fields->merge(FieldList::create(
+            HiddenField::create('Sort', 'Sort', (!$vars || empty($vars['Sort'])) ? 'ID' : $vars['Sort']),
+            HiddenField::create('Dir', 'Dir', (!$vars || empty($vars['Dir'])) ? 'ASC' : $vars['Dir'])
         ));
 
-        $actions = new FieldList(
+        $actions = FieldList::create(
             FormAction::create('doRegistryFilter')->setTitle('Filter')->addExtraClass('btn btn-primary primary'),
             FormAction::create('doRegistryFilterReset')->setTitle('Clear')->addExtraClass('btn')
         );
 
-        $form = new Form($this, 'RegistryFilterForm', $fields, $actions);
+        $form = Form::create($this, 'RegistryFilterForm', $fields, $actions);
         $form->loadDataFrom($this->request->getVars());
         $form->disableSecurityToken();
         $form->setFormMethod('get');
@@ -121,11 +129,11 @@ class RegistryPageController extends PageController
     public function doRegistryFilter($data, $form, $request)
     {
         // Basic parameters
-        $parameters = array(
+        $parameters = [
             'start' => 0,
             'Sort' => 'ID',
-            'Dir' => 'ASC'
-        );
+            'Dir' => 'ASC',
+        ];
 
         // Data record-specific parameters
         $singleton = $this->dataRecord->getDataSingleton();
@@ -175,11 +183,11 @@ class RegistryPageController extends PageController
         if ($singleton && !$singleton->hasDatabaseField($sort)) {
             $sort = 'ID';
         }
-        $direction = (!empty($variables['Dir']) && in_array($variables['Dir'], array('ASC', 'DESC'))) ? $variables['Dir'] : 'ASC';
-        $orderby = array("\"{$sort}\"" => $direction);
+        $direction = (!empty($variables['Dir']) && in_array($variables['Dir'], ['ASC', 'DESC'])) ? $variables['Dir'] : 'ASC';
+        $orderby = ["\"{$sort}\"" => $direction];
 
         // Filtering
-        $where = array();
+        $where = [];
         if ($singleton) {
             foreach ($singleton->getSearchFields() as $field) {
                 if (!empty($variables[$field->getName()])) {
@@ -194,14 +202,14 @@ class RegistryPageController extends PageController
     public function Columns($result = null)
     {
         $columns = $this->dataRecord->getDataSingleton()->summaryFields();
-        $list = new ArrayList();
+        $list = ArrayList::create();
         foreach ($columns as $name => $title) {
-            $list->push(new ArrayData(array(
+            $list->push(ArrayData::create([
                 'Name' => $name,
                 'Title' => $title,
                 'Link' => (($result && $result->hasMethod('Link')) ? $result->Link() : ''),
                 'Value' => ($result ? $result->obj($name) : '')
-            )));
+            ]));
         }
         return $list;
     }
@@ -243,7 +251,7 @@ class RegistryPageController extends PageController
 
         // if the headers can't be sent (i.e. running a unit test, or something)
         // just return the file path so the user can manually download the csv
-        if (!headers_sent() && !SapphireTest::is_running_test()) {
+        if (!headers_sent() && $this->config()->get('output_headers')) {
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename=' . basename($filepath));
@@ -294,17 +302,19 @@ class RegistryPageController extends PageController
     {
         $dataClass = $this->dataRecord->getDataClass();
         if (!$dataClass) {
-            return new PaginatedList(new ArrayList());
+            return PaginatedList::create(ArrayList::create());
         }
+
+        $tableName = DataObject::getSchema()->tableName($dataClass);
 
         $resultColumns = $this->dataRecord->getDataSingleton()->summaryFields();
         $resultColumns['ID'] = 'ID';
-        $results = new ArrayList();
+        $results = ArrayList::create();
 
-        $query = new SQLQuery();
+        $query = SQLSelect::create();
         $query
             ->setSelect($this->escapeSelect(array_keys($resultColumns)))
-            ->setFrom("\"{$dataClass}\"");
+            ->setFrom('"' . $tableName . '"');
         $query->addWhere($where);
         $query->addOrderBy($orderby);
         $query->setConnective('AND');
@@ -320,7 +330,7 @@ class RegistryPageController extends PageController
         }
 
         if ($paged) {
-            $list = new PaginatedList($results);
+            $list = PaginatedList::create($results);
             $list->setPageStart($start);
             $list->setPageLength($pageLength);
             $list->setTotalItems($query->unlimitedRowCount());
@@ -340,7 +350,12 @@ class RegistryPageController extends PageController
      */
     protected function escapeSelect($names)
     {
-        return array_map(function ($var) { return "\"{$var}\""; }, $names);
+        return array_map(
+            function ($var) {
+                return "\"{$var}\"";
+            },
+            $names
+        );
     }
 
     /**
@@ -352,7 +367,7 @@ class RegistryPageController extends PageController
      *
      * @return array
      */
-    protected function _queryVars()
+    protected function queryVars()
     {
         $resultColumns = $this->dataRecord->getDataSingleton()->getSearchFields();
         $columns = array();
@@ -362,11 +377,11 @@ class RegistryPageController extends PageController
 
         $arr = array_merge(
             $columns,
-            array(
+            [
                 'action_doRegistryFilter' => 'Filter',
                 'Sort' => '',
                 'Dir' => ''
-            )
+            ]
         );
 
         foreach ($arr as $key => $val) {
@@ -381,17 +396,17 @@ class RegistryPageController extends PageController
     public function getTemplateList($action)
     {
         // Add action-specific templates for inheritance chain
-        $templates = array();
-        $parentClass = $this->class;
-        if ($action && $action != 'index') {
-            $parentClass = $this->class;
+        $templates = [];
+        $parentClass = get_class($this->class);
+        if ($action && $action !== 'index') {
+            $parentClass = get_class($this);
             while ($parentClass !== Controller::class) {
                 $templates[] = strtok($parentClass, '_') . '_' . $action;
                 $parentClass = get_parent_class($parentClass);
             }
         }
         // Add controller templates for inheritance chain
-        $parentClass = $this->class;
+        $parentClass = get_class($this->class);
         while ($parentClass !== Controller::class) {
             $templates[] = strtok($parentClass, '_');
             $parentClass = get_parent_class($parentClass);
@@ -402,19 +417,19 @@ class RegistryPageController extends PageController
         // remove duplicates
         $templates = array_unique($templates);
 
-        $actionlessTemplates = array();
+        $actionlessTemplates = [];
 
         if ($action && $action !== 'index') {
-            array_unshift($templates, RegistryPage::class . '_' . $this->DataClass . '_' . $action);
+            array_unshift($templates, $this->DataClass . '_' . $action);
         }
-        array_unshift($actionlessTemplates, RegistryPage::class . '_' . $this->DataClass);
+        array_unshift($actionlessTemplates, $this->DataClass);
 
         $parentClass = get_class($this->dataRecord);
         while ($parentClass !== RegistryPage::class) {
             if ($action && $action != 'index') {
-                array_unshift($templates, $parentClass . '_' . $this->DataClass . '_' . $action);
+                array_unshift($templates, $parentClass . '_' . $action);
             }
-            array_unshift($actionlessTemplates, $parentClass . '_' . $this->DataClass);
+            array_unshift($actionlessTemplates, $parentClass);
 
             $parentClass = get_parent_class($parentClass);
         }

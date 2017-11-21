@@ -2,7 +2,7 @@
 
 namespace SilverStripe\Registry;
 
-use ViewableData;
+use SilverStripe\View\ViewableData;
 
 class RegistryImportFeedEntry extends ViewableData
 {
@@ -11,6 +11,10 @@ class RegistryImportFeedEntry extends ViewableData
     protected $date;
     protected $link;
 
+    private static $casting = [
+        'Date' => 'DBDatetime',
+    ];
+
     public function __construct($title, $description, $date, $link)
     {
         $this->title = $title;
@@ -18,10 +22,6 @@ class RegistryImportFeedEntry extends ViewableData
         $this->date = $date;
         $this->link = $link;
     }
-
-    public static $casting = array(
-        'Date' => 'DBDatetime'
-    );
 
     public function Link()
     {

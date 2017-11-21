@@ -3,33 +3,33 @@
 namespace SilverStripe\Registry;
 
 use Page;
-use ClassInfo;
-use DropdownField;
-use NumericField;
-use DataList;
-use DBDatetime;
-use Controller;
-use DataObject;
-use SSViewer;
-use ArrayData;
-use ArrayList;
+use SilverStripe\Control\Controller;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\NumericField;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataList;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\FieldType\DBDatetime;
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\ArrayData;
 
 class RegistryPage extends Page
 {
     private static $description = 'Shows large series of data in a filterable, searchable, and paginated list';
 
-    private static $db = array(
+    private static $db = [
         'DataClass' => 'Varchar(100)',
-        'PageLength' => 'Int'
-    );
+        'PageLength' => 'Int',
+    ];
 
     public static $page_length_default = 10;
 
     public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels($includerelations);
-        $labels['DataClass'] = _t('RegistryPage.DataClassFieldLabel', "Data Class");
-        $labels['PageLength'] = _t('RegistryPage.PageLengthFieldLabel', "Results page length");
+        $labels['DataClass'] = _t(__CLASS__ . '.DataClassFieldLabel', "Data Class");
+        $labels['PageLength'] = _t(__CLASS__ . '.PageLengthFieldLabel', "Results page length");
 
         return $labels;
     }
@@ -66,17 +66,17 @@ class RegistryPage extends Page
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-        $classDropdown = new DropdownField('DataClass', $this->fieldLabel('DataClass'), $this->getDataClasses());
-        $classDropdown->setEmptyString(_t('RegistryPage.SelectDropdownDefault', 'Select one'));
+        $classDropdown = DropdownField::create('DataClass', $this->fieldLabel('DataClass'), $this->getDataClasses());
+        $classDropdown->setEmptyString(_t(__CLASS__ . '.SelectDropdownDefault', 'Select one'));
         $fields->addFieldToTab('Root.Main', $classDropdown, 'Content');
-        $fields->addFieldToTab('Root.Main', new NumericField('PageLength', $this->fieldLabel('PageLength')), 'Content');
+        $fields->addFieldToTab('Root.Main', NumericField::create('PageLength', $this->fieldLabel('PageLength')), 'Content');
         return $fields;
     }
 
     public function LastUpdated()
     {
-        $elements = new DataList($this->dataClass);
-        $lastUpdated = new DBDatetime('LastUpdated');
+        $elements = DataList::create($this->dataClass);
+        $lastUpdated = DBDatetime::create('LastUpdated');
         $lastUpdated->setValue($elements->max('LastEdited'));
         return $lastUpdated;
     }
@@ -84,13 +84,12 @@ class RegistryPage extends Page
     /**
      * Modified version of Breadcrumbs, to cater for viewing items.
      */
-    public function Breadcrumbs($maxDepth = 20, $unlinked = false, $stopAtPageType = false, $showHidden = false)
+    public function Breadcrumbs($maxDepth = 20, $unlinked = false, $stopAtPageType = false, $showHidden = false, $delimiter = '&raquo;')
     {
         $page = $this;
-        $pages = array();
+        $pages = [];
 
-        while (
-            $page
+        while ($page
             && (!$maxDepth || count($pages) < $maxDepth)
             && (!$stopAtPageType || $page->ClassName != $stopAtPageType)
         ) {
@@ -114,10 +113,10 @@ class RegistryPage extends Page
             }
         }
 
-        $template = new SSViewer('BreadcrumbsTemplate');
+        $template = SSViewer::create('BreadcrumbsTemplate');
 
-        return $template->process($this->customise(new ArrayData(array(
-            'Pages' => new ArrayList(array_reverse($pages))
-        ))));
+        return $template->process($this->customise(ArrayData::create([
+            'Pages' => ArrayList::create(array_reverse($pages))
+        ])));
     }
 }

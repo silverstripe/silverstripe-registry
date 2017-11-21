@@ -2,23 +2,25 @@
 
 namespace SilverStripe\Registry\Tests\Stub;
 
-use DataObject;
-use RegistryDataInterface;
-use FieldList;
-use TextField;
-use TestOnly;
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Registry\RegistryDataInterface;
 
 class RegistryPageTestContact extends DataObject implements RegistryDataInterface, TestOnly
 {
-    private static $db = array(
-        'FirstName' => 'Varchar(50)',
-        'Surname' => 'Varchar(50)'
-    );
+    private static $table_name = 'RegistryPageTestContact';
 
-    private static $summary_fields = array(
+    private static $db = [
+        'FirstName' => 'Varchar(50)',
+        'Surname' => 'Varchar(50)',
+    ];
+
+    private static $summary_fields = [
         'FirstName' => 'First name',
-        'Surname' => 'Surname'
-    );
+        'Surname' => 'Surname',
+    ];
 
     public function getSearchFields()
     {

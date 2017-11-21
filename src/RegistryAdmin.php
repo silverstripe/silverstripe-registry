@@ -2,8 +2,8 @@
 
 namespace SilverStripe\Registry;
 
-use ModelAdmin;
-use ClassInfo;
+use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Core\ClassInfo;
 
 class RegistryAdmin extends ModelAdmin
 {

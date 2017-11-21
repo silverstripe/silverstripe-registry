@@ -1,7 +1,0 @@
----
-Name: registryconfig
----
-SilverStripe\Admin\LeftAndMain:
-  extra_requirements_css:
-    registry/css/RegistryAdmin.css:
-      media: screen

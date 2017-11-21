@@ -2,10 +2,10 @@
 
 namespace SilverStripe\Registry\Tests;
 
-use SapphireTest;
-use RegistryPage;
-use RegistryPageTestContact;
-use RegistryPageTestSubclass;
+use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Registry\RegistryPage;
+use SilverStripe\Registry\Tests\Stub\RegistryPageTestContact;
+use SilverStripe\Registry\Tests\Stub\RegistryPageTestSubclass;
 
 class RegistryPageTest extends SapphireTest
 {

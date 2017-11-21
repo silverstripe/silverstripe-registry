@@ -1,10 +1,10 @@
-SilverStripe\Registry\RegistryPageTestPage:
+SilverStripe\Registry\Tests\Stub\RegistryPageTestPage:
   contact-registrypage:
     Title: Contact search
     URLSegment: contact-search
-    DataClass: SilverStripe\Registry\RegistryPageTestContact
+    DataClass: SilverStripe\Registry\Tests\Stub\RegistryPageTestContact
   contact-registrypage-limit:
     Title: Contact search
     URLSegment: contact-search-limit
-    DataClass: SilverStripe\Registry\RegistryPageTestContact
+    DataClass: SilverStripe\Registry\Tests\Stub\RegistryPageTestContact
     PageLength: 3

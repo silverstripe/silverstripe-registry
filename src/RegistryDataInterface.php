@@ -2,7 +2,7 @@
 
 namespace SilverStripe\Registry;
 
-use FieldList;
+use SilverStripe\Forms\FieldList;
 
 interface RegistryDataInterface
 {

@@ -2,8 +2,8 @@
 
 namespace SilverStripe\Registry\Tests\Stub;
 
-use TestOnly;
-use RegistryPageController;
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\Registry\RegistryPageController;
 
 class RegistryPageTestPageController extends RegistryPageController implements TestOnly
 {

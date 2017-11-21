@@ -2,21 +2,21 @@
 
 namespace SilverStripe\Registry;
 
-use Controller;
+use SilverStripe\Control\Controller;
 
 class RegistryImportFeedController extends Controller
 {
-    private static $allowed_actions = array(
-        'latest'
-    );
+    private static $allowed_actions = [
+        'latest',
+    ];
 
-    public static $url_handlers = array(
+    private static $url_handlers = [
         '$Action/$ModelClass' => 'handleAction',
-    );
+    ];
 
     public function latest($request)
     {
-        $feed = new RegistryImportFeed();
+        $feed = RegistryImportFeed::create();
         $feed->setModelClass($request->param('ModelClass'));
         return $feed->getLatest()->outputToBrowser();
     }

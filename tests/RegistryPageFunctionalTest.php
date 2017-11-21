@@ -2,10 +2,11 @@
 
 namespace SilverStripe\Registry\Tests;
 
-use FunctionalTest;
-use CSSContentParser;
-use RegistryPageTestPage;
-use Controller;
+use SilverStripe\Control\Controller;
+use SilverStripe\Dev\CSSContentParser;
+use SilverStripe\Dev\FunctionalTest;
+use SilverStripe\Registry\Tests\Stub\RegistryPageTestContact;
+use SilverStripe\Registry\Tests\Stub\RegistryPageTestPage;
 
 class RegistryPageFunctionalTest extends FunctionalTest
 {
@@ -14,9 +15,9 @@ class RegistryPageFunctionalTest extends FunctionalTest
         'fixtures/RegistryPageFunctionalTest.yml',
     ];
 
-    protected static $extra_databjects = [
-        RegistryPageTestPage::class,
+    protected static $extra_dataobjects = [
         RegistryPageTestContact::class,
+        RegistryPageTestPage::class,
     ];
 
     protected static $use_draft_site = true;
