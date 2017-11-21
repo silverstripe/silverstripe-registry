@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Registry\Tests;
 
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Registry\RegistryPage;
 use SilverStripe\Registry\Tests\Stub\RegistryPageTestContact;
@@ -21,8 +22,9 @@ class RegistryPageTest extends SapphireTest
 
     public function testPageLengthDefault()
     {
+        Config::modify()->set(RegistryPage::class, 'page_length_default', 13);
         $page = $this->objFromFixture(RegistryPage::class, 'contact-registrypage');
-        $this->assertEquals(RegistryPage::$page_length_default, $page->getPageLength());
+        $this->assertEquals(13, $page->getPageLength());
     }
 
     public function testPageLengthFieldOverridesDefault()
