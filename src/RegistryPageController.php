@@ -397,7 +397,7 @@ class RegistryPageController extends PageController
     {
         // Add action-specific templates for inheritance chain
         $templates = [];
-        $parentClass = get_class($this->class);
+        $parentClass = get_class($this);
         if ($action && $action !== 'index') {
             $parentClass = get_class($this);
             while ($parentClass !== Controller::class) {
@@ -406,7 +406,7 @@ class RegistryPageController extends PageController
             }
         }
         // Add controller templates for inheritance chain
-        $parentClass = get_class($this->class);
+        $parentClass = get_class($this);
         while ($parentClass !== Controller::class) {
             $templates[] = strtok($parentClass, '_');
             $parentClass = get_parent_class($parentClass);
