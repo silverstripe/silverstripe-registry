@@ -69,7 +69,11 @@ class RegistryPage extends Page
         $classDropdown = DropdownField::create('DataClass', $this->fieldLabel('DataClass'), $this->getDataClasses());
         $classDropdown->setEmptyString(_t(__CLASS__ . '.SelectDropdownDefault', 'Select one'));
         $fields->addFieldToTab('Root.Main', $classDropdown, 'Content');
-        $fields->addFieldToTab('Root.Main', NumericField::create('PageLength', $this->fieldLabel('PageLength')), 'Content');
+        $fields->addFieldToTab(
+            'Root.Main',
+            NumericField::create('PageLength', $this->fieldLabel('PageLength')),
+            'Content'
+        );
         return $fields;
     }
 
@@ -84,8 +88,13 @@ class RegistryPage extends Page
     /**
      * Modified version of Breadcrumbs, to cater for viewing items.
      */
-    public function Breadcrumbs($maxDepth = 20, $unlinked = false, $stopAtPageType = false, $showHidden = false, $delimiter = '&raquo;')
-    {
+    public function Breadcrumbs(
+        $maxDepth = 20,
+        $unlinked = false,
+        $stopAtPageType = false,
+        $showHidden = false,
+        $delimiter = '&raquo;'
+    ) {
         $page = $this;
         $pages = [];
 

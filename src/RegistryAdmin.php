@@ -60,7 +60,9 @@ class RegistryAdmin extends ModelAdmin
 
     public function import($data, $form, $request)
     {
-        if (!$this->showImportForm || (is_array($this->showImportForm) && !in_array($this->modelClass, $this->showImportForm))) {
+        if (!$this->showImportForm
+            || (is_array($this->showImportForm) && !in_array($this->modelClass, $this->showImportForm))
+        ) {
             return false;
         }
 
@@ -83,7 +85,10 @@ class RegistryAdmin extends ModelAdmin
         $results = $loader->load($_FILES['_CsvFile']['tmp_name']);
 
         // copy the uploaded file into the export path
-        copy($_FILES['_CsvFile']['tmp_name'], sprintf('%s/import-%s.csv', $this->getCsvImportsPath(), date('Y-m-dHis')));
+        copy(
+            $_FILES['_CsvFile']['tmp_name'],
+            sprintf('%s/import-%s.csv', $this->getCsvImportsPath(), date('Y-m-dHis'))
+        );
 
         $message = '';
         if ($results->CreatedCount()) {

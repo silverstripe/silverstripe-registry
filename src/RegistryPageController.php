@@ -183,7 +183,9 @@ class RegistryPageController extends PageController
         if ($singleton && !$singleton->hasDatabaseField($sort)) {
             $sort = 'ID';
         }
-        $direction = (!empty($variables['Dir']) && in_array($variables['Dir'], ['ASC', 'DESC'])) ? $variables['Dir'] : 'ASC';
+        $direction = (!empty($variables['Dir']) && in_array($variables['Dir'], ['ASC', 'DESC']))
+            ? $variables['Dir']
+            : 'ASC';
         $orderby = ["\"{$sort}\"" => $direction];
 
         // Filtering
@@ -191,7 +193,11 @@ class RegistryPageController extends PageController
         if ($singleton) {
             foreach ($singleton->getSearchFields() as $field) {
                 if (!empty($variables[$field->getName()])) {
-                    $where[] = sprintf('"%s" LIKE \'%%%s%%\'', $field->getName(), Convert::raw2sql($variables[$field->getName()]));
+                    $where[] = sprintf(
+                        '"%s" LIKE \'%%%s%%\'',
+                        $field->getName(),
+                        Convert::raw2sql($variables[$field->getName()])
+                    );
                 }
             }
         }
@@ -298,7 +304,7 @@ class RegistryPageController extends PageController
      * @param boolean $paged Paged results or not?
      * @return ArrayList|PaginatedList
      */
-    protected function queryList($where = array(), $orderby = array(), $start, $pageLength, $paged = true)
+    protected function queryList(array $where, array $orderby, $start, $pageLength, $paged = true)
     {
         $dataClass = $this->dataRecord->getDataClass();
         if (!$dataClass) {
@@ -325,7 +331,8 @@ class RegistryPageController extends PageController
 
         foreach ($query->execute() as $record) {
             $result = new $dataClass($record);
-            $result->Columns = $this->Columns($result); // we attach Columns here so the template can loop through them on each result
+            // we attach Columns here so the template can loop through them on each result
+            $result->Columns = $this->Columns($result);
             $results->push($result);
         }
 

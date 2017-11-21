@@ -25,7 +25,11 @@ class RegistryImportFeed
 
         $path = REGISTRY_IMPORT_PATH . '/' . $this->modelClass;
         if (file_exists($path)) {
-            $registryPage = DataObject::get_one(RegistryPage::class, sprintf('"DataClass" = \'%s\'', $this->modelClass));
+            $registryPage = DataObject::get_one(
+                RegistryPage::class,
+                sprintf('"DataClass" = \'%s\'', $this->modelClass)
+            );
+
             if (($registryPage && $registryPage->exists())) {
                 foreach (array_diff(scandir($path), array('.', '..')) as $file) {
                     $files->push(new RegistryImportFeedEntry(
