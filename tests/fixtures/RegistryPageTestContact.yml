@@ -1,28 +1,28 @@
-RegistryPageTestContact:
-    alexander:
-        FirstName: Alexander
-        Surname: Bernie
-    quincy:
-        FirstName: Quincy
-        Surname: Shane
-    smith:
-        FirstName: Smith
-        Surname: Linden
-    pearl:
-        FirstName: Pearl
-        Surname: Trey
-    peyton:
-        FirstName: Peyton
-        Surname: Ronnie
-    elwin:
-        FirstName: Elwin
-        Surname: Jamar
-    owen:
-        FirstName: Owen
-        Surname: Jarvis
-    cairo:
-        FirstName: Cairo
-        Surname: Chadwick
-    tennyson:
-        FirstName: Tennyson
-        Surname: Jerome
+SilverStripe\Registry\Tests\Stub\RegistryPageTestContact:
+  alexander:
+    FirstName: Alexander
+    Surname: Bernie
+  quincy:
+    FirstName: Quincy
+    Surname: Shane
+  smith:
+    FirstName: Smith
+    Surname: Linden
+  pearl:
+    FirstName: Pearl
+    Surname: Trey
+  peyton:
+    FirstName: Peyton
+    Surname: Ronnie
+  elwin:
+    FirstName: Elwin
+    Surname: Jamar
+  owen:
+    FirstName: Owen
+    Surname: Jarvis
+  cairo:
+    FirstName: Cairo
+    Surname: Chadwick
+  tennyson:
+    FirstName: Tennyson
+    Surname: Jerome

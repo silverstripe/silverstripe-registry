@@ -1,5 +1,14 @@
 <?php
-class RegistryPageTestContact extends DataObject implements RegistryDataInterface
+
+namespace SilverStripe\Registry\Tests\Stub;
+
+use DataObject;
+use RegistryDataInterface;
+use FieldList;
+use TextField;
+use TestOnly;
+
+class RegistryPageTestContact extends DataObject implements RegistryDataInterface, TestOnly
 {
     private static $db = array(
         'FirstName' => 'Varchar(50)',

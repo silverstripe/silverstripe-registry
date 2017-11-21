@@ -1,4 +1,6 @@
-Director:
-    rules:
-        'registry-feed': 'RegistryImportFeed_Controller'
-
+---
+Name: registryroutes
+---
+SilverStripe\Control\Director:
+  rules:
+    registry-feed: SilverStripe\Registry\RegistryImportFeedController

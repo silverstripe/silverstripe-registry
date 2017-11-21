@@ -1,21 +1,29 @@
 <?php
+
+namespace SilverStripe\Registry\Tests;
+
+use FunctionalTest;
+use CSSContentParser;
+use RegistryPageTestPage;
+use Controller;
+
 class RegistryPageFunctionalTest extends FunctionalTest
 {
-    public static $fixture_file = array(
+    protected static $fixture_file = [
         'fixtures/RegistryPageTestContact.yml',
-        'fixtures/RegistryPageFunctionalTest.yml'
-    );
+        'fixtures/RegistryPageFunctionalTest.yml',
+    ];
 
-    protected $extraDataObjects = array(
-        'RegistryPageTestPage',
-        'RegistryPageTestContact'
-    );
+    protected static $extra_databjects = [
+        RegistryPageTestPage::class,
+        RegistryPageTestContact::class,
+    ];
 
-    public static $use_draft_site = true;
+    protected static $use_draft_site = true;
 
     public function testFilteredSearchResults()
     {
-        $page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
         $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
             'FirstName' => 'Alexander',
             'action_doRegistryFilter' => 'Filter'
@@ -32,7 +40,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
 
     public function testSearchResultsLimitAndStart()
     {
-        $page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage-limit');
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-limit');
         $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
             'Sort' => 'FirstName',
             'Dir' => 'DESC',
@@ -56,7 +64,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
 
     public function testGetParamsPopulatesSearchForm()
     {
-        $page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
         $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
             'FirstName' => 'Alexander',
             'Sort' => 'FirstName',
@@ -76,7 +84,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
 
     public function testQueryLinks()
     {
-        $page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
         $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
             'FirstName' => 'Alexander',
             'action_doRegistryFilter' => 'Filter'
@@ -95,8 +103,8 @@ class RegistryPageFunctionalTest extends FunctionalTest
 
     public function testShowExistingRecord()
     {
-        $record = $this->objFromFixture('RegistryPageTestContact', 'alexander');
-        $page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
+        $record = $this->objFromFixture(RegistryPageTestContact::class, 'alexander');
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
         $response = $this->get(Controller::join_links($page->RelativeLink(), 'show', $record->ID));
 
         $this->assertContains('Alexander Bernie', $response->getBody());
@@ -104,14 +112,14 @@ class RegistryPageFunctionalTest extends FunctionalTest
 
     public function testPageNotFoundNonExistantRecord()
     {
-        $page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
         $response = $this->get(Controller::join_links($page->RelativeLink(), 'show', '123456'));
         $this->assertEquals(404, $response->getStatusCode());
     }
 
     public function testColumnName()
     {
-        $page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
         $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
             'action_doRegistryFilter' => 'Filter'
         )));
@@ -125,7 +133,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
 
     public function testExportLink()
     {
-        $page = $this->objFromFixture('RegistryPageTestPage', 'contact-registrypage');
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
         $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
             'FirstName' => 'Alexander',
             'Sort' => 'FirstName',

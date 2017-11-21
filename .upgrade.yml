@@ -1,0 +1,10 @@
+mappings:
+  RegistryAdmin: SilverStripe\Registry\RegistryAdmin
+  RegistryDataInterface: SilverStripe\Registry\RegistryDataInterface
+  RegistryPage: SilverStripe\Registry\RegistryPage
+  RegistryPage_Controller: SilverStripe\Registry\RegistryPageController
+  RegistryImportFeed: SilverStripe\Registry\RegistryImportFeed
+  RegistryImportFeed_Entry: SilverStripe\Registry\RegistryImportFeedEntry
+  RegistryImportFeed_Controller: SilverStripe\Registry\RegistryImportFeedController
+  RegistryPageTest: SilverStripe\Registry\Tests\RegistryPageTest
+  RegistryPageFunctionalTest: SilverStripe\Registry\Tests\RegistryPageFunctionalTest

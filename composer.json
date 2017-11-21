@@ -1,7 +1,7 @@
 {
     "name": "silverstripe/registry",
     "description": "Provide search and export interfaces for datasets.",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "keywords": [
         "silverstripe",
         "cwp"
@@ -18,13 +18,20 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "~3.1",
-        "silverstripe/cms": "~3.1"
+        "silverstripe/cms": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SilverStripe\\Registry\\": "src/",
+            "SilverStripe\\Registry\\Tests\\": "tests/"
+        }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.x-dev"
+            "dev-master": "2.x-dev"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
 
