@@ -1,6 +1,3 @@
 lt:
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     PLURALNAME: 'Baziniai puslapiai'
-  SiteTree:
-    PLURALNAME: Puslapiai
-    SINGULARNAME: Puslapis

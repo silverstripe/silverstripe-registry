@@ -9,6 +9,8 @@ class RegistryAdmin extends ModelAdmin
 {
     private static $url_segment = 'registry';
 
+    private static $menu_title = 'Registry';
+
     // Hide the registry section completely if we have no registries to manage.
     public function canView($member = null)
     {
@@ -73,7 +75,10 @@ class RegistryAdmin extends ModelAdmin
         if (empty($_FILES['_CsvFile']['tmp_name'])
             || file_get_contents($_FILES['_CsvFile']['tmp_name']) == ''
         ) {
-            $form->sessionMessage(_t('ModelAdmin.NOCSVFILE', 'Please browse for a CSV file to import'), 'good');
+            $form->sessionMessage(
+                _t('SilverStripe\\Admin\\ModelAdmin.NOCSVFILE', 'Please browse for a CSV file to import'),
+                'good'
+            );
             $this->redirectBack();
             return false;
         }

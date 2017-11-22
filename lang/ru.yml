@@ -1,13 +1,7 @@
 ru:
-  ModelAdmin:
-    DELETEDRECORDS: 'Удалено {count} записей.'
-    IMPORTEDRECORDS: 'Импортировано {count} записей.'
-    NOCSVFILE: 'Выберите CSV-файл для импорта'
-    NOIMPORT: 'Нечего импортировать'
-    UPDATEDRECORDS: 'Обновлено {count} записей.'
-  RegistryAdmin:
+  SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: 'Регистр'
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     DESCRIPTION: 'Показывает большие списки данных в фильтрованных, постраничных списках с возможностью поиска.'
     DataClassFieldLabel: 'Тип Данных'
     ExportAll: 'Экспорт в CSV'
@@ -22,6 +16,3 @@ ru:
     ViewNext: 'Перейти к следующей странице'
     ViewPageNum: 'Просмотреть страницу №'
     ViewPrev: 'Перейти к предыдущей странице'
-  SiteTree:
-    PLURALNAME: Страницы
-    SINGULARNAME: Страница

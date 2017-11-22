@@ -1,13 +1,7 @@
 ar:
-  ModelAdmin:
-    DELETEDRECORDS: 'التسجيلات {count} الحذوفة'
-    IMPORTEDRECORDS: 'تسجيلات {count} مستوردة.'
-    NOCSVFILE: 'من فضلك قم بالتصفح من أجل استيراد ملف سى إس فى'
-    NOIMPORT: 'لا شئ ليتم استيراده'
-    UPDATEDRECORDS: 'تسجيلات {count} محدثة'
-  RegistryAdmin:
+  SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: التسجيل
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     DESCRIPTION: 'يقوم بعرض سلسلة كبيرة من البيانات فى قائمة قائمة قابلة للتصنيف, البحث و ترقيم الصفحات'
     DataClassFieldLabel: 'تصنيف البيانات'
     ExportAll: 'تصدير النتائج لملف إس سى فى'
@@ -22,6 +16,3 @@ ar:
     ViewNext: 'عرض الصفحة التالية'
     ViewPageNum: 'عرض رقم الصفحة'
     ViewPrev: 'عرض الصفحة السابقة'
-  SiteTree:
-    PLURALNAME: الصفحات
-    SINGULARNAME: الصفحة

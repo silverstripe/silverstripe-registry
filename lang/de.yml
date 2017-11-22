@@ -1,11 +1,5 @@
 de:
-  ModelAdmin:
-    DELETEDRECORDS: '{count} Einträge gelöscht.'
-    IMPORTEDRECORDS: '{count} Einträge importiert.'
-    NOCSVFILE: 'Bitte suchen Sie nach einer CSV-Datei zum Importieren'
-    NOIMPORT: 'Kein Import notwendig.'
-    UPDATEDRECORDS: '{count} Einträge aktualisiert.'
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     DataClassFieldLabel: Datenklasse
     ExportAll: 'Ergebnisse als CSV exportieren'
     ExportAllTitle: 'Alle Ergebnisse als CSV-Tabelle exportieren'
@@ -17,6 +11,3 @@ de:
     ViewNext: 'Nächste Seite anzeigen'
     ViewPageNum: 'Seitennummer anzeigen'
     ViewPrev: 'Vorherige Seite anzeigen'
-  SiteTree:
-    PLURALNAME: Seiten
-    SINGULARNAME: Seite

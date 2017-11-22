@@ -1,13 +1,7 @@
 fa_IR:
-  ModelAdmin:
-    DELETEDRECORDS: '{count} رکورد حذف شده است.'
-    IMPORTEDRECORDS: '{count} رکورد وارد‌شده است.'
-    NOCSVFILE: 'لطفاً یک فایل CSV برای وارد‌کردن انتخاب کنید'
-    NOIMPORT: 'چیزی برای وارد‌کردن وجود ندارد'
-    UPDATEDRECORDS: '{count} رکورد به‌روز‌رسانی شد.'
-  RegistryAdmin:
+  SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: رجیستری
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     DESCRIPTION: 'سری بلندی از داده‌ها را در یک لیست قابل پالایش، قابل جستجو و براساس شماره صفحه نمایش می‌دهد'
     DataClassFieldLabel: 'کلاس داده'
     ExportAll: 'فرستادن نتایج به CSV'
@@ -22,6 +16,3 @@ fa_IR:
     ViewNext: 'مشاهده‌ی صفحه‌ی بعد'
     ViewPageNum: 'مشاهده‌ی شماره‌ی صفحه'
     ViewPrev: 'مشاهده‌ی صفحه قبل'
-  SiteTree:
-    PLURALNAME: صفحات
-    SINGULARNAME: صفحه

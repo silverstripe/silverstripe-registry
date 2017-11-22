@@ -1,19 +1,16 @@
 en:
-  ModelAdmin:
-    DELETEDRECORDS: 'Deleted {count} records.'
-    IMPORTEDRECORDS: 'Imported {count} records.'
-    NOCSVFILE: 'Please browse for a CSV file to import'
-    NOIMPORT: 'Nothing to import'
-    UPDATEDRECORDS: 'Updated {count} records.'
-  RegistryAdmin:
+  SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Registry
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     DESCRIPTION: 'Shows large series of data in a filterable, searchable, and paginated list'
     DataClassFieldLabel: 'Data Class'
     ExportAll: 'Export results to CSV'
     ExportAllTitle: 'Export all results to a CSV spreadsheet file'
     NoResults: 'No results to show'
-    PLURALNAME: 'Base Pages'
+    PLURALNAME: 'Registry Pages'
+    PLURALS:
+      one: 'A Registry Page'
+      other: '{count} Registry Pages'
     PageLengthFieldLabel: 'Results page length'
     ResultsFor: 'Search results for'
     SINGULARNAME: 'Registry Page'
@@ -22,6 +19,3 @@ en:
     ViewNext: 'View the next page'
     ViewPageNum: 'View page number'
     ViewPrev: 'View the previous page'
-  SiteTree:
-    PLURALNAME: Pages
-    SINGULARNAME: Page

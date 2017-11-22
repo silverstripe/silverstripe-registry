@@ -1,13 +1,7 @@
 eo:
-  ModelAdmin:
-    DELETEDRECORDS: 'Forigis {count} rikordojn.'
-    IMPORTEDRECORDS: 'Importis {count} rikordojn.'
-    NOCSVFILE: 'Bonvole foliumu por CSV-dosiero importota'
-    NOIMPORT: 'Nenio importota'
-    UPDATEDRECORDS: 'Ĝisdatigis {count} rikordojn.'
-  RegistryAdmin:
+  SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Registrejo
-  RegistryPage:
+  SilverStripe\Registry\RegistryPage:
     DESCRIPTION: 'Vidigas grandan serion de datumoj en filtrebla, serĉebla, kaj enpaĝigita listo.'
     DataClassFieldLabel: 'Klaso de datumoj'
     ExportAll: 'Eksporti rezultojn al CSV'
@@ -22,6 +16,3 @@ eo:
     ViewNext: 'Vidigi la sekvan paĝon'
     ViewPageNum: 'Vidigi paĝnumeron'
     ViewPrev: 'Vidigi la antaŭan paĝon'
-  SiteTree:
-    PLURALNAME: Paĝoj
-    SINGULARNAME: 'Paĝo:'
