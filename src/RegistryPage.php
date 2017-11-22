@@ -18,6 +18,8 @@ class RegistryPage extends Page
 {
     private static $description = 'Shows large series of data in a filterable, searchable, and paginated list';
 
+    private static $table_name = 'RegistryPage';
+
     private static $db = [
         'DataClass' => 'Varchar(100)',
         'PageLength' => 'Int',
