@@ -7,6 +7,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTP;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Convert;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\Form;
@@ -330,7 +331,7 @@ class RegistryPageController extends PageController
         }
 
         foreach ($query->execute() as $record) {
-            $result = new $dataClass($record);
+            $result = Injector::inst()->create($dataClass, $record);
             // we attach Columns here so the template can loop through them on each result
             $result->Columns = $this->Columns($result);
             $results->push($result);
