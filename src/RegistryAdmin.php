@@ -4,6 +4,7 @@ namespace SilverStripe\Registry;
 
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Core\ClassInfo;
+use SilverStripe\ORM\DataObject;
 
 class RegistryAdmin extends ModelAdmin
 {
@@ -11,7 +12,11 @@ class RegistryAdmin extends ModelAdmin
 
     private static $menu_title = 'Registry';
 
-    // Hide the registry section completely if we have no registries to manage.
+    /**
+     * Hide the registry section completely if we have no registries to manage.
+     *
+     * {@inheritDoc}
+     */
     public function canView($member = null)
     {
         $managedModels = $this->getManagedModels();
@@ -26,11 +31,11 @@ class RegistryAdmin extends ModelAdmin
     {
         $models = ClassInfo::implementorsOf(RegistryDataInterface::class);
 
-        foreach ($models as $k => $v) {
-            if (is_numeric($k)) {
-                $models[$v] = array('title' => singleton($v)->i18n_singular_name());
-                unset($models[$k]);
-            }
+        foreach ($models as $alias => $className) {
+            $models[$className] = [
+                'title' => singleton($className)->i18n_singular_name(),
+            ];
+            unset($models[$alias]);
         }
 
         return $models;
@@ -38,8 +43,10 @@ class RegistryAdmin extends ModelAdmin
 
     public function getExportFields()
     {
-        $fields = array();
-        foreach (singleton($this->modelClass)->db() as $field => $spec) {
+        $dataObjectSchema = DataObject::getSchema();
+
+        $fields = [];
+        foreach ($dataObjectSchema->databaseFields($this->modelClass) as $field => $spec) {
             $fields[$field] = $field;
         }
         return $fields;
@@ -52,7 +59,7 @@ class RegistryAdmin extends ModelAdmin
             mkdir($base);
         }
 
-        $path = sprintf('%s/%s', $base, $this->modelClass);
+        $path = sprintf('%s/%s', $base, $this->sanitiseClassName($this->modelClass));
         if (!file_exists($path)) {
             mkdir($path);
         }

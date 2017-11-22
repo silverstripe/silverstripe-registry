@@ -23,20 +23,20 @@ class RegistryImportFeed
     {
         $files = ArrayList::create();
 
-        $path = REGISTRY_IMPORT_PATH . '/' . $this->modelClass;
+        $path = REGISTRY_IMPORT_PATH . '/' . $this->sanitiseClassName($this->modelClass);
         if (file_exists($path)) {
             $registryPage = DataObject::get_one(
                 RegistryPage::class,
-                sprintf('"DataClass" = \'%s\'', $this->modelClass)
+                ['DataClass' => $this->modelClass]
             );
 
-            if (($registryPage && $registryPage->exists())) {
+            if ($registryPage && $registryPage->exists()) {
                 foreach (array_diff(scandir($path), array('.', '..')) as $file) {
                     $files->push(RegistryImportFeedEntry::create(
                         $file,
                         '',
                         filemtime($path . '/' . $file),
-                        REGISTRY_IMPORT_URL . '/' . $this->modelClass . '/' . $file
+                        REGISTRY_IMPORT_URL . '/' . $this->sanitiseClassName($this->modelClass) . '/' . $file
                     ));
                 }
             }
@@ -44,8 +44,19 @@ class RegistryImportFeed
 
         return RSSFeed::create(
             $files,
-            'registry-feed/latest/' . $this->modelClass,
+            'registry-feed/latest/' . $this->sanitiseClassName($this->modelClass),
             singleton($this->modelClass)->singular_name() . ' data import history'
         );
+    }
+
+    /**
+     * See {@link \SilverStripe\Admin\ModelAdmin::sanitiseClassName}
+     *
+     * @param  string $class
+     * @return string
+     */
+    protected function sanitiseClassName($class)
+    {
+        return str_replace('\\', '-', $class);
     }
 }
