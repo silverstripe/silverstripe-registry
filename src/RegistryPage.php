@@ -23,7 +23,13 @@ class RegistryPage extends Page
         'PageLength' => 'Int',
     ];
 
-    public static $page_length_default = 10;
+    /**
+     * The default length of a page of registry entries
+     *
+     * @config
+     * @var integer
+     */
+    private static $page_length_default = 10;
 
     public function fieldLabels($includerelations = true)
     {
@@ -60,7 +66,7 @@ class RegistryPage extends Page
     public function getPageLength()
     {
         $length = $this->getField('PageLength');
-        return $length ? $length : self::$page_length_default;
+        return $length ?: $this->config()->get('page_length_default');
     }
 
     public function getCMSFields()
