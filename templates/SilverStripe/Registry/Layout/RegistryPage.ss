@@ -4,7 +4,7 @@ $Content
 	$RegistryFilterForm
 </div>
 
-<a class="historyFeedLink" href="registry-feed/latest/{$DataClass}" title="<%t SilverStripe\\Registry\\RegistryPage.ViewHistory "View imported data history" %>">
+<a class="historyFeedLink" href="registry-feed/latest/{$getClassNameForUrl($DataClass)}" title="<%t SilverStripe\\Registry\\RegistryPage.ViewHistory "View imported data history" %>">
 	<%t SilverStripe\\Registry\\RegistryPage.ViewHistory "View imported data history" %>
 </a>
 

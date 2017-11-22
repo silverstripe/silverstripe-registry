@@ -449,4 +449,14 @@ class RegistryPageController extends PageController
 
         return array_merge(array_slice($templates, 0, $index), $actionlessTemplates, array_slice($templates, $index));
     }
+
+    /**
+     * Sanitise a PHP class name for display in URLs etc
+     *
+     * @return string
+     */
+    public function getClassNameForUrl($className)
+    {
+        return str_replace('\\', '-', $className);
+    }
 }
