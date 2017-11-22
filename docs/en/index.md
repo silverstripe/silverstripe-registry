@@ -21,23 +21,32 @@ A DataObject must implement `RegistryDataInterface` and the
 
 In this example we've created a `StaffMember` class:
 
-	:::php
-	<?php
-	class StaffMember extends DataObject implements RegistryDataInterface {
-		public static $db = array(
-			'Name' => 'Varchar(255)',
-			'PhoneNumber' => 'Varchar(50)'
-		);
-		
-		public function getSearchFields() {
-			return new FieldList(
-				new TextField('Name'),
-				new TextField('PhoneNumber')
-			);
-		}
-	}
+```php
+<?php
 
-Once that's defined, we run `dev/build?flush=1` to build the database with the new class.
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Registry\RegistryDataInterface;
+
+class StaffMember extends DataObject implements RegistryDataInterface
+{
+    public static $db = [
+        'Name' => 'Varchar(255)',
+        'PhoneNumber' => 'Varchar(50)',
+    ];
+
+    public function getSearchFields()
+    {
+        return FieldList::create(
+            TextField::create('Name'),
+            TextField::create('PhoneNumber')
+        );
+    }
+}
+```
+
+Once that's defined, we run `dev/build` to build the database with the new class.
 
 ### Managing the data
 
@@ -68,16 +77,22 @@ SilverStripe has a built-in way of defining summary fields on a DataObject. You 
 the static `$summary_fields` in the DataObject definition. The array is a map of `$db` column name to
 a viewable title the user will see. In this example we're adding the phone number to the summary list.
 
-	:::php
-	<?php
-	class StaffMember extends DataObject implements RegistryDataInterface {
-		//...
-		public static $summary_fields = array(
-			'Name' => 'Name',
-			'PhoneNumber' => 'Phone number'
-		);
-		//...
-	}
+```php
+<?php
+
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Registry\RegistryDataInterface;
+
+class StaffMember extends DataObject implements RegistryDataInterface
+{
+    //...
+    public static $summary_fields = [
+        'Name' => 'Name',
+        'PhoneNumber' => 'Phone number',
+    ];
+    //...
+}
+```
 
 Now when you view the staff member listing on the **Registry Page** it will show the two columns we
 defined above.
@@ -90,16 +105,23 @@ Sometimes the records listed you'll want a user to click through and see more de
 
 You can do this by defining the `Link` method on your registry class. For example:
 
-	:::php
-	<?php
-	class StaffMember extends DataObject implements RegistryDataInterface {
-		//...
-		public function Link($action = 'show') {
-			$page = RegistryPage::get()->filter('DataClass', 'StaffMember')->First();
-			return Controller::join_links($page->Link(), $action, $this->ID);
-		}
-		//...
-	}
+```php
+<?php
+
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Registry\RegistryDataInterface;
+
+class StaffMember extends DataObject implements RegistryDataInterface
+{
+    //...
+    public function Link($action = 'show')
+    {
+        $page = RegistryPage::get()->filter('DataClass', StaffMember::class)->First();
+        return Controller::join_links($page->Link(), $action, $this->ID);
+    }
+    //...
+}
+```
 
 This method can return a link to any place you wish. The above example will link to
 the `show` action on the `RegistryPage` for `StaffMember`. Note that this assumes that there is
@@ -119,12 +141,12 @@ first look for `Title`, then for `Name`, then default to the `ID`.
 
 While the default template does its best to be functional and easy-to-style, it's quite likely that
 you'll need to change the templates. You can do so by placing the templates `RegistryPage.ss` and
-`RegistryPage_show.ss` in your themes templates/Layout folder. You can base these off the files found
-in registry/templates/Layout.
+`RegistryPage_show.ss` in your themes `templates/SilverStripe/Registry/Layout` folder. You can base these off the
+files found in `vendor/silverstripe/registry/templates/SilverStripe/Registry/Layout`.
 
 As a further layer of customisation, you can create templates that will be only used when viewing
 specific registries. So if you wanted to create a template that would only be used to view the
-StaffMember registry, you would create `RegistryPage_StaffMember.ss` and `RegistryPage_StaffMember_show.ss`
+StaffMember registry, you would create `My/Namespaced/StaffMember_RegistryPage.ss` and `My/Namespaced/StaffMember_RegistryPage_show.ss`
 
 ## Contributing
 

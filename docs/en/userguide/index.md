@@ -24,7 +24,7 @@ The built-in features:
 A website developer is needed initially to create the “database” that can then be readily managed and interacted with using the CMS.
 
 ## Adminstration of registry data
-![Registry admin](_images/registry-admin.jpg)
+![Registry admin](_images/registry-admin.png)
 
 Pictured above is a summary of the admin area for managing registry data.
 

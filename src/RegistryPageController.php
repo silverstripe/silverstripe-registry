@@ -428,9 +428,9 @@ class RegistryPageController extends PageController
         $actionlessTemplates = [];
 
         if ($action && $action !== 'index') {
-            array_unshift($templates, $this->DataClass . '_' . $action);
+            array_unshift($templates, $this->DataClass . '_RegistryPage_' . $action);
         }
-        array_unshift($actionlessTemplates, $this->DataClass);
+        array_unshift($actionlessTemplates, $this->DataClass . '_RegistryPage');
 
         $parentClass = get_class($this->dataRecord);
         while ($parentClass !== RegistryPage::class) {
