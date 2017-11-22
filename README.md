@@ -1,11 +1,14 @@
 # Registry module
 
-[![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-registry.png)](http://travis-ci.org/silverstripe/silverstripe-registry)
+[![Build Status](http://img.shields.io/travis/silverstripe/silverstripe-registry.svg?style=flat)](https://travis-ci.org/silverstripe/silverstripe-registry)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-registry/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-registry/?branch=master)
+[![codecov](https://codecov.io/gh/silverstripe/silverstripe-registry/branch/master/graph/badge.svg)](https://codecov.io/gh/silverstripe/silverstripe-registry)
 
 ## Requirements
 
- * SilverStripe 3.1 or newer
- * MySQL 5.1+ or SQL Server 2008+ database
+ * SilverStripe ^4.0
+
+**Note:** For a SilverStripe 3.x compatible version, please use [the 1.x release line](https://github.com/silverstripe/silverstripe-registry/tree/1.0).
 
 ## Installation
 
@@ -15,9 +18,7 @@ Install with Composer:
 composer require silverstripe/registry
 ```
 
-Alternatively, copy the registry directory into your SilverStripe project.
-
-When the module is installed, append `dev/build?flush=all` to the website URL in your browser. e.g. http://mysite.com/dev/build?flush=all.
+When the module is installed, run a `dev/build` in your browser, or from the command line via `vendor/bin/sake dev/build`.
 
 ## Instructions
 
