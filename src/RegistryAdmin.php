@@ -52,19 +52,16 @@ class RegistryAdmin extends ModelAdmin
         return $fields;
     }
 
-    public function getCsvImportsPath()
+    /**
+     * Gets a unique filename to use for importing the uploaded CSV data
+     *
+     * @return string
+     */
+    public function getCsvImportFilename()
     {
-        $base = REGISTRY_IMPORT_PATH;
-        if (!file_exists($base)) {
-            mkdir($base);
-        }
+        $feed = RegistryImportFeed::singleton();
 
-        $path = sprintf('%s/%s', $base, $this->sanitiseClassName($this->modelClass));
-        if (!file_exists($path)) {
-            mkdir($path);
-        }
-
-        return $path;
+        return sprintf('%s/%s', $feed->getStoragePath($this->modelClass), $feed->getImportFilename());
     }
 
     public function import($data, $form, $request)
@@ -78,13 +75,12 @@ class RegistryAdmin extends ModelAdmin
         $importers = $this->getModelImporters();
         $loader = $importers[$this->modelClass];
 
+        $fileContents = !empty($data['_CsvFile']['tmp_name']) ? file_get_contents($data['_CsvFile']['tmp_name']) : '';
         // File wasn't properly uploaded, show a reminder to the user
-        if (empty($_FILES['_CsvFile']['tmp_name'])
-            || file_get_contents($_FILES['_CsvFile']['tmp_name']) == ''
-        ) {
+        if (!$fileContents) {
             $form->sessionMessage(
                 _t('SilverStripe\\Admin\\ModelAdmin.NOCSVFILE', 'Please browse for a CSV file to import'),
-                'good'
+                'bad'
             );
             $this->redirectBack();
             return false;
@@ -94,13 +90,12 @@ class RegistryAdmin extends ModelAdmin
             $loader->deleteExistingRecords = true;
         }
 
-        $results = $loader->load($_FILES['_CsvFile']['tmp_name']);
+        $results = $loader->load($data['_CsvFile']['tmp_name']);
 
         // copy the uploaded file into the export path
-        copy(
-            $_FILES['_CsvFile']['tmp_name'],
-            sprintf('%s/import-%s.csv', $this->getCsvImportsPath(), date('Y-m-dHis'))
-        );
+        RegistryImportFeed::singleton()
+            ->getAssetHandler()
+            ->setContent($this->getCsvImportFilename(), $fileContents);
 
         $message = '';
         if ($results->CreatedCount()) {

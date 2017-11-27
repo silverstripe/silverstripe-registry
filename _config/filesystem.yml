@@ -1,0 +1,7 @@
+---
+Name: registryfilesystem
+---
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Registry\RegistryImportFeed:
+    properties:
+      AssetHandler: '%$SilverStripe\Assets\Storage\GeneratedAssetHandler'

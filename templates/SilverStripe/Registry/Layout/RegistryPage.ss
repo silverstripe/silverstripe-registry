@@ -30,7 +30,7 @@ $Content
 		</table>
 
 		<div class="resultActions">
-			<a class="export" href="$Link(export)?$AllQueryVars" title="<%t SilverStripe\\Registry\\RegistryPage.ExportAllTitle "Export all results to a CSV spreadsheet file" %>">
+			<a class="export" href="$Link(export)?$AllQueryVars.RAW" title="<%t SilverStripe\\Registry\\RegistryPage.ExportAllTitle "Export all results to a CSV spreadsheet file" %>">
 				<%t SilverStripe\\Registry\\RegistryPage.ExportAll "Export results to CSV" %>
 			</a>
 		</div>

@@ -25,7 +25,7 @@ class RegistryImportFeedEntry extends ViewableData
 
     public function Link()
     {
-        return $this->link;
+        return 'assets/' . $this->link;
     }
 
     public function Description()
