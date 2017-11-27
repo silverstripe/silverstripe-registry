@@ -230,51 +230,49 @@ class RegistryPageController extends PageController
         $dataClass = $this->dataRecord->getDataClass();
         $resultColumns = $this->dataRecord->getDataSingleton()->fieldLabels();
 
-        if (!file_exists(REGISTRY_EXPORT_PATH)) {
-            mkdir(REGISTRY_EXPORT_PATH);
-        }
-        $base = REGISTRY_EXPORT_PATH . '/' . $dataClass;
-        if (!file_exists($base)) {
-            mkdir($base);
-        }
+        // Used for the browser, not stored on the server
+        $filepath = sprintf('export-%s.csv', date('Y-m-dHis'));
 
-        $filepath = sprintf('%s/export-%s.csv', $base, date('Y-m-dHis'));
-        $file = fopen($filepath, 'w');
+        // Allocates up to 1M of memory storage to write to, then will fail over to a temporary file on the filesystem
+        $handle = fopen('php://temp/maxmemory:' . (1024 * 1024), 'w');
 
         $cols = array_keys($resultColumns);
+
         // put the headers in the first row
-        fputcsv($file, $cols, ',', '"');
+        fputcsv($handle, $cols);
 
         // put the data in the rows after
         foreach ($this->RegistryEntries(false) as $result) {
-            $item = array();
+            $item = [];
             foreach ($cols as $col) {
                 $item[] = $result->$col;
             }
-            fputcsv($file, $item, ',', '"');
+            fputcsv($handle, $item);
         }
 
-        fclose($file);
+        rewind($handle);
 
         // if the headers can't be sent (i.e. running a unit test, or something)
         // just return the file path so the user can manually download the csv
         if (!headers_sent() && $this->config()->get('output_headers')) {
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename=' . basename($filepath));
+            header('Content-Disposition: attachment; filename=' . $filepath);
             header('Content-Transfer-Encoding: binary');
             header('Expires: 0');
             header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
             header('Pragma: public');
-            header('Content-Length: ' . filesize($filepath));
+            header('Content-Length: ' . fstat($handle)['size']);
             ob_clean();
             flush();
-            readfile($filepath);
 
-            unlink($filepath);
+            echo stream_get_contents($handle);
+
+            fclose($handle);
         } else {
-            $contents = file_get_contents($filepath);
-            unlink($filepath);
+            $contents = stream_get_contents($handle);
+            fclose($handle);
+
             return $contents;
         }
     }
