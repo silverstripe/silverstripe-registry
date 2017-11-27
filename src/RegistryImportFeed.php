@@ -41,6 +41,13 @@ class RegistryImportFeed
      */
     protected $assetHandler;
 
+    /**
+     * The "assets" folder name
+     *
+     * @var string
+     */
+    protected $assetsDir;
+
     public function setModelClass($class)
     {
         $this->modelClass = $class;
@@ -119,7 +126,7 @@ class RegistryImportFeed
                 $importFile['basename'],
                 '',
                 DBDatetime::create()->setValue($importFile['timestamp'])->Format(DBDatetime::ISO_DATETIME),
-                $importFile['path']
+                $this->getAssetsDir() . '/' . $importFile['path']
             ));
         }
 
@@ -136,6 +143,28 @@ class RegistryImportFeed
         // Note: CLDR date format see DBDatetime
         $datetime = DBDatetime::now()->Format('y-MM-dd-HHmmss');
         return str_replace('{date}', $datetime, $this->config()->get('storage_filename'));
+    }
+
+    /**
+     * Set the assets directory name
+     *
+     * @param string $assetsDir
+     * @return $this
+     */
+    public function setAssetsDir($assetsDir)
+    {
+        $this->assetsDir = $assetsDir;
+        return $this;
+    }
+
+    /**
+     * Get the assets directory name
+     *
+     * @return string
+     */
+    public function getAssetsDir()
+    {
+        return $this->assetsDir;
     }
 
     /**
