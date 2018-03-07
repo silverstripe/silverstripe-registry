@@ -5,12 +5,11 @@ namespace SilverStripe\Registry;
 use PageController;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTP;
-use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\Form;
+use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
@@ -312,13 +311,23 @@ class RegistryPageController extends PageController
 
         $tableName = DataObject::getSchema()->tableName($dataClass);
 
-        $resultColumns = $this->dataRecord->getDataSingleton()->summaryFields();
-        $resultColumns['ID'] = 'ID';
+        $summarisedModel = $this->dataRecord->getDataSingleton();
+        $resultColumns = $summarisedModel->summaryFields();
+
+        // Remove any non database residing summary fields before trying to erroneously SELECT them.
+        $resultDBOnlyColumns = [];
+        foreach ($resultColumns as $summaryFieldKey => $summaryFieldValue) {
+            if (!$summarisedModel->hasMethod("get{$summaryFieldKey}")) {
+                $resultDBOnlyColumns[$summaryFieldKey] = $summaryFieldValue;
+            }
+        }
+
+        $resultDBOnlyColumns['ID'] = 'ID';
         $results = ArrayList::create();
 
         $query = SQLSelect::create();
         $query
-            ->setSelect($this->escapeSelect(array_keys($resultColumns)))
+            ->setSelect($this->escapeSelect(array_keys($resultDBOnlyColumns)))
             ->setFrom('"' . $tableName . '"');
         $query->addWhere($where);
         $query->addOrderBy($orderby);
@@ -376,7 +385,7 @@ class RegistryPageController extends PageController
     protected function queryVars()
     {
         $resultColumns = $this->dataRecord->getDataSingleton()->getSearchFields();
-        $columns = array();
+        $columns = [];
         foreach ($resultColumns as $field) {
             $columns[$field->getName()] = '';
         }
