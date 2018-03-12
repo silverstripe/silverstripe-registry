@@ -31,7 +31,7 @@ use SilverStripe\Registry\RegistryDataInterface;
 
 class StaffMember extends DataObject implements RegistryDataInterface
 {
-    public static $db = [
+    private static $db = [
         'Name' => 'Varchar(255)',
         'PhoneNumber' => 'Varchar(50)',
     ];
@@ -50,7 +50,7 @@ Once that's defined, we run `dev/build` to build the database with the new class
 
 ### Managing the data
 
-![Registry admin](userguide/_images/registry-admin.jpg)
+![Registry admin](userguide/_images/registry-admin.png)
 
 Pictured above is a summary of the admin area for managing registry data.
 
@@ -86,7 +86,7 @@ use SilverStripe\Registry\RegistryDataInterface;
 class StaffMember extends DataObject implements RegistryDataInterface
 {
     //...
-    public static $summary_fields = [
+    private static $summary_fields = [
         'Name' => 'Name',
         'PhoneNumber' => 'Phone number',
     ];
