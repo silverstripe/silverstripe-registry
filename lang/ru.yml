@@ -1,6 +1,6 @@
 ru:
   SilverStripe\Registry\RegistryAdmin:
-    MENUTITLE: 'Регистр'
+    MENUTITLE: Регистр
   SilverStripe\Registry\RegistryPage:
     DESCRIPTION: 'Показывает большие списки данных в фильтрованных, постраничных списках с возможностью поиска.'
     DataClassFieldLabel: 'Тип Данных'
@@ -10,7 +10,7 @@ ru:
     PLURALNAME: 'Базовые страницы'
     PageLengthFieldLabel: 'Кол-во позиций на странице'
     ResultsFor: 'Результаты поиска по'
-    SINGULARNAME: 'Регистр'
+    SINGULARNAME: Регистр
     SelectDropdownDefault: Выберите
     ViewHistory: 'История импорта данных'
     ViewNext: 'Перейти к следующей странице'
