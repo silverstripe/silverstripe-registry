@@ -234,11 +234,19 @@ class RegistryPageController extends PageController
                     }
                 }
             }
+            // Check for link
+            $link = null;
+            if ($this->dataRecord->getDataSingleton()->config()->get('use_link')) {
+                if ($result && $result->hasMethod('link')) {
+                    $link = $result->link();
+                }
+            }
+
             // Format column
             $list->push(ArrayData::create([
                 'Name' => $name,
                 'Title' => $title,
-                'Link' => (($result && $result->hasMethod('Link')) ? $result->Link() : ''),
+                'Link' => $link,
                 'Value' => isset($context) ? $context : null
             ]));
         }
