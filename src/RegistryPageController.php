@@ -15,7 +15,9 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
 use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\Registry\Exception\RegistryException;
 use SilverStripe\View\ArrayData;
+use SilverStripe\View\ViewableData;
 
 class RegistryPageController extends PageController
 {
@@ -205,16 +207,39 @@ class RegistryPageController extends PageController
         return $this->queryList($where, $orderby, $start, $this->dataRecord->getPageLength(), $paginated);
     }
 
-    public function Columns($result = null)
+    /**
+     * Format a set of columns, used for headings and row data
+     * @param  ViewabledData $result The row context
+     * @return ArrayList
+     */
+    public function columns($result = null)
     {
         $columns = $this->dataRecord->getDataSingleton()->summaryFields();
         $list = ArrayList::create();
         foreach ($columns as $name => $title) {
+            // Check for unwanted parameters
+            if (preg_match('/[()]/', $name)) {
+                throw new RegistryException(_t(
+                    'SilverStripe\\Registry\\RegistryPageController.UNWANTEDCOLUMNPARAMETERS',
+                    "Columns do not accept parameters"
+                ));
+            }
+
+            // Increment name dot deliniation
+            if ($result) {
+                $context = $result;
+                foreach (explode('.', $name) as $property) {
+                    if ($context instanceof ViewableData) {
+                        $context = $context->obj($property);
+                    }
+                }
+            }
+            // Format column
             $list->push(ArrayData::create([
                 'Name' => $name,
                 'Title' => $title,
                 'Link' => (($result && $result->hasMethod('Link')) ? $result->Link() : ''),
-                'Value' => ($result ? $result->obj($name) : '')
+                'Value' => isset($context) ? $context : null
             ]));
         }
         return $list;

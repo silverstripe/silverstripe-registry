@@ -94,6 +94,24 @@ class StaffMember extends DataObject implements RegistryDataInterface
 }
 ```
 
+You can also reference nested fields by using dot deliniated syntax.
+
+```
+    private static $has_one = [
+        'Region' => 'MyRegion'
+    ];
+
+    private static $summary_fields = [
+        'Name' => 'Name',
+        'PhoneNumber' => 'Phone number',
+        'Region.Name' => 'Region'
+    ];
+```
+
+_This will display the `Name` field of the **has_one** related `MyRegion`_
+
+**NOTE Nested fields will not accept parameters**
+
 Now when you view the staff member listing on the **Registry Page** it will show the two columns we
 defined above.
 
