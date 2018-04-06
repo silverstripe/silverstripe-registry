@@ -36,6 +36,11 @@ class StaffMember extends DataObject implements RegistryDataInterface
         'PhoneNumber' => 'Varchar(50)',
     ];
 
+    private static $searchable_fields = [
+        'Name',
+        'PhoneNumber'
+    ];
+
     public function getSearchFields()
     {
         return FieldList::create(
@@ -45,6 +50,8 @@ class StaffMember extends DataObject implements RegistryDataInterface
     }
 }
 ```
+
+**NOTE Search fields should match `$searchable_fields`**
 
 Once that's defined, we run `dev/build` to build the database with the new class.
 

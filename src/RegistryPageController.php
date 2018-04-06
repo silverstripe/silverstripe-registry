@@ -339,12 +339,11 @@ class RegistryPageController extends PageController
         $summarisedModel = $this->dataRecord->getDataSingleton();
         $resultColumns = $summarisedModel->summaryFields();
 
-        // Remove any non database residing summary fields before trying to erroneously SELECT them.
+        // Utilise DataObject::$searchable_fields
         $resultDBOnlyColumns = [];
-        foreach ($resultColumns as $summaryFieldKey => $summaryFieldValue) {
-            if (!$summarisedModel->hasMethod("get{$summaryFieldKey}")) {
-                $resultDBOnlyColumns[$summaryFieldKey] = $summaryFieldValue;
-            }
+        $fields = $summarisedModel->config()->get('searchable_fields');
+        foreach ($fields as $field) {
+            $resultDBOnlyColumns[$field] = $field;
         }
 
         $resultDBOnlyColumns['ID'] = 'ID';
