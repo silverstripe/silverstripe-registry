@@ -14,7 +14,13 @@ $Content
 			<thead>
 				<tr>
 					<% loop Columns %>
-						<th><a href="$Top.QueryLink&amp;Sort={$Name}&amp;Dir={$Top.OppositeDirection}#results">$Title</a></th>
+						<th>
+                            <% if $CanSort %>
+                                <a href="$Top.QueryLink&amp;Sort={$Name}&amp;Dir={$Top.OppositeDirection}#results">$Title</a>
+                            <% else %>
+                                $Title
+                            <% end_if %>
+                        </th>
 					<% end_loop %>
 				</tr>
 			</thead>

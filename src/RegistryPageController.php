@@ -182,7 +182,7 @@ class RegistryPageController extends PageController
 
         // Ordering
         $sort = isset($variables['Sort']) && $variables['Sort'] ? Convert::raw2sql($variables['Sort']) : 'ID';
-        if ($singleton && !$singleton->hasDatabaseField($sort)) {
+        if ($this->canSortBy($sort)) {
             $sort = 'ID';
         }
         $direction = (!empty($variables['Dir']) && in_array($variables['Dir'], ['ASC', 'DESC']))
@@ -208,14 +208,44 @@ class RegistryPageController extends PageController
     }
 
     /**
+     * Loosely check if the record can be sorted by a property
+     * @param  string $property
+     * @return boolean
+     */
+    public function canSortBy($property)
+    {
+        $canSort = false;
+        $singleton = $this->dataRecord->getDataSingleton();
+
+        if ($singleton) {
+            $properties = explode('.', $property);
+
+            $relationClass = $singleton->getRelationClass($properties[0]);
+            if ($relationClass) {
+                if (count($properties) <= 2 && singleton($relationClass)->hasDatabaseField($properties[1])) {
+                    $canSort = true;
+                }
+            } elseif ($singleton instanceof DataObject) {
+                if ($singleton->hasDatabaseField($property)) {
+                    $canSort = true;
+                }
+            }
+        }
+
+        return $canSort;
+    }
+
+    /**
      * Format a set of columns, used for headings and row data
      * @param  ViewabledData $result The row context
      * @return ArrayList
      */
     public function columns($result = null)
     {
-        $columns = $this->dataRecord->getDataSingleton()->summaryFields();
+        $singleton = $this->dataRecord->getDataSingleton();
+        $columns = $singleton->summaryFields();
         $list = ArrayList::create();
+
         foreach ($columns as $name => $title) {
             // Check for unwanted parameters
             if (preg_match('/[()]/', $name)) {
@@ -225,18 +255,20 @@ class RegistryPageController extends PageController
                 ));
             }
 
-            // Increment name dot deliniation
-            if ($result) {
-                $context = $result;
-                foreach (explode('.', $name) as $property) {
-                    if ($context instanceof ViewableData) {
-                        $context = $context->obj($property);
-                    }
+            // Get dot deliniated properties
+            $properties = explode('.', $name);
+
+            // Increment properties for value
+            $context = $result;
+            foreach ($properties as $property) {
+                if ($context instanceof ViewableData) {
+                    $context = $context->obj($property);
                 }
             }
+
             // Check for link
             $link = null;
-            if ($this->dataRecord->getDataSingleton()->config()->get('use_link')) {
+            if ($singleton->config()->get('use_link')) {
                 if ($result && $result->hasMethod('link')) {
                     $link = $result->link();
                 }
@@ -247,7 +279,8 @@ class RegistryPageController extends PageController
                 'Name' => $name,
                 'Title' => $title,
                 'Link' => $link,
-                'Value' => isset($context) ? $context : null
+                'Value' => isset($context) ? $context : null,
+                'CanSort' => $this->canSortBy($name)
             ]));
         }
         return $list;
