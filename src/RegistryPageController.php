@@ -17,6 +17,7 @@ use SilverStripe\ORM\PaginatedList;
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Registry\Exception\RegistryException;
 use SilverStripe\View\ArrayData;
+use SilverStripe\View\SSViewer;
 use SilverStripe\View\ViewableData;
 
 class RegistryPageController extends PageController
@@ -301,6 +302,13 @@ class RegistryPageController extends PageController
         }
     }
 
+    /**
+     * Show action. Will try to match a template name using the Overriding
+     * templates convention of this module, or fallback to default Silverstripe
+     * behaviour.
+     * @param  HTTPRequest $request [description]
+     * @return [type]          [description]
+     */
     public function show($request)
     {
         // If Id is not numeric, then return an error page
@@ -314,7 +322,19 @@ class RegistryPageController extends PageController
             return $this->httpError(404);
         }
 
-        return $this->customise($data)->renderWith($this->getTemplateList('show'));
+        // Customise
+        $show = $this->customise($data);
+
+        // Check if we should use a specific template
+        $templates = $this->getTemplateList('show');
+        if (SSViewer::hasTemplate($templates)) {
+
+            var_dump('has template?');
+
+            $show = $show->renderWith($templates);
+        }
+
+        return $show;
     }
 
     /**
@@ -478,7 +498,9 @@ class RegistryPageController extends PageController
             $index++;
         }
 
-        return array_merge(array_slice($templates, 0, $index), $actionlessTemplates, array_slice($templates, $index));
+        $templates = array_merge(array_slice($templates, 0, $index), $actionlessTemplates, array_slice($templates, $index));
+
+
     }
 
     /**
