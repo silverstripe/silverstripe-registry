@@ -24,6 +24,8 @@ In this example we've created a `StaffMember` class:
 ```php
 <?php
 
+namespace App\Model;
+
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataObject;
@@ -87,6 +89,8 @@ a viewable title the user will see. In this example we're adding the phone numbe
 ```php
 <?php
 
+namespace App\Model;
+
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Registry\RegistryDataInterface;
 
@@ -133,6 +137,8 @@ You can do this by defining the `Link` method on your registry class. For exampl
 ```php
 <?php
 
+namespace App\Model;
+
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Registry\RegistryDataInterface;
 
@@ -167,11 +173,36 @@ first look for `Title`, then for `Name`, then default to the `ID`.
 While the default template does its best to be functional and easy-to-style, it's quite likely that
 you'll need to change the templates. You can do so by placing the templates `RegistryPage.ss` and
 `RegistryPage_show.ss` in your themes `templates/SilverStripe/Registry/Layout` folder. You can base these off the
-files found in `vendor/silverstripe/registry/templates/SilverStripe/Registry/Layout`.
+files found in `vendor/silverstripe/registry/templates/SilverStripe/Registry/Layout`. The entry is provided by the `$Entry` template variable.
 
-As a further layer of customisation, you can create templates that will be only used when viewing
-specific registries. So if you wanted to create a template that would only be used to view the
-StaffMember registry, you would create `My/Namespaced/StaffMember_RegistryPage.ss` and `My/Namespaced/StaffMember_RegistryPage_show.ss`
+RegistryPage_show.ss
+```
+<h1>$Entry.Name</h1>
+<% with $Entry %>
+    <p><strong>Phone</strong><br>$PhoneNumber</p>
+<% end_with %>
+```
+
+As a further layer of customisation, you can create templates for specific entries. Do this by configuring the registry entry for rendering, and creating a template in the correctly namespaced folder.
+
+themes/.../SilverStripe/Registry/Layout/RegistryPage_show.ss
+```
+<h1>$Entry.Name</h1>
+$Entry
+```
+
+StaffMember.php
+```php
+public function forTemplate()
+{
+    return $this->renderWith(static::class);
+}
+```
+
+themes/.../templates/App/Model/StaffMember.ss
+```
+<p><strong>Phone</strong><br>$PhoneNumber</p>
+```
 
 ## Contributing
 
