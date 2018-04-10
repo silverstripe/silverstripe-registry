@@ -89,7 +89,7 @@ a viewable title the user will see. In this example we're adding the phone numbe
 ```php
 <?php
 
-namespace App\Model;
+namespace Vendor\Package; // Change to preferred namespace
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Registry\RegistryDataInterface;
@@ -109,7 +109,7 @@ You can also reference nested fields by using dot deliniated syntax.
 
 ```
     private static $has_one = [
-        'Region' => 'MyRegion'
+        'Region' => Vendor\Package\MyRegion::class
     ];
 
     private static $summary_fields = [
@@ -137,7 +137,7 @@ You can do this by defining the `use_link` config and defining a `link()` method
 ```php
 <?php
 
-namespace App\Model;
+namespace Vendor\Package; // Change to preferred namespace
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Registry\RegistryDataInterface;
@@ -147,7 +147,7 @@ class StaffMember extends DataObject implements RegistryDataInterface
     private static $use_link = true;
 
     //...
-    public function link($action = 'show')
+    public function Link($action = 'show')
     {
         $page = RegistryPage::get()->filter('DataClass', StaffMember::class)->First();
         return Controller::join_links($page->Link(), $action, $this->ID);
@@ -157,8 +157,8 @@ class StaffMember extends DataObject implements RegistryDataInterface
 ```
 
 This method can return a link to any place you wish. The above example will link to
-the `show` action on the `RegistryPage` for `StaffMember`. Note that this assumes that there is
-only a single `RegistryPage` displaying that type of data object.
+the `show` action on the `RegistryPage` for `StaffMember`. _Note that this assumes that there is
+only a single `RegistryPage` displaying that type of data object._
 
 The default template `RegistryPage_show.ss` is very simple and only shows a debug
 representation of the data. See *Overriding templates* below on how to change this
@@ -175,9 +175,13 @@ first look for `Title`, then for `Name`, then default to the `ID`.
 While the default template does its best to be functional and easy-to-style, it's quite likely that
 you'll need to change the templates. You can do so by placing the templates `RegistryPage.ss` and
 `RegistryPage_show.ss` in your themes `templates/SilverStripe/Registry/Layout` folder. You can base these off the
-files found in `vendor/silverstripe/registry/templates/SilverStripe/Registry/Layout`. The entry is provided by the `$Entry` template variable.
+files found in `vendor/silverstripe/registry/templates/SilverStripe/Registry/Layout`.
 
-RegistryPage_show.ss
+Read about SilverStripe's [template locations](https://docs.silverstripe.org/en/4/developer_guides/templates/template_inheritance/#template-types-and-locations)
+
+The entry is provided by the `$Entry` template variable.
+
+themes/.../SilverStripe/Registry/Layout/RegistryPage_show.ss
 ```
 <h1>$Entry.Name</h1>
 <% with $Entry %>
@@ -201,7 +205,8 @@ public function forTemplate()
 }
 ```
 
-themes/.../templates/App/Model/StaffMember.ss
+themes/.../templates/Vendor/Package/StaffMember.ss
+_Location should resemble class namespace_
 ```
 <p><strong>Phone</strong><br>$PhoneNumber</p>
 ```

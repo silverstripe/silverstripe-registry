@@ -271,7 +271,7 @@ class RegistryPageController extends PageController
             $useLink = $singleton->config()->get('use_link');
             if ($useLink !== false) {
                 if ($result && $result->hasMethod('link')) {
-                    $link = $result->link();
+                    $link = $result->Link();
                 }
             }
 
