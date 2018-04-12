@@ -24,7 +24,7 @@ In this example we've created a `StaffMember` class:
 ```php
 <?php
 
-namespace App\Model;
+namespace Vendor\Package; // Change to preferred namespace
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
