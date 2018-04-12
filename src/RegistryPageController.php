@@ -240,7 +240,7 @@ class RegistryPageController extends PageController
      * @param  ViewabledData $result The row context
      * @return ArrayList
      */
-    public function columns($result = null)
+    public function Columns($result = null)
     {
         $singleton = $this->dataRecord->getDataSingleton();
         $columns = $singleton->summaryFields();
