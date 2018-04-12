@@ -53,7 +53,9 @@ class StaffMember extends DataObject implements RegistryDataInterface
 }
 ```
 
-**NOTE Search fields should match `$searchable_fields`**
+**NOTE Search fields must match `$searchable_fields`**
+
+**NOTE Nested fields cannot be used in `$searchable_fields` ([see display results with nested values](#display-results-with-nested-values))**
 
 Once that's defined, we run `dev/build` to build the database with the new class.
 
@@ -105,6 +107,8 @@ class StaffMember extends DataObject implements RegistryDataInterface
 }
 ```
 
+#### Display results with nested values
+
 You can also reference nested fields by using dot deliniated syntax.
 
 ```
@@ -122,6 +126,8 @@ You can also reference nested fields by using dot deliniated syntax.
 _This will display the `Name` field of the **has_one** related `MyRegion`_
 
 **NOTE Nested fields will not accept parameters**
+
+**NOTE Nested fields cannot be used in `$searchable_fields`**
 
 Now when you view the staff member listing on the **Registry Page** it will show the two columns we
 defined above.
