@@ -12,18 +12,24 @@ $Content
 			<thead>
 				<tr>
 					<% loop Columns %>
-						<th><a href="$Top.QueryLink&amp;Sort={$Name}&amp;Dir={$Top.OppositeDirection}#results">$Title</a></th>
-					<% end_loop %>
+                        <th>
+                            <% if $CanSort %>
+                                <a href="$Top.QueryLink&amp;Sort={$Name}&amp;Dir={$Top.OppositeDirection}#results">$Title</a>
+                            <% else %>
+                                $Title
+                            <% end_if %>
+                        </th>
+                    <% end_loop %>
 				</tr>
 			</thead>
 			<tbody>
 			<% loop RegistryEntries %>
-				<tr class="<% if FirstLast %>$FirstLast <% end_if %>$EvenOdd">
-					<% loop Columns %>
-						<td><% if Link %><a href="$Link">$Value</a><% else %>$Value<% end_if %></td>
-					<% end_loop %>
-				</tr>
-			<% end_loop %>
+                <tr class="<% if FirstLast %>$FirstLast <% end_if %>$EvenOdd">
+                    <% loop Columns %>
+                        <td><% if Link %><a href="$Link">$Value</a><% else %>$Value<% end_if %></td>
+                    <% end_loop %>
+                </tr>
+            <% end_loop %>
 			</tbody>
 		</table>
 

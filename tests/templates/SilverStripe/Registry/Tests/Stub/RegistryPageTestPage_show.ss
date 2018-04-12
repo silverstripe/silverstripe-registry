@@ -1,1 +1,1 @@
-$FirstName $Surname
+$Entry.FirstName $Entry.Surname
