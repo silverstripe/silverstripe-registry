@@ -12,3 +12,14 @@ SilverStripe\Registry\Tests\Stub\RegistryPageTestPage:
     URLSegment: contact-search-limit
     DataClass: SilverStripe\Registry\Tests\Stub\RegistryPageTestContact
     PageLength: 3
+SilverStripe\Registry\Tests\Stub\RegistryPageTestContactExtra:
+  jimmy:
+    FirstName: Jimmy
+    Surname: Sherson
+    RegistryPageID: =>SilverStripe\Registry\Tests\Stub\RegistryPageTestPage.contact-registrypage-extra
+  lisa:
+    FirstName: Lisa
+    Surname: Pemberton
+  simone:
+    FirstName: Simone
+    Surname: Chester
