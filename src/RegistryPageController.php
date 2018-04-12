@@ -270,7 +270,7 @@ class RegistryPageController extends PageController
             $link = null;
             $useLink = $singleton->config()->get('use_link');
             if ($useLink !== false) {
-                if ($result && $result->hasMethod('link')) {
+                if ($result && $result->hasMethod('Link')) {
                     $link = $result->Link();
                 }
             }
@@ -280,7 +280,7 @@ class RegistryPageController extends PageController
                 'Name' => $name,
                 'Title' => $title,
                 'Link' => $link,
-                'Value' => isset($context) ? $context : null,
+                'Value' => $context,
                 'CanSort' => $this->canSortBy($name)
             ]));
         }
@@ -352,7 +352,7 @@ class RegistryPageController extends PageController
 
         $entry = DataObject::get_by_id($this->DataClass, $request->param('ID'));
 
-        if (!($entry && $entry->exists())) {
+        if (!$entry || !$entry->exists()) {
             return $this->httpError(404);
         }
 
