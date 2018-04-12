@@ -113,7 +113,7 @@ You can also reference nested fields by using dot deliniated syntax.
 
 ```
     private static $has_one = [
-        'Region' => Vendor\Package\MyRegion::class
+        'Region' => MyRegion::class
     ];
 
     private static $summary_fields = [
