@@ -31,18 +31,9 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $response = $this->get($page->Link());
         $parser = new CSSContentParser($response->getBody());
 
-        $rows = $parser->getBySelector('table.results tbody tr td');
+        $cells = $parser->getBySelector('table.results tbody tr td');
 
-        $this->assertContains('/contact-search-extra/1', (string) $rows[0]->a->attributes()->href[0]);
-
-        // Page without links
-        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
-        $response = $this->get($page->Link());
-        $parser = new CSSContentParser($response->getBody());
-
-        $rows = $parser->getBySelector('table.results tbody tr td');
-
-        $this->assertEquals('Alexander', $rows[0][0]);
+        $this->assertContains('/contact-search-extra/', (string) $cells[0]->a->attributes()->href[0]);
     }
 
     public function testFilteredSearchResults()
@@ -74,7 +65,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $uri = Controller::join_links(
             $page->RelativeLink('RegistryFilterForm'),
             '?' . http_build_query(array(
-                'RegistryPageID' => $page->ID,
+                'RegistryPage.Title' => $page->Title,
                 'action_doRegistryFilter' => 'Filter'
             ))
         );
@@ -89,6 +80,17 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $this->assertCount(1, $rows);
         $this->assertEquals('Jimmy', (string) $cells[0]->a[0]);
         $this->assertEquals('Sherson', (string) $cells[1]->a[0]);
+    }
+
+    public function testUserCustomSummaryField()
+    {
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $response = $this->get($page->Link());
+        $parser = new CSSContentParser($response->getBody());
+
+        $cells = $parser->getBySelector('table.results tbody tr td');
+
+        $this->assertContains($page->getDataSingleton()->getStaticReference(), (string) $cells[3]->a[0]);
     }
 
     public function testSearchResultsLimitAndStart()

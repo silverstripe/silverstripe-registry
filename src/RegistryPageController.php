@@ -111,8 +111,14 @@ class RegistryPageController extends PageController
             FormAction::create('doRegistryFilterReset')->setTitle('Clear')->addExtraClass('btn')
         );
 
+        // Align vars to fields
+        $values = [];
+        foreach ($this->getRequest()->getVars() as $field => $value) {
+            $values[str_replace('_', '.', $field)] = $value;
+        }
+
         $form = Form::create($this, 'RegistryFilterForm', $fields, $actions);
-        $form->loadDataFrom($this->request->getVars());
+        $form->loadDataFrom($values);
         $form->disableSecurityToken();
         $form->setFormMethod('get');
 
@@ -130,40 +136,20 @@ class RegistryPageController extends PageController
      */
     public function doRegistryFilter($data, $form, $request)
     {
-        // Basic parameters
-        $parameters = [
-            'start' => 0,
-            'Sort' => 'ID',
-            'Dir' => 'ASC',
-        ];
-
-        // Data record-specific parameters
         $singleton = $this->dataRecord->getDataSingleton();
-        if ($singleton) {
-            $fields = $singleton->getSearchFields();
-            if ($fields) {
-                foreach ($fields as $field) {
-                    $parameters[$field->Name] = '';
-                }
+
+        // Restrict fields
+        $fields = array_merge(['start', 'Sort', 'Dir'], $singleton->config()->get('searchable_fields'));
+        $params = [];
+        foreach ($fields as $field) {
+            $value = $this->getRequest()->getVar(str_replace('.', '_', $field));
+            if ($value) {
+                $params[$field] = $value;
             }
         }
 
-        // Read them from the request
-        foreach ($parameters as $key => $default) {
-            $value = $this->request->getVar($key);
-            if (!$value || $value == $default) {
-                unset($parameters[$key]);
-            } else {
-                $parameters[$key] = $value;
-            }
-        }
-
-        // Link back to this page with the relevant parameters.
-        $link = $this->AbsoluteLink();
-        foreach ($parameters as $key => $value) {
-            $link = HTTP::setGetVar($key, $value, $link, '&');
-        }
-        $this->redirect($link);
+        // Link back to this page with the relevant parameters
+        $this->redirect($this->Link('?' . http_build_query($params)));
     }
 
     public function doRegistryFilterReset($data, $form, $request)
@@ -174,37 +160,15 @@ class RegistryPageController extends PageController
 
     public function RegistryEntries($paginated = true)
     {
-        $variables = $this->request->getVars();
-        $singleton = $this->dataRecord->getDataSingleton();
 
-        // Pagination
-        $start = isset($variables['start']) ? (int)$variables['start'] : 0;
+        $list = $this->queryList();
 
-        // Ordering
-        $sort = isset($variables['Sort']) && $variables['Sort'] ? Convert::raw2sql($variables['Sort']) : 'ID';
-        if ($this->canSortBy($sort)) {
-            $sort = 'ID';
-        }
-        $direction = (!empty($variables['Dir']) && in_array($variables['Dir'], ['ASC', 'DESC']))
-            ? $variables['Dir']
-            : 'ASC';
-        $orderby = ["\"{$sort}\"" => $direction];
-
-        // Filtering
-        $where = [];
-        if ($singleton) {
-            foreach ($singleton->getSearchFields() as $field) {
-                if (!empty($variables[$field->getName()])) {
-                    $where[] = sprintf(
-                        '"%s" LIKE \'%%%s%%\'',
-                        $field->getName(),
-                        Convert::raw2sql($variables[$field->getName()])
-                    );
-                }
-            }
+        if ($paginated) {
+            $list = new PaginatedList($list, $this->getRequest());
+            $list->setPageLength($this->getPageLength());
         }
 
-        return $this->queryList($where, $orderby, $start, $this->dataRecord->getPageLength(), $paginated);
+        return $list;
     }
 
     /**
@@ -237,14 +201,19 @@ class RegistryPageController extends PageController
 
     /**
      * Format a set of columns, used for headings and row data
-     * @param  ViewabledData $result The row context
+     * @param  int $id The result ID to reference
      * @return ArrayList
      */
-    public function Columns($result = null)
+    public function Columns($id = null)
     {
         $singleton = $this->dataRecord->getDataSingleton();
-        $columns = $singleton->summaryFields();
-        $list = ArrayList::create();
+        $columns   = $singleton->summaryFields();
+        $list      = ArrayList::create();
+        $result    = null;
+
+        if ($id) {
+            $result = $this->queryList()->byId($id);
+        }
 
         foreach ($columns as $name => $title) {
             // Check for unwanted parameters
@@ -363,63 +332,41 @@ class RegistryPageController extends PageController
 
     /**
      * Perform a search against the data table.
-     *
-     * @param array $where Array of strings to add into the WHERE clause
-     * @param array $orderby Array of column as key, to direction as value to add into the ORDER BY clause
-     * @param string|int $start Record to start at (for paging)
-     * @param string|int $pageLength Number of results per page (for paging)
-     * @param boolean $paged Paged results or not?
-     * @return ArrayList|PaginatedList
+     * @return SS_List
      */
-    protected function queryList(array $where, array $orderby, $start, $pageLength, $paged = true)
+    protected function queryList()
     {
+        // Sanity check
         $dataClass = $this->dataRecord->getDataClass();
         if (!$dataClass) {
-            return PaginatedList::create(ArrayList::create());
+            return ArrayList::create();
         }
 
-        $tableName = DataObject::getSchema()->tableName($dataClass);
+        // Setup
+        $singleton = $this->dataRecord->getDataSingleton();
 
-        $summarisedModel = $this->dataRecord->getDataSingleton();
-        $resultColumns = $summarisedModel->summaryFields();
+        // Create list
+        $list = $singleton->get();
 
-        // Utilise DataObject::$searchable_fields
-        $resultDBOnlyColumns = [];
-        $fields = $summarisedModel->config()->get('searchable_fields');
-        foreach ($fields as $field) {
-            $resultDBOnlyColumns[$field] = $field;
+        // Setup filters
+        $filters = [];
+        foreach ($singleton->config()->get('searchable_fields') as $field) {
+            $value = $this->getRequest()->getVar(str_replace('.', '_', $field));
+
+            if ($value) {
+                $filters[$field . ':PartialMatch'] = $value;
+            }
         }
+        $list = $list->filter($filters);
 
-        $resultDBOnlyColumns['ID'] = 'ID';
-        $results = ArrayList::create();
-
-        $query = SQLSelect::create();
-        $query
-            ->setSelect($this->escapeSelect(array_keys($resultDBOnlyColumns)))
-            ->setFrom('"' . $tableName . '"');
-        $query->addWhere($where);
-        $query->addOrderBy($orderby);
-        $query->setConnective('AND');
-
-        if ($paged) {
-            $query->setLimit($pageLength, $start);
-        }
-
-        foreach ($query->execute() as $record) {
-            $result = Injector::inst()->create($dataClass, $record);
-            // we attach Columns here so the template can loop through them on each result
-            $result->Columns = $this->Columns($result);
-            $results->push($result);
-        }
-
-        if ($paged) {
-            $list = PaginatedList::create($results);
-            $list->setPageStart($start);
-            $list->setPageLength($pageLength);
-            $list->setTotalItems($query->unlimitedRowCount());
-            $list->setLimitItems(false);
-        } else {
-            $list = $results;
+        // Sort
+        $sort = $this->getRequest()->getVar('Sort');
+        if ($sort) {
+            $dir = 'ASC';
+            if ($this->getRequest()->getVar('Dir')) {
+                $dir = $this->getRequest()->getVar('Dir');
+            }
+            $list = $list->sort($sort, $dir);
         }
 
         return $list;
