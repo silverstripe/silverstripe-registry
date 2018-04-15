@@ -138,7 +138,7 @@ This summary definition will also be used in the *Registry* tab of the CMS.
 
 Sometimes the records listed you'll want a user to click through and see more details.
 
-You can do this by defining the `use_link` config and defining a `link()` method on your registry class. For example:
+You can do this by defining the `use_link` config and defining a `Link()` method on your registry class. For example:
 
 ```php
 <?php
