@@ -164,7 +164,7 @@ class RegistryPageController extends PageController
         $list = $this->queryList();
 
         if ($paginated) {
-            $list = new PaginatedList($list, $this->getRequest());
+            $list = PaginatedList::create($list, $this->getRequest());
             $list->setPageLength($this->getPageLength());
         }
 
