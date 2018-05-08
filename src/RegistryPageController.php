@@ -15,7 +15,9 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
 use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\Registry\Exception\RegistryException;
 use SilverStripe\View\ArrayData;
+use SilverStripe\View\ViewableData;
 
 class RegistryPageController extends PageController
 {
@@ -109,8 +111,14 @@ class RegistryPageController extends PageController
             FormAction::create('doRegistryFilterReset')->setTitle('Clear')->addExtraClass('btn')
         );
 
+        // Align vars to fields
+        $values = [];
+        foreach ($this->getRequest()->getVars() as $field => $value) {
+            $values[str_replace('_', '.', $field)] = $value;
+        }
+
         $form = Form::create($this, 'RegistryFilterForm', $fields, $actions);
-        $form->loadDataFrom($this->request->getVars());
+        $form->loadDataFrom($values);
         $form->disableSecurityToken();
         $form->setFormMethod('get');
 
@@ -128,40 +136,20 @@ class RegistryPageController extends PageController
      */
     public function doRegistryFilter($data, $form, $request)
     {
-        // Basic parameters
-        $parameters = [
-            'start' => 0,
-            'Sort' => 'ID',
-            'Dir' => 'ASC',
-        ];
-
-        // Data record-specific parameters
         $singleton = $this->dataRecord->getDataSingleton();
-        if ($singleton) {
-            $fields = $singleton->getSearchFields();
-            if ($fields) {
-                foreach ($fields as $field) {
-                    $parameters[$field->Name] = '';
-                }
+
+        // Restrict fields
+        $fields = array_merge(['start', 'Sort', 'Dir'], $singleton->config()->get('searchable_fields'));
+        $params = [];
+        foreach ($fields as $field) {
+            $value = $this->getRequest()->getVar(str_replace('.', '_', $field));
+            if ($value) {
+                $params[$field] = $value;
             }
         }
 
-        // Read them from the request
-        foreach ($parameters as $key => $default) {
-            $value = $this->request->getVar($key);
-            if (!$value || $value == $default) {
-                unset($parameters[$key]);
-            } else {
-                $parameters[$key] = $value;
-            }
-        }
-
-        // Link back to this page with the relevant parameters.
-        $link = $this->AbsoluteLink();
-        foreach ($parameters as $key => $value) {
-            $link = HTTP::setGetVar($key, $value, $link, '&');
-        }
-        $this->redirect($link);
+        // Link back to this page with the relevant parameters
+        $this->redirect($this->Link('?' . http_build_query($params)));
     }
 
     public function doRegistryFilterReset($data, $form, $request)
@@ -172,49 +160,97 @@ class RegistryPageController extends PageController
 
     public function RegistryEntries($paginated = true)
     {
-        $variables = $this->request->getVars();
+
+        $list = $this->queryList();
+
+        if ($paginated) {
+            $list = PaginatedList::create($list, $this->getRequest());
+            $list->setPageLength($this->getPageLength());
+        }
+
+        return $list;
+    }
+
+    /**
+     * Loosely check if the record can be sorted by a property
+     * @param  string $property
+     * @return boolean
+     */
+    public function canSortBy($property)
+    {
+        $canSort = false;
         $singleton = $this->dataRecord->getDataSingleton();
 
-        // Pagination
-        $start = isset($variables['start']) ? (int)$variables['start'] : 0;
-
-        // Ordering
-        $sort = isset($variables['Sort']) && $variables['Sort'] ? Convert::raw2sql($variables['Sort']) : 'ID';
-        if ($singleton && !$singleton->hasDatabaseField($sort)) {
-            $sort = 'ID';
-        }
-        $direction = (!empty($variables['Dir']) && in_array($variables['Dir'], ['ASC', 'DESC']))
-            ? $variables['Dir']
-            : 'ASC';
-        $orderby = ["\"{$sort}\"" => $direction];
-
-        // Filtering
-        $where = [];
         if ($singleton) {
-            foreach ($singleton->getSearchFields() as $field) {
-                if (!empty($variables[$field->getName()])) {
-                    $where[] = sprintf(
-                        '"%s" LIKE \'%%%s%%\'',
-                        $field->getName(),
-                        Convert::raw2sql($variables[$field->getName()])
-                    );
+            $properties = explode('.', $property);
+
+            $relationClass = $singleton->getRelationClass($properties[0]);
+            if ($relationClass) {
+                if (count($properties) <= 2 && singleton($relationClass)->hasDatabaseField($properties[1])) {
+                    $canSort = true;
+                }
+            } elseif ($singleton instanceof DataObject) {
+                if ($singleton->hasDatabaseField($property)) {
+                    $canSort = true;
                 }
             }
         }
 
-        return $this->queryList($where, $orderby, $start, $this->dataRecord->getPageLength(), $paginated);
+        return $canSort;
     }
 
-    public function Columns($result = null)
+    /**
+     * Format a set of columns, used for headings and row data
+     * @param  int $id The result ID to reference
+     * @return ArrayList
+     */
+    public function Columns($id = null)
     {
-        $columns = $this->dataRecord->getDataSingleton()->summaryFields();
-        $list = ArrayList::create();
+        $singleton = $this->dataRecord->getDataSingleton();
+        $columns   = $singleton->summaryFields();
+        $list      = ArrayList::create();
+        $result    = null;
+
+        if ($id) {
+            $result = $this->queryList()->byId($id);
+        }
+
         foreach ($columns as $name => $title) {
+            // Check for unwanted parameters
+            if (preg_match('/[()]/', $name)) {
+                throw new RegistryException(_t(
+                    'SilverStripe\\Registry\\RegistryPageController.UNWANTEDCOLUMNPARAMETERS',
+                    "Columns do not accept parameters"
+                ));
+            }
+
+            // Get dot deliniated properties
+            $properties = explode('.', $name);
+
+            // Increment properties for value
+            $context = $result;
+            foreach ($properties as $property) {
+                if ($context instanceof ViewableData) {
+                    $context = $context->obj($property);
+                }
+            }
+
+            // Check for link
+            $link = null;
+            $useLink = $singleton->config()->get('use_link');
+            if ($useLink !== false) {
+                if ($result && $result->hasMethod('Link')) {
+                    $link = $result->Link();
+                }
+            }
+
+            // Format column
             $list->push(ArrayData::create([
                 'Name' => $name,
                 'Title' => $title,
-                'Link' => (($result && $result->hasMethod('Link')) ? $result->Link() : ''),
-                'Value' => ($result ? $result->obj($name) : '')
+                'Link' => $link,
+                'Value' => $context,
+                'CanSort' => $this->canSortBy($name)
             ]));
         }
         return $list;
@@ -283,75 +319,54 @@ class RegistryPageController extends PageController
             return $this->httpError(404);
         }
 
-        $data = DataObject::get_by_id($this->DataClass, $request->param('ID'));
+        $entry = DataObject::get_by_id($this->DataClass, $request->param('ID'));
 
-        if (!($data && $data->exists())) {
+        if (!$entry || !$entry->exists()) {
             return $this->httpError(404);
         }
 
-        return $this->customise($data)->renderWith($this->getTemplateList('show'));
+        return $this->customise([
+            'Entry' => $entry
+        ]);
     }
 
     /**
      * Perform a search against the data table.
-     *
-     * @param array $where Array of strings to add into the WHERE clause
-     * @param array $orderby Array of column as key, to direction as value to add into the ORDER BY clause
-     * @param string|int $start Record to start at (for paging)
-     * @param string|int $pageLength Number of results per page (for paging)
-     * @param boolean $paged Paged results or not?
-     * @return ArrayList|PaginatedList
+     * @return SS_List
      */
-    protected function queryList(array $where, array $orderby, $start, $pageLength, $paged = true)
+    protected function queryList()
     {
+        // Sanity check
         $dataClass = $this->dataRecord->getDataClass();
         if (!$dataClass) {
-            return PaginatedList::create(ArrayList::create());
+            return ArrayList::create();
         }
 
-        $tableName = DataObject::getSchema()->tableName($dataClass);
+        // Setup
+        $singleton = $this->dataRecord->getDataSingleton();
 
-        $summarisedModel = $this->dataRecord->getDataSingleton();
-        $resultColumns = $summarisedModel->summaryFields();
+        // Create list
+        $list = $singleton->get();
 
-        // Remove any non database residing summary fields before trying to erroneously SELECT them.
-        $resultDBOnlyColumns = [];
-        foreach ($resultColumns as $summaryFieldKey => $summaryFieldValue) {
-            if (!$summarisedModel->hasMethod("get{$summaryFieldKey}")) {
-                $resultDBOnlyColumns[$summaryFieldKey] = $summaryFieldValue;
+        // Setup filters
+        $filters = [];
+        foreach ($singleton->config()->get('searchable_fields') as $field) {
+            $value = $this->getRequest()->getVar(str_replace('.', '_', $field));
+
+            if ($value) {
+                $filters[$field . ':PartialMatch'] = $value;
             }
         }
+        $list = $list->filter($filters);
 
-        $resultDBOnlyColumns['ID'] = 'ID';
-        $results = ArrayList::create();
-
-        $query = SQLSelect::create();
-        $query
-            ->setSelect($this->escapeSelect(array_keys($resultDBOnlyColumns)))
-            ->setFrom('"' . $tableName . '"');
-        $query->addWhere($where);
-        $query->addOrderBy($orderby);
-        $query->setConnective('AND');
-
-        if ($paged) {
-            $query->setLimit($pageLength, $start);
-        }
-
-        foreach ($query->execute() as $record) {
-            $result = Injector::inst()->create($dataClass, $record);
-            // we attach Columns here so the template can loop through them on each result
-            $result->Columns = $this->Columns($result);
-            $results->push($result);
-        }
-
-        if ($paged) {
-            $list = PaginatedList::create($results);
-            $list->setPageStart($start);
-            $list->setPageLength($pageLength);
-            $list->setTotalItems($query->unlimitedRowCount());
-            $list->setLimitItems(false);
-        } else {
-            $list = $results;
+        // Sort
+        $sort = $this->getRequest()->getVar('Sort');
+        if ($sort) {
+            $dir = 'ASC';
+            if ($this->getRequest()->getVar('Dir')) {
+                $dir = $this->getRequest()->getVar('Dir');
+            }
+            $list = $list->sort($sort, $dir);
         }
 
         return $list;

@@ -24,6 +24,8 @@ In this example we've created a `StaffMember` class:
 ```php
 <?php
 
+namespace Vendor\Package; // Change to preferred namespace
+
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataObject;
@@ -36,6 +38,11 @@ class StaffMember extends DataObject implements RegistryDataInterface
         'PhoneNumber' => 'Varchar(50)',
     ];
 
+    private static $searchable_fields = [
+        'Name',
+        'PhoneNumber'
+    ];
+
     public function getSearchFields()
     {
         return FieldList::create(
@@ -45,6 +52,10 @@ class StaffMember extends DataObject implements RegistryDataInterface
     }
 }
 ```
+
+**NOTE Search fields must match `$searchable_fields`**
+
+**NOTE Nested fields cannot be used in `$searchable_fields` ([see display results with nested values](#display-results-with-nested-values))**
 
 Once that's defined, we run `dev/build` to build the database with the new class.
 
@@ -80,6 +91,8 @@ a viewable title the user will see. In this example we're adding the phone numbe
 ```php
 <?php
 
+namespace Vendor\Package; // Change to preferred namespace
+
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Registry\RegistryDataInterface;
 
@@ -94,6 +107,28 @@ class StaffMember extends DataObject implements RegistryDataInterface
 }
 ```
 
+#### Display results with nested values
+
+You can also reference nested fields by using dot deliniated syntax.
+
+```
+    private static $has_one = [
+        'Region' => MyRegion::class
+    ];
+
+    private static $summary_fields = [
+        'Name' => 'Name',
+        'PhoneNumber' => 'Phone number',
+        'Region.Name' => 'Region'
+    ];
+```
+
+_This will display the `Name` field of the **has_one** related `MyRegion`_
+
+**NOTE Nested fields will not accept parameters**
+
+**NOTE Nested fields cannot be used in `$searchable_fields`**
+
 Now when you view the staff member listing on the **Registry Page** it will show the two columns we
 defined above.
 
@@ -103,16 +138,20 @@ This summary definition will also be used in the *Registry* tab of the CMS.
 
 Sometimes the records listed you'll want a user to click through and see more details.
 
-You can do this by defining the `Link` method on your registry class. For example:
+You can do this by defining the `use_link` config and defining a `Link()` method on your registry class. For example:
 
 ```php
 <?php
+
+namespace Vendor\Package; // Change to preferred namespace
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Registry\RegistryDataInterface;
 
 class StaffMember extends DataObject implements RegistryDataInterface
 {
+    private static $use_link = true;
+
     //...
     public function Link($action = 'show')
     {
@@ -124,8 +163,8 @@ class StaffMember extends DataObject implements RegistryDataInterface
 ```
 
 This method can return a link to any place you wish. The above example will link to
-the `show` action on the `RegistryPage` for `StaffMember`. Note that this assumes that there is
-only a single `RegistryPage` displaying that type of data object.
+the `show` action on the `RegistryPage` for `StaffMember`. _Note that this assumes that there is
+only a single `RegistryPage` displaying that type of data object._
 
 The default template `RegistryPage_show.ss` is very simple and only shows a debug
 representation of the data. See *Overriding templates* below on how to change this
@@ -144,9 +183,39 @@ you'll need to change the templates. You can do so by placing the templates `Reg
 `RegistryPage_show.ss` in your themes `templates/SilverStripe/Registry/Layout` folder. You can base these off the
 files found in `vendor/silverstripe/registry/templates/SilverStripe/Registry/Layout`.
 
-As a further layer of customisation, you can create templates that will be only used when viewing
-specific registries. So if you wanted to create a template that would only be used to view the
-StaffMember registry, you would create `My/Namespaced/StaffMember_RegistryPage.ss` and `My/Namespaced/StaffMember_RegistryPage_show.ss`
+Read about SilverStripe's [template locations](https://docs.silverstripe.org/en/4/developer_guides/templates/template_inheritance/#template-types-and-locations)
+
+The entry is provided by the `$Entry` template variable.
+
+themes/.../SilverStripe/Registry/Layout/RegistryPage_show.ss
+```
+<h1>$Entry.Name</h1>
+<% with $Entry %>
+    <p><strong>Phone</strong><br>$PhoneNumber</p>
+<% end_with %>
+```
+
+As a further layer of customisation, you can create templates for specific entries. Do this by configuring the registry entry for rendering, and creating a template in the correctly namespaced folder.
+
+themes/.../SilverStripe/Registry/Layout/RegistryPage_show.ss
+```
+<h1>$Entry.Name</h1>
+$Entry
+```
+
+StaffMember.php
+```php
+public function forTemplate()
+{
+    return $this->renderWith(static::class);
+}
+```
+
+themes/.../templates/Vendor/Package/StaffMember.ss
+_Location should resemble class namespace_
+```
+<p><strong>Phone</strong><br>$PhoneNumber</p>
+```
 
 ## Contributing
 

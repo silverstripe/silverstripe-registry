@@ -6,54 +6,114 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Dev\CSSContentParser;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Registry\Tests\Stub\RegistryPageTestContact;
+use SilverStripe\Registry\Tests\Stub\RegistryPageTestContactExtra;
 use SilverStripe\Registry\Tests\Stub\RegistryPageTestPage;
 
 class RegistryPageFunctionalTest extends FunctionalTest
 {
     protected static $fixture_file = [
-        'fixtures/RegistryPageTestContact.yml',
         'fixtures/RegistryPageFunctionalTest.yml',
+        'fixtures/RegistryPageTestContact.yml'
     ];
 
     protected static $extra_dataobjects = [
         RegistryPageTestContact::class,
-        RegistryPageTestPage::class,
+        RegistryPageTestContactExtra::class,
+        RegistryPageTestPage::class
     ];
 
     protected static $use_draft_site = true;
 
+    public function testUseLink()
+    {
+        // Page with links
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $response = $this->get($page->Link());
+        $parser = new CSSContentParser($response->getBody());
+
+        $cells = $parser->getBySelector('table.results tbody tr td');
+
+        $this->assertContains('/contact-search-extra/', (string) $cells[0]->a->attributes()->href[0]);
+    }
+
     public function testFilteredSearchResults()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
-        $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
-            'FirstName' => 'Alexander',
-            'action_doRegistryFilter' => 'Filter'
-        )));
+        $uri = Controller::join_links(
+            $page->RelativeLink('RegistryFilterForm'),
+            '?' .
+            http_build_query(array(
+                'FirstName' => 'Alexander',
+                'action_doRegistryFilter' => 'Filter'
+            ))
+        );
+        $response = $this->get($uri);
 
         $parser = new CSSContentParser($response->getBody());
         $rows = $parser->getBySelector('table.results tbody tr');
+
         $cells = $rows[0]->td;
 
-        $this->assertEquals(1, count($rows));
+        $this->assertCount(1, $rows);
         $this->assertEquals('Alexander', (string) $cells[0]);
         $this->assertEquals('Bernie', (string) $cells[1]);
+    }
+
+    public function testFilteredByRelationSearchResults()
+    {
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $uri = Controller::join_links(
+            $page->RelativeLink('RegistryFilterForm'),
+            '?' . http_build_query(array(
+                'RegistryPage.Title' => $page->Title,
+                'action_doRegistryFilter' => 'Filter'
+            ))
+        );
+
+        $response = $this->get($uri);
+
+        $parser = new CSSContentParser($response->getBody());
+
+        $rows = $parser->getBySelector('table.results tbody tr');
+        $cells = $rows[0]->td;
+
+        $this->assertCount(1, $rows);
+        $this->assertEquals('Jimmy', (string) $cells[0]->a[0]);
+        $this->assertEquals('Sherson', (string) $cells[1]->a[0]);
+    }
+
+    public function testUserCustomSummaryField()
+    {
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $response = $this->get($page->Link());
+        $parser = new CSSContentParser($response->getBody());
+
+        $cells = $parser->getBySelector('table.results tbody tr td');
+
+        $this->assertContains($page->getDataSingleton()->getStaticReference(), (string) $cells[3]->a[0]);
     }
 
     public function testSearchResultsLimitAndStart()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-limit');
-        $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
-            'Sort' => 'FirstName',
-            'Dir' => 'DESC',
-            'action_doRegistryFilter' => 'Filter'
-        )));
+        $uri = Controller::join_links(
+            $page->RelativeLink('RegistryFilterForm'),
+            '?' . http_build_query(array(
+                'Sort' => 'FirstName',
+                'Dir' => 'DESC',
+                'action_doRegistryFilter' => 'Filter'
+            ))
+        );
+
+
+        $response = $this->get($uri);
 
         $parser = new CSSContentParser($response->getBody());
         $rows = $parser->getBySelector('table.results tbody tr');
         $anchors = $parser->getBySelector('ul.pageNumbers li a');
 
-        $this->assertEquals(3, count($rows), 'Limited to 3 search results');
-        $this->assertEquals(4, count($anchors), '4 paging anchors, including next');
+        $this->assertCount(3, $rows, 'Limited to 3 search results');
+        $this->assertCount(4, $anchors, '4 paging anchors, including next');
 
         $this->assertContains('Sort=FirstName', (string) $anchors[0]['href']);
         $this->assertContains('Dir=DESC', (string) $anchors[0]['href']);
@@ -66,12 +126,16 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testGetParamsPopulatesSearchForm()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
-        $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
-            'FirstName' => 'Alexander',
-            'Sort' => 'FirstName',
-            'Dir' => 'DESC',
-            'action_doRegistryFilter' => 'Filter'
-        )));
+        $uri = Controller::join_links(
+            $page->RelativeLink('RegistryFilterForm'),
+            '?' . http_build_query(array(
+                'FirstName' => 'Alexander',
+                'Sort' => 'FirstName',
+                'Dir' => 'DESC',
+                'action_doRegistryFilter' => 'Filter'
+            ))
+        );
+        $response = $this->get($uri);
 
         $parser = new CSSContentParser($response->getBody());
         $firstNameField = $parser->getBySelector('#Form_RegistryFilterForm_FirstName');
@@ -86,10 +150,14 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testQueryLinks()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
-        $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
-            'FirstName' => 'Alexander',
-            'action_doRegistryFilter' => 'Filter'
-        )));
+        $uri = Controller::join_links(
+            $page->RelativeLink('RegistryFilterForm'),
+            '?' . http_build_query(array(
+                'FirstName' => 'Alexander',
+                'action_doRegistryFilter' => 'Filter'
+            ))
+        );
+        $response = $this->get($uri);
 
         $parser = new CSSContentParser($response->getBody());
         $rows = $parser->getBySelector('table.results thead tr');
@@ -121,9 +189,13 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testColumnName()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
-        $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
-            'action_doRegistryFilter' => 'Filter'
-        )));
+        $uri = Controller::join_links(
+            $page->RelativeLink('RegistryFilterForm'),
+            '?' . http_build_query(array(
+                'action_doRegistryFilter' => 'Filter'
+            ))
+        );
+        $response = $this->get($uri);
 
         $parser = new CSSContentParser($response->getBody());
         $rows = $parser->getBySelector('table.results thead tr');
@@ -132,15 +204,32 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $this->assertEquals('First name', (string) $anchors[0]);
     }
 
+    public function testSortableColumns()
+    {
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $response = $this->get($page->Link());
+        $parser = new CSSContentParser($response->getBody());
+        $columns = $parser->getBySelector('table.results thead tr th');
+
+        $this->assertNotEmpty($columns[0]->a);
+        $this->assertNotEmpty($columns[1]->a);
+        $this->assertNotEmpty($columns[2]->a);
+        $this->assertEquals('Other', $columns[3]);
+    }
+
     public function testExportLink()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
-        $response = $this->get($page->RelativeLink('RegistryFilterForm') . '?' . http_build_query(array(
-            'FirstName' => 'Alexander',
-            'Sort' => 'FirstName',
-            'Dir' => 'DESC',
-            'action_doRegistryFilter' => 'Filter'
-        )));
+        $uri = Controller::join_links(
+            $page->RelativeLink('RegistryFilterForm'),
+            '?' . http_build_query(array(
+                'FirstName' => 'Alexander',
+                'Sort' => 'FirstName',
+                'Dir' => 'DESC',
+                'action_doRegistryFilter' => 'Filter'
+            ))
+        );
+        $response = $this->get($uri);
 
         $parser = new CSSContentParser($response->getBody());
         $anchor = $parser->getBySelector('a.export');
