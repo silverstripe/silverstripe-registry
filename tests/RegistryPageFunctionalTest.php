@@ -82,6 +82,37 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $this->assertEquals('Sherson', (string) $cells[1]->a[0]);
     }
 
+    /**
+     * Check that RegistryPageController can filter for ExactMatches (ID) for relationships.
+     *
+     * @throws \Exception
+     */
+    public function testFilteredByRelationIDSearchResults()
+    {
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $uri = Controller::join_links(
+            $page->RelativeLink('RegistryFilterForm'),
+            '?' . http_build_query(array(
+                'RegistryPage.ID' => 2,
+                'action_doRegistryFilter' => 'Filter',
+            ))
+        );
+
+        // If this is wrong then the configuration system is broken.
+        $this->assertCount(4, $page->getDataSingleton()->config()->get('searchable_fields'));
+
+        $response = $this->get($uri);
+
+        $parser = new CSSContentParser($response->getBody());
+
+        $rows = $parser->getBySelector('table.results tbody tr');
+        $cells = $rows[0]->td;
+
+        $this->assertCount(1, $rows);
+        $this->assertEquals('Jimmy', (string)trim($cells[0]->a[0]));
+        $this->assertEquals('Sherson', (string)trim($cells[1]->a[0]));
+    }
+
     public function testUserCustomSummaryField()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
@@ -104,7 +135,6 @@ class RegistryPageFunctionalTest extends FunctionalTest
                 'action_doRegistryFilter' => 'Filter'
             ))
         );
-
 
         $response = $this->get($uri);
 

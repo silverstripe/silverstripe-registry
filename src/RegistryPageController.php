@@ -352,10 +352,13 @@ class RegistryPageController extends PageController
         $filters = [];
         foreach ($singleton->config()->get('searchable_fields') as $field) {
             $value = $this->getRequest()->getVar(str_replace('.', '_', $field));
-
-            if ($value) {
-                $filters[$field . ':PartialMatch'] = $value;
+            if (!$value) {
+                continue;
             }
+
+            // if the searchable field is a relationship, it must be an exact match (ID match) if not partial is fine.
+            $matchType = $this->instanceHasRelationship($singleton, $field) ? "ExactMatch" : "PartialMatch";
+            $filters[$field . ':' . $matchType] = $value;
         }
         $list = $list->filter($filters);
 
@@ -370,6 +373,26 @@ class RegistryPageController extends PageController
         }
 
         return $list;
+    }
+
+    /**
+     *
+     * Returns boolean if the fieldname is a relationship on the instance.
+     *
+     * @param DataObject $singleton
+     * @param string $field
+     *
+     * @return bool
+     */
+    protected function instanceHasRelationship(DataObject $singleton, $field)
+    {
+        // Strip ID or .ID off the fieldname, as it's not going to be present in our relationship
+        $fieldName = mb_substr(preg_replace("/[^a-z]/iu", "", $field), 0, -2, 'utf-8');
+
+        // check the instances's relationships.
+        return array_key_exists($fieldName, $singleton->hasOne()) ||
+            array_key_exists($fieldName, $singleton->hasMany()) ||
+            array_key_exists($fieldName, $singleton->manyMany());
     }
 
     /**
