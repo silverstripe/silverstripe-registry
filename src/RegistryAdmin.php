@@ -43,10 +43,8 @@ class RegistryAdmin extends ModelAdmin
 
     public function getExportFields()
     {
-        $dataObjectSchema = DataObject::getSchema();
-
         $fields = [];
-        foreach ($dataObjectSchema->databaseFields($this->modelClass) as $field => $spec) {
+        foreach (singleton($this->modelClass)->summaryFields() as $field => $spec) {
             $fields[$field] = $field;
         }
         return $fields;
