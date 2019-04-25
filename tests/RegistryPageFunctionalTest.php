@@ -93,7 +93,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $uri = Controller::join_links(
             $page->RelativeLink('RegistryFilterForm'),
             '?' . http_build_query(array(
-                'RegistryPage.ID' => 2,
+                'RegistryPage.ID' => $page->ID,
                 'action_doRegistryFilter' => 'Filter',
             ))
         );
@@ -106,6 +106,9 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $parser = new CSSContentParser($response->getBody());
 
         $rows = $parser->getBySelector('table.results tbody tr');
+
+        // there should only be one user with that ID from our YML
+        $this->assertCount(1, $rows);
         $cells = $rows[0]->td;
 
         $this->assertCount(1, $rows);
