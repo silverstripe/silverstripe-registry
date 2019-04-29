@@ -29,13 +29,15 @@ class RegistryPageTestContactExtra extends DataObject implements RegistryDataInt
         'FirstName' => 'First name',
         'Surname' => 'Surname',
         'RegistryPage.Title' => 'Registry Page',
+        'RegistryPage.ID' => 'Registry Page ID',
         'StaticReference' => 'Other'
     ];
 
     private static $searchable_fields = [
         'FirstName',
         'Surname',
-        'RegistryPage.Title'
+        'RegistryPage.Title',
+        'RegistryPage.ID',
     ];
 
     public function getSearchFields()
@@ -43,7 +45,8 @@ class RegistryPageTestContactExtra extends DataObject implements RegistryDataInt
         return new FieldList(
             new TextField('FirstName', 'First name'),
             new TextField('Surname', 'Surname'),
-            new TextField('RegistryPage.Title', 'Registry Page')
+            new TextField('RegistryPage.Title', 'Registry Page'),
+            new TextField('RegistryPage.ID', 'Registry ID')
         );
     }
 

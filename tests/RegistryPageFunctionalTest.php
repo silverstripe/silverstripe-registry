@@ -33,7 +33,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
 
         $cells = $parser->getBySelector('table.results tbody tr td');
 
-        $this->assertContains('/contact-search-extra/', (string) $cells[0]->a->attributes()->href[0]);
+        $this->assertContains('/contact-search-extra/', (string)$cells[0]->a->attributes()->href[0]);
     }
 
     public function testFilteredSearchResults()
@@ -55,8 +55,8 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $cells = $rows[0]->td;
 
         $this->assertCount(1, $rows);
-        $this->assertEquals('Alexander', (string) $cells[0]);
-        $this->assertEquals('Bernie', (string) $cells[1]);
+        $this->assertEquals('Alexander', trim((string)$cells[0]));
+        $this->assertEquals('Bernie', trim((string)$cells[1]));
     }
 
     public function testFilteredByRelationSearchResults()
@@ -78,8 +78,42 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $cells = $rows[0]->td;
 
         $this->assertCount(1, $rows);
-        $this->assertEquals('Jimmy', (string) $cells[0]->a[0]);
-        $this->assertEquals('Sherson', (string) $cells[1]->a[0]);
+        $this->assertEquals('Jimmy', trim((string)$cells[0]->a[0]));
+        $this->assertEquals('Sherson', trim((string)$cells[1]->a[0]));
+    }
+
+    /**
+     * Check that RegistryPageController can filter for ExactMatches (ID) for relationships.
+     *
+     * @throws \Exception
+     */
+    public function testFilteredByRelationIDSearchResults()
+    {
+        $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $uri = Controller::join_links(
+            $page->RelativeLink('RegistryFilterForm'),
+            '?' . http_build_query(array(
+                'RegistryPage.ID' => $page->ID,
+                'action_doRegistryFilter' => 'Filter',
+            ))
+        );
+
+        // If this is wrong then the configuration system is broken.
+        $this->assertCount(4, $page->getDataSingleton()->config()->get('searchable_fields'));
+
+        $response = $this->get($uri);
+
+        $parser = new CSSContentParser($response->getBody());
+
+        $rows = $parser->getBySelector('table.results tbody tr');
+
+        // there should only be one user with that ID from our YML
+        $this->assertCount(1, $rows);
+        $cells = $rows[0]->td;
+
+        $this->assertCount(1, $rows);
+        $this->assertEquals('Jimmy', trim((string)$cells[0]->a));
+        $this->assertEquals('Sherson', trim((string)$cells[1]->a));
     }
 
     public function testUserCustomSummaryField()
@@ -90,7 +124,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
 
         $cells = $parser->getBySelector('table.results tbody tr td');
 
-        $this->assertContains($page->getDataSingleton()->getStaticReference(), (string) $cells[3]->a[0]);
+        $this->assertContains($page->getDataSingleton()->getStaticReference(), trim((string)$cells[4]->a[0]));
     }
 
     public function testSearchResultsLimitAndStart()
@@ -105,7 +139,6 @@ class RegistryPageFunctionalTest extends FunctionalTest
             ))
         );
 
-
         $response = $this->get($uri);
 
         $parser = new CSSContentParser($response->getBody());
@@ -115,12 +148,12 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $this->assertCount(3, $rows, 'Limited to 3 search results');
         $this->assertCount(4, $anchors, '4 paging anchors, including next');
 
-        $this->assertContains('Sort=FirstName', (string) $anchors[0]['href']);
-        $this->assertContains('Dir=DESC', (string) $anchors[0]['href']);
+        $this->assertContains('Sort=FirstName', (string)$anchors[0]['href']);
+        $this->assertContains('Dir=DESC', (string)$anchors[0]['href']);
 
-        $this->assertContains('start=0', (string) $anchors[0]['href']);
-        $this->assertContains('start=3', (string) $anchors[1]['href']);
-        $this->assertContains('start=6', (string) $anchors[2]['href']);
+        $this->assertContains('start=0', (string)$anchors[0]['href']);
+        $this->assertContains('start=3', (string)$anchors[1]['href']);
+        $this->assertContains('start=6', (string)$anchors[2]['href']);
     }
 
     public function testGetParamsPopulatesSearchForm()
@@ -142,9 +175,9 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $sortField = $parser->getBySelector('#Form_RegistryFilterForm_Sort');
         $dirField = $parser->getBySelector('#Form_RegistryFilterForm_Dir');
 
-        $this->assertEquals('Alexander', (string) $firstNameField[0]['value']);
-        $this->assertEquals('FirstName', (string) $sortField[0]['value']);
-        $this->assertEquals('DESC', (string) $dirField[0]['value']);
+        $this->assertEquals('Alexander', (string)$firstNameField[0]['value']);
+        $this->assertEquals('FirstName', (string)$sortField[0]['value']);
+        $this->assertEquals('DESC', (string)$dirField[0]['value']);
     }
 
     public function testQueryLinks()
@@ -163,11 +196,11 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $rows = $parser->getBySelector('table.results thead tr');
         $anchors = $rows[0]->th->a;
 
-        $this->assertContains('FirstName=Alexander', (string) $anchors[0]['href']);
-        $this->assertContains('Surname=', (string) $anchors[0]['href']);
-        $this->assertContains('Sort=FirstName', (string) $anchors[0]['href']);
-        $this->assertContains('Dir=ASC', (string) $anchors[0]['href']);
-        $this->assertContains('action_doRegistryFilter=Filter', (string) $anchors[0]['href']);
+        $this->assertContains('FirstName=Alexander', (string)$anchors[0]['href']);
+        $this->assertContains('Surname=', (string)$anchors[0]['href']);
+        $this->assertContains('Sort=FirstName', (string)$anchors[0]['href']);
+        $this->assertContains('Dir=ASC', (string)$anchors[0]['href']);
+        $this->assertContains('action_doRegistryFilter=Filter', (string)$anchors[0]['href']);
     }
 
     public function testShowExistingRecord()
@@ -201,7 +234,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $rows = $parser->getBySelector('table.results thead tr');
         $anchors = $rows[0]->th->a;
 
-        $this->assertEquals('First name', (string) $anchors[0]);
+        $this->assertEquals('First name', trim((string)$anchors[0]));
     }
 
     public function testSortableColumns()
@@ -214,7 +247,8 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $this->assertNotEmpty($columns[0]->a);
         $this->assertNotEmpty($columns[1]->a);
         $this->assertNotEmpty($columns[2]->a);
-        $this->assertEquals('Other', $columns[3]);
+        $this->assertNotEmpty($columns[3]->a);
+        $this->assertEquals('Other', trim((string)$columns[4]));
     }
 
     public function testExportLink()
@@ -234,11 +268,11 @@ class RegistryPageFunctionalTest extends FunctionalTest
         $parser = new CSSContentParser($response->getBody());
         $anchor = $parser->getBySelector('a.export');
 
-        $this->assertContains('export?', (string) $anchor[0]['href']);
-        $this->assertContains('FirstName=Alexander', (string) $anchor[0]['href']);
-        $this->assertContains('Surname=', (string) $anchor[0]['href']);
-        $this->assertContains('Sort=FirstName', (string) $anchor[0]['href']);
-        $this->assertContains('Dir=DESC', (string) $anchor[0]['href']);
-        $this->assertContains('action_doRegistryFilter=Filter', (string) $anchor[0]['href']);
+        $this->assertContains('export?', (string)$anchor[0]['href']);
+        $this->assertContains('FirstName=Alexander', (string)$anchor[0]['href']);
+        $this->assertContains('Surname=', (string)$anchor[0]['href']);
+        $this->assertContains('Sort=FirstName', (string)$anchor[0]['href']);
+        $this->assertContains('Dir=DESC', (string)$anchor[0]['href']);
+        $this->assertContains('action_doRegistryFilter=Filter', (string)$anchor[0]['href']);
     }
 }
