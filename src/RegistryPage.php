@@ -20,6 +20,8 @@ class RegistryPage extends Page
 
     private static $table_name = 'RegistryPage';
 
+    private static $icon_class = 'font-icon-p-data';
+
     private static $db = [
         'DataClass' => 'Varchar(100)',
         'PageLength' => 'Int',
