@@ -4,9 +4,8 @@ namespace SilverStripe\Registry;
 
 use PageController;
 use SilverStripe\Control\Controller;
-use SilverStripe\Control\HTTP;
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Convert;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
@@ -14,7 +13,7 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
-use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\ORM\SS_List;
 use SilverStripe\Registry\Exception\RegistryException;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
@@ -75,7 +74,7 @@ class RegistryPageController extends PageController
         // If direction is set, then just reverse it.
         $direction = $this->request->getVar('Dir');
         if ($direction) {
-            if ($direction == 'ASC') {
+            if ($direction === 'ASC') {
                 return 'DESC';
             }
             return 'ASC';
@@ -97,6 +96,7 @@ class RegistryPageController extends PageController
             return;
         }
 
+        /** @var FieldList $fields */
         $fields = $singleton->getSearchFields();
 
         // Add the sort information.
@@ -201,8 +201,10 @@ class RegistryPageController extends PageController
 
     /**
      * Format a set of columns, used for headings and row data
+     *
      * @param  int $id The result ID to reference
      * @return ArrayList
+     * @throws RegistryException If parameters are used in column names
      */
     public function Columns($id = null)
     {
@@ -263,7 +265,9 @@ class RegistryPageController extends PageController
     public function export($request)
     {
         $dataClass = $this->dataRecord->getDataClass();
-        $resultColumns = $this->dataRecord->getDataSingleton()->fieldLabels();
+        /** @var DataObject $singleton */
+        $singleton = $this->dataRecord->getDataSingleton();
+        $columns = $singleton->summaryFields();
 
         // Used for the browser, not stored on the server
         $filepath = sprintf('export-%s.csv', date('Y-m-dHis'));
@@ -271,16 +275,14 @@ class RegistryPageController extends PageController
         // Allocates up to 1M of memory storage to write to, then will fail over to a temporary file on the filesystem
         $handle = fopen('php://temp/maxmemory:' . (1024 * 1024), 'w');
 
-        $cols = array_keys($resultColumns);
-
         // put the headers in the first row
-        fputcsv($handle, $cols);
+        fputcsv($handle, $columns);
 
         // put the data in the rows after
         foreach ($this->RegistryEntries(false) as $result) {
             $item = [];
-            foreach ($cols as $col) {
-                $item[] = $result->$col;
+            foreach ($columns as $column => $columnLabel) {
+                $item[] = $result->$column;
             }
             fputcsv($handle, $item);
         }
