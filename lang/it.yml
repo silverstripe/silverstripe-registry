@@ -1,0 +1,21 @@
+it:
+  SilverStripe\Registry\RegistryAdmin:
+    MENUTITLE: Registro
+  SilverStripe\Registry\RegistryPage:
+    DESCRIPTION: 'Mostra grandi serie di dati in una lista filtrabile, ricercabile e paginata'
+    DataClassFieldLabel: 'Classe Dati'
+    ExportAll: 'Esportare risultati in CSV'
+    ExportAllTitle: 'Esportare tutti i risultati in un fogli di calcolo CSV'
+    NoResults: 'Non ci sono risultati da mostrare'
+    PLURALNAME: 'Pagine Registro'
+    PLURALS:
+      one: 'Una Pagina Registro'
+      other: '{count} Pagine Registro'
+    PageLengthFieldLabel: 'Lunghezza pagina risultati'
+    ResultsFor: 'Ricerca risultati per'
+    SINGULARNAME: 'Pagina Registro'
+    SelectDropdownDefault: 'Selezionarne uno'
+    ViewHistory: 'Vedere cronologia dati importati'
+    ViewNext: 'Vedere pagina successiva'
+    ViewPageNum: 'Vedere numero pagina'
+    ViewPrev: 'Vedere pagina precedente'
