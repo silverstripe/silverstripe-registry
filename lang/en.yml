@@ -19,3 +19,5 @@ en:
     ViewNext: 'View the next page'
     ViewPageNum: 'View page number'
     ViewPrev: 'View the previous page'
+  SilverStripe\Registry\RegistryPageController:
+    UNWANTEDCOLUMNPARAMETERS: 'Columns do not accept parameters'
