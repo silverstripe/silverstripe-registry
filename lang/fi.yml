@@ -8,6 +8,9 @@ fi:
     ExportAllTitle: 'Vie kaikki tulokset CSV-muotoiseksi tiedostoksi'
     NoResults: 'Ei näytettäviä tuloksia'
     PLURALNAME: Perussivut
+    PLURALS:
+      one: Rekisterisivu
+      other: '{count} Rekisterisivua'
     PageLengthFieldLabel: 'Tulossivun pituus'
     ResultsFor: 'Hakutulokset kohteelle'
     SINGULARNAME: Rekisterisivu

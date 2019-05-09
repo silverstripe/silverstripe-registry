@@ -123,7 +123,7 @@ class RegistryPage extends Page
         $controller = Controller::curr();
         if ($controller) {
             $request = $controller->getRequest();
-            if ($request->param('Action') == 'show') {
+            if ($request->param('Action') === 'show') {
                 $id = $request->param('ID');
                 if ($id) {
                     $object = DataObject::get_by_id($this->getDataClass(), $id);
