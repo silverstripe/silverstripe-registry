@@ -371,7 +371,9 @@ class RegistryPageController extends PageController
             if ($this->getRequest()->getVar('Dir')) {
                 $dir = $this->getRequest()->getVar('Dir');
             }
-            $list = $list->sort($sort, $dir);
+            if ($this->canSortBy($sort)) {
+                $list = $list->sort($sort, $dir);
+            }
         }
 
         return $list;
