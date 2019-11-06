@@ -18,9 +18,9 @@
         }
     ],
     "require": {
-        "silverstripe/cms": "^4.0",
-        "silverstripe/admin": "^1.0",
-        "silverstripe/assets": "^1.0"
+        "silverstripe/cms": "^4",
+        "silverstripe/admin": "^1",
+        "silverstripe/assets": "^1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
@@ -32,12 +32,6 @@
             "SilverStripe\\Registry\\Tests\\": "tests/"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.x-dev"
-        }
-    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
-
