@@ -19,3 +19,5 @@ eo:
     ViewNext: 'Vidigi la sekvan paĝon'
     ViewPageNum: 'Vidigi paĝnumeron'
     ViewPrev: 'Vidigi la antaŭan paĝon'
+  SilverStripe\Registry\RegistryPageController:
+    UNWANTEDCOLUMNPARAMETERS: 'Kolumnoj ne akceptas parametrojn'
