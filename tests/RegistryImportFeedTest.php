@@ -19,6 +19,6 @@ class RegistryImportFeedTest extends SapphireTest
         DBDatetime::set_mock_now('2017-01-01 12:30:45');
 
         $importFeed = RegistryImportFeed::create();
-        $this->assertContains('import-2017-01-01', $importFeed->getImportFilename());
+        $this->assertStringContainsString('import-2017-01-01', $importFeed->getImportFilename());
     }
 }
