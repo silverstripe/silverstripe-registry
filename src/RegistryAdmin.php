@@ -20,7 +20,7 @@ class RegistryAdmin extends ModelAdmin
     public function canView($member = null)
     {
         $managedModels = $this->getManagedModels();
-        if (count($managedModels) == 0) {
+        if (count($managedModels ?? []) == 0) {
             return false;
         }
 
@@ -65,7 +65,7 @@ class RegistryAdmin extends ModelAdmin
     public function import($data, $form, $request)
     {
         if (!$this->showImportForm
-            || (is_array($this->showImportForm) && !in_array($this->modelClass, $this->showImportForm))
+            || (is_array($this->showImportForm) && !in_array($this->modelClass, $this->showImportForm ?? []))
         ) {
             return false;
         }
