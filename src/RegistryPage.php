@@ -109,7 +109,7 @@ class RegistryPage extends Page
         $pages = [];
 
         while ($page
-            && (!$maxDepth || count($pages) < $maxDepth)
+            && (!$maxDepth || count($pages ?? []) < $maxDepth)
             && (!$stopAtPageType || $page->ClassName != $stopAtPageType)
         ) {
             if ($showHidden || $page->ShowInMenus || ($page->ID == $this->ID)) {
@@ -135,7 +135,7 @@ class RegistryPage extends Page
         $template = SSViewer::create('BreadcrumbsTemplate');
 
         return $template->process($this->customise(ArrayData::create([
-            'Pages' => ArrayList::create(array_reverse($pages))
+            'Pages' => ArrayList::create(array_reverse($pages ?? []))
         ])));
     }
 }

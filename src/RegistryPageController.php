@@ -42,7 +42,7 @@ class RegistryPageController extends PageController
      */
     public function AllQueryVars()
     {
-        return Convert::raw2xml(http_build_query($this->queryVars()));
+        return Convert::raw2xml(http_build_query($this->queryVars() ?? []));
     }
 
     /**
@@ -57,7 +57,7 @@ class RegistryPageController extends PageController
         unset($vars['Sort']);
         unset($vars['Dir']);
 
-        return Convert::raw2xml($this->Link('RegistryFilterForm') . '?' . http_build_query($vars));
+        return Convert::raw2xml($this->Link('RegistryFilterForm') . '?' . http_build_query($vars ?? []));
     }
 
     public function Sort()
@@ -142,14 +142,14 @@ class RegistryPageController extends PageController
         $fields = array_merge(['start', 'Sort', 'Dir'], $singleton->config()->get('searchable_fields'));
         $params = [];
         foreach ($fields as $field) {
-            $value = $this->getRequest()->getVar(str_replace('.', '_', $field));
+            $value = $this->getRequest()->getVar(str_replace('.', '_', $field ?? ''));
             if ($value) {
                 $params[$field] = $value;
             }
         }
 
         // Link back to this page with the relevant parameters
-        $this->redirect($this->Link('?' . http_build_query($params)));
+        $this->redirect($this->Link('?' . http_build_query($params ?? [])));
     }
 
     public function doRegistryFilterReset($data, $form, $request)
@@ -182,11 +182,11 @@ class RegistryPageController extends PageController
         $singleton = $this->dataRecord->getDataSingleton();
 
         if ($singleton) {
-            $properties = explode('.', $property);
+            $properties = explode('.', $property ?? '');
 
             $relationClass = $singleton->getRelationClass($properties[0]);
             if ($relationClass) {
-                if (count($properties) <= 2 && singleton($relationClass)->hasDatabaseField($properties[1])) {
+                if (count($properties ?? []) <= 2 && singleton($relationClass)->hasDatabaseField($properties[1])) {
                     $canSort = true;
                 }
             } elseif ($singleton instanceof DataObject) {
@@ -219,7 +219,7 @@ class RegistryPageController extends PageController
 
         foreach ($columns as $name => $title) {
             // Check for unwanted parameters
-            if (preg_match('/[()]/', $name)) {
+            if (preg_match('/[()]/', $name ?? '')) {
                 throw new RegistryException(_t(
                     'SilverStripe\\Registry\\RegistryPageController.UNWANTEDCOLUMNPARAMETERS',
                     "Columns do not accept parameters"
@@ -227,7 +227,7 @@ class RegistryPageController extends PageController
             }
 
             // Get dot deliniated properties
-            $properties = explode('.', $name);
+            $properties = explode('.', $name ?? '');
 
             // Increment properties for value
             $context = $result;
@@ -276,7 +276,7 @@ class RegistryPageController extends PageController
         $handle = fopen('php://temp/maxmemory:' . (1024 * 1024), 'w');
 
         // put the headers in the first row
-        fputcsv($handle, $columns);
+        fputcsv($handle, $columns ?? []);
 
         // put the data in the rows after
         foreach ($this->RegistryEntries(false) as $result) {
@@ -284,7 +284,7 @@ class RegistryPageController extends PageController
             foreach ($columns as $column => $columnLabel) {
                 $item[] = $result->$column;
             }
-            fputcsv($handle, $item);
+            fputcsv($handle, $item ?? []);
         }
 
         rewind($handle);
@@ -353,7 +353,7 @@ class RegistryPageController extends PageController
         // Setup filters
         $filters = [];
         foreach ($singleton->config()->get('searchable_fields') as $field) {
-            $value = $this->getRequest()->getVar(str_replace('.', '_', $field));
+            $value = $this->getRequest()->getVar(str_replace('.', '_', $field ?? ''));
             if (!$value) {
                 continue;
             }
@@ -391,12 +391,12 @@ class RegistryPageController extends PageController
     protected function instanceHasRelationship(DataObject $singleton, $field)
     {
         // Strip ID or .ID off the fieldname, as it's not going to be present in our relationship
-        $fieldName = mb_substr(preg_replace("/[^a-z]/iu", "", $field), 0, -2, 'utf-8');
+        $fieldName = mb_substr(preg_replace("/[^a-z]/iu", "", $field ?? '') ?? '', 0, -2, 'utf-8');
 
         // check the instances's relationships.
-        return array_key_exists($fieldName, $singleton->hasOne()) ||
-            array_key_exists($fieldName, $singleton->hasMany()) ||
-            array_key_exists($fieldName, $singleton->manyMany());
+        return array_key_exists($fieldName, $singleton->hasOne() ?? []) ||
+            array_key_exists($fieldName, $singleton->hasMany() ?? []) ||
+            array_key_exists($fieldName, $singleton->manyMany() ?? []);
     }
 
     /**
@@ -411,7 +411,7 @@ class RegistryPageController extends PageController
             function ($var) {
                 return "\"{$var}\"";
             },
-            $names
+            $names ?? []
         );
     }
 
@@ -458,21 +458,21 @@ class RegistryPageController extends PageController
         if ($action && $action !== 'index') {
             $parentClass = get_class($this);
             while ($parentClass !== Controller::class) {
-                $templates[] = strtok($parentClass, '_') . '_' . $action;
-                $parentClass = get_parent_class($parentClass);
+                $templates[] = strtok($parentClass ?? '', '_') . '_' . $action;
+                $parentClass = get_parent_class($parentClass ?? '');
             }
         }
         // Add controller templates for inheritance chain
         $parentClass = get_class($this);
         while ($parentClass !== Controller::class) {
-            $templates[] = strtok($parentClass, '_');
-            $parentClass = get_parent_class($parentClass);
+            $templates[] = strtok($parentClass ?? '', '_');
+            $parentClass = get_parent_class($parentClass ?? '');
         }
 
         $templates[] = Controller::class;
 
         // remove duplicates
-        $templates = array_unique($templates);
+        $templates = array_unique($templates ?? []);
 
         $actionlessTemplates = [];
 
@@ -488,15 +488,19 @@ class RegistryPageController extends PageController
             }
             array_unshift($actionlessTemplates, $parentClass);
 
-            $parentClass = get_parent_class($parentClass);
+            $parentClass = get_parent_class($parentClass ?? '');
         }
 
         $index = 0;
-        while ($index < count($templates) && $templates[$index] !== RegistryPage::class) {
+        while ($index < count($templates ?? []) && $templates[$index] !== RegistryPage::class) {
             $index++;
         }
 
-        return array_merge(array_slice($templates, 0, $index), $actionlessTemplates, array_slice($templates, $index));
+        return array_merge(
+            array_slice($templates ?? [], 0, $index),
+            $actionlessTemplates,
+            array_slice($templates ?? [], $index ?? 0)
+        );
     }
 
     /**
@@ -506,6 +510,6 @@ class RegistryPageController extends PageController
      */
     public function getClassNameForUrl($className)
     {
-        return str_replace('\\', '-', $className);
+        return str_replace('\\', '-', $className ?? '');
     }
 }

@@ -29,7 +29,7 @@ class RegistryImportFeedController extends Controller
         $feed = RegistryImportFeed::create();
         $modelClass = $this->unsanitiseClassName($request->param('ModelClass'));
 
-        if (!class_exists($modelClass) || !(singleton($modelClass) instanceof RegistryDataInterface)) {
+        if (!class_exists($modelClass ?? '') || !(singleton($modelClass) instanceof RegistryDataInterface)) {
             return $this->httpError(404);
         }
 
@@ -42,6 +42,6 @@ class RegistryImportFeedController extends Controller
      */
     protected function unsanitiseClassName($class)
     {
-        return str_replace('-', '\\', $class);
+        return str_replace('-', '\\', $class ?? '');
     }
 }

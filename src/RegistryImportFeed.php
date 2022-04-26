@@ -106,7 +106,7 @@ class RegistryImportFeed
     public function getStoragePath($modelClass = null)
     {
         $sanitisedClassName = $this->sanitiseClassName($modelClass ?: $this->modelClass);
-        return str_replace('{model}', $sanitisedClassName, $this->config()->get('storage_path'));
+        return str_replace('{model}', $sanitisedClassName ?? '', $this->config()->get('storage_path') ?? '');
     }
 
     /**
@@ -142,7 +142,7 @@ class RegistryImportFeed
     {
         // Note: CLDR date format see DBDatetime
         $datetime = DBDatetime::now()->Format('y-MM-dd-HHmmss');
-        return str_replace('{date}', $datetime, $this->config()->get('storage_filename'));
+        return str_replace('{date}', $datetime ?? '', $this->config()->get('storage_filename') ?? '');
     }
 
     /**
@@ -175,6 +175,6 @@ class RegistryImportFeed
      */
     protected function sanitiseClassName($class)
     {
-        return str_replace('\\', '-', $class);
+        return str_replace('\\', '-', $class ?? '');
     }
 }
