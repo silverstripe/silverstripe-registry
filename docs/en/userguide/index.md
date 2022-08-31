@@ -1,5 +1,7 @@
+---
 title: Online databases and registries
 summary: How to manage databases and registries using the CMS
+---
 
 ## In this section:
 
