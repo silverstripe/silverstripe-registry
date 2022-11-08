@@ -8,6 +8,8 @@ use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Registry\Tests\Stub\RegistryPageTestContact;
 use SilverStripe\Registry\Tests\Stub\RegistryPageTestContactExtra;
 use SilverStripe\Registry\Tests\Stub\RegistryPageTestPage;
+use SilverStripe\Security\Member;
+use SilverStripe\Security\Security;
 
 class RegistryPageFunctionalTest extends FunctionalTest
 {
@@ -22,12 +24,12 @@ class RegistryPageFunctionalTest extends FunctionalTest
         RegistryPageTestPage::class
     ];
 
-    protected static $use_draft_site = true;
-
     public function testUseLink()
     {
         // Page with links
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $page->publishRecursive();
+
         $response = $this->get($page->Link());
         $parser = new CSSContentParser($response->getBody());
 
@@ -39,6 +41,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testFilteredSearchResults()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
+        $page->publishRecursive();
         $uri = Controller::join_links(
             $page->RelativeLink('RegistryFilterForm'),
             '?' .
@@ -62,6 +65,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testFilteredByRelationSearchResults()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $page->publishRecursive();
         $uri = Controller::join_links(
             $page->RelativeLink('RegistryFilterForm'),
             '?' . http_build_query(array(
@@ -90,6 +94,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testFilteredByRelationIDSearchResults()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $page->publishRecursive();
         $uri = Controller::join_links(
             $page->RelativeLink('RegistryFilterForm'),
             '?' . http_build_query(array(
@@ -119,6 +124,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testUserCustomSummaryField()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $page->publishRecursive();
         $response = $this->get($page->Link());
         $parser = new CSSContentParser($response->getBody());
 
@@ -133,6 +139,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testSearchResultsLimitAndStart()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-limit');
+        $page->publishRecursive();
         $uri = Controller::join_links(
             $page->RelativeLink('RegistryFilterForm'),
             '?' . http_build_query(array(
@@ -162,6 +169,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testGetParamsPopulatesSearchForm()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
+        $page->publishRecursive();
         $uri = Controller::join_links(
             $page->RelativeLink('RegistryFilterForm'),
             '?' . http_build_query(array(
@@ -186,6 +194,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testQueryLinks()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
+        $page->publishRecursive();
         $uri = Controller::join_links(
             $page->RelativeLink('RegistryFilterForm'),
             '?' . http_build_query(array(
@@ -210,6 +219,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     {
         $record = $this->objFromFixture(RegistryPageTestContact::class, 'alexander');
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
+        $page->publishRecursive();
         $response = $this->get(Controller::join_links($page->RelativeLink(), 'show', $record->ID));
 
         $this->assertStringContainsString('Alexander Bernie', $response->getBody());
@@ -225,6 +235,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testColumnName()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
+        $page->publishRecursive();
         $uri = Controller::join_links(
             $page->RelativeLink('RegistryFilterForm'),
             '?' . http_build_query(array(
@@ -243,6 +254,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testSortableColumns()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage-extra');
+        $page->publishRecursive();
         $response = $this->get($page->Link());
         $parser = new CSSContentParser($response->getBody());
         $columns = $parser->getBySelector('table.results thead tr th');
@@ -257,6 +269,7 @@ class RegistryPageFunctionalTest extends FunctionalTest
     public function testExportLink()
     {
         $page = $this->objFromFixture(RegistryPageTestPage::class, 'contact-registrypage');
+        $page->publishRecursive();
         $uri = Controller::join_links(
             $page->RelativeLink('RegistryFilterForm'),
             '?' . http_build_query(array(
