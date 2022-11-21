@@ -26,7 +26,7 @@ $Content
 			</thead>
 			<tbody>
 			<% loop $RegistryEntries %>
-				<tr class="<% if FirstLast %>$FirstLast <% end_if %>$EvenOdd">
+				<tr class="<% if $FirstLast %>$FirstLast <% end_if %>$EvenOdd">
 					<% loop $Top.Columns($ID) %>
 						<td><% if Link %><a href="$Link">$Value</a><% else %>$Value<% end_if %></td>
 					<% end_loop %>
