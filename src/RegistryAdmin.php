@@ -5,6 +5,8 @@ namespace SilverStripe\Registry;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Control\HTTPResponse;
+use SilverStripe\Forms\Form;
 
 class RegistryAdmin extends ModelAdmin
 {
@@ -62,12 +64,12 @@ class RegistryAdmin extends ModelAdmin
         return sprintf('%s/%s', $feed->getStoragePath($this->modelClass), $feed->getImportFilename());
     }
 
-    public function import($data, $form, $request)
+    public function import(array $data, Form $form): HTTPResponse
     {
         if (!$this->showImportForm
             || (is_array($this->showImportForm) && !in_array($this->modelClass, $this->showImportForm ?? []))
         ) {
-            return false;
+            return $this->redirectBack();
         }
 
         $importers = $this->getModelImporters();
@@ -80,8 +82,7 @@ class RegistryAdmin extends ModelAdmin
                 _t('SilverStripe\\Admin\\ModelAdmin.NOCSVFILE', 'Please browse for a CSV file to import'),
                 'bad'
             );
-            $this->redirectBack();
-            return false;
+            return $this->redirectBack();
         }
 
         if (!empty($data['EmptyBeforeImport']) && $data['EmptyBeforeImport']) { //clear database before import
