@@ -2,13 +2,11 @@
 
 namespace SilverStripe\Registry;
 
-use League\Flysystem\Plugin\ListFiles;
 use SilverStripe\Assets\Storage\GeneratedAssetHandler;
 use SilverStripe\Control\RSS\RSSFeed;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBDatetime;
 
 class RegistryImportFeed
@@ -80,8 +78,6 @@ class RegistryImportFeed
      */
     public function setAssetHandler(GeneratedAssetHandler $handler)
     {
-        $handler->getFilesystem()->addPlugin(new ListFiles);
-
         $this->assetHandler = $handler;
 
         return $this;
@@ -117,16 +113,16 @@ class RegistryImportFeed
     public function getImportFiles()
     {
         $path = $this->getStoragePath();
-        $importFiles = $this->getAssetHandler()->getFilesystem()->listFiles($path);
+        $importFiles = $this->getAssetHandler()->getFilesystem()->listContents($path)->toArray();
 
         $files = ArrayList::create();
 
         foreach ($importFiles as $importFile) {
             $files->push(RegistryImportFeedEntry::create(
-                $importFile['basename'],
+                basename($importFile->path()),
                 '',
-                DBDatetime::create()->setValue($importFile['timestamp'])->Format(DBDatetime::ISO_DATETIME),
-                $this->getAssetsDir() . '/' . $importFile['path']
+                DBDatetime::create()->setValue($importFile->lastModified())->Format(DBDatetime::ISO_DATETIME),
+                $this->getAssetsDir() . '/' . $importFile->path()
             ));
         }
 
