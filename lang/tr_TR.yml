@@ -1,0 +1,12 @@
+tr_TR:
+  SilverStripe\Registry\RegistryAdmin:
+    MENUTITLE: Kayıt
+  SilverStripe\Registry\RegistryPage:
+    NoResults: 'Sonuç yok'
+    ResultsFor: 'Arama sonuçları'
+    SINGULARNAME: 'Kayıt Sayfası'
+    SelectDropdownDefault: 'Birini seç'
+    ViewHistory: 'İçe aktarılan veri geçmişini görüntüle'
+    ViewNext: 'Sonraki sayfayı görüntüle'
+    ViewPageNum: 'Sayfa numarasını görüntüle'
+    ViewPrev: 'Önceki sayfayı görüntüle'
