@@ -1,0 +1,4 @@
+nb:
+  SilverStripe\Registry\RegistryPage:
+    ViewNext: 'Vis neste side'
+    ViewPrev: 'Vis forrige side'

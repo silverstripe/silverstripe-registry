@@ -11,6 +11,7 @@ it:
     PLURALS:
       one: 'Una Pagina Registro'
       other: '{count} Pagine Registro'
+      many: '{count} Pagine Registro'
     PageLengthFieldLabel: 'Lunghezza pagina risultati'
     ResultsFor: 'Ricerca risultati per'
     SINGULARNAME: 'Pagina Registro'
@@ -19,3 +20,5 @@ it:
     ViewNext: 'Vedere pagina successiva'
     ViewPageNum: 'Vedere numero pagina'
     ViewPrev: 'Vedere pagina precedente'
+  SilverStripe\Registry\RegistryPageController:
+    UNWANTEDCOLUMNPARAMETERS: 'Le colonne non accettano parametri'

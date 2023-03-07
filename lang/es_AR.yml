@@ -1,0 +1,4 @@
+es_AR:
+  SilverStripe\Registry\RegistryPage:
+    ViewNext: 'Ver la página siguiente'
+    ViewPrev: 'Ver la página previa'
