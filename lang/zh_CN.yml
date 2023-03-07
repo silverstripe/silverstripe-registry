@@ -1,0 +1,4 @@
+zh_CN:
+  SilverStripe\Registry\RegistryPage:
+    ViewNext: 浏览下一页
+    ViewPrev: 浏览上一页

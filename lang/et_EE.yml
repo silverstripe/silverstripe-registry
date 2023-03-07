@@ -1,0 +1,4 @@
+et_EE:
+  SilverStripe\Registry\RegistryPage:
+    ViewNext: 'Vaata järgmist lehte'
+    ViewPrev: 'Vaata eelmist lehte'
