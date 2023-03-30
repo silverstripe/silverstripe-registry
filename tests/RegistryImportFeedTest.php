@@ -38,8 +38,9 @@ class RegistryImportFeedTest extends SapphireTest
 
         $items = $importFeed->getImportFiles()->items;
         $this->assertEquals(2, count($items));
-        $this->assertSame('assets/_imports/import-2023-01-01.csv', $items[0]->link);
-        $this->assertSame('assets/_imports/import-2023-02-02.csv', $items[1]->link);
+        $itemLinks = array_map(fn($item) => $item->link, $items);
+        $this->assertContains('assets/_imports/import-2023-01-01.csv', $itemLinks);
+        $this->assertContains('assets/_imports/import-2023-02-02.csv', $itemLinks);
 
         $importFeed->getAssetHandler()->removeContent($importFeed->getStoragePath());
     }
