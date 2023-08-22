@@ -9,9 +9,9 @@ it:
     NoResults: 'Non ci sono risultati da mostrare'
     PLURALNAME: 'Pagine Registro'
     PLURALS:
+      many: '{count} Pagine Registro'
       one: 'Una Pagina Registro'
       other: '{count} Pagine Registro'
-      many: '{count} Pagine Registro'
     PageLengthFieldLabel: 'Lunghezza pagina risultati'
     ResultsFor: 'Ricerca risultati per'
     SINGULARNAME: 'Pagina Registro'
