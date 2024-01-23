@@ -108,7 +108,7 @@ class RegistryImportFeed
     /**
      * Loop import files in the storage path and push them into an {@link ArrayList}
      *
-     * @return ArrayList
+     * @return ArrayList<RegistryImportFeedEntry>
      */
     public function getImportFiles()
     {

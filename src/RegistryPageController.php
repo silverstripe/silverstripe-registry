@@ -18,6 +18,9 @@ use SilverStripe\Registry\Exception\RegistryException;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
 
+/**
+ * @extends PageController<RegistryPage>
+ */
 class RegistryPageController extends PageController
 {
     private static $allowed_actions = [
@@ -203,7 +206,7 @@ class RegistryPageController extends PageController
      * Format a set of columns, used for headings and row data
      *
      * @param  int $id The result ID to reference
-     * @return ArrayList
+     * @return ArrayList<ArrayData>
      * @throws RegistryException If parameters are used in column names
      */
     public function Columns($id = null)
