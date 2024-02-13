@@ -1,3 +1,27 @@
 sk:
+  SilverStripe\Registry\RegistryAdmin:
+    MENUTITLE: Register
   SilverStripe\Registry\RegistryPage:
-    PLURALNAME: 'Základné stránky'
+    DESCRIPTION: 'Zobrazuje veľké série údajov vo filtrovateľnom, prehľadávateľnom a stránkovanom zozname'
+    DataClassFieldLabel: 'Dátová trieda'
+    ExportAll: 'Export výsledkov do CSV'
+    ExportAllTitle: 'Export všetkých výsledkov do súboru CSV'
+    NoResults: 'Žiadne výsledky na zobrazenie'
+    PLURALNAME: 'Stránky registra'
+    PLURALS:
+      few: '{count} stránky registra'
+      many: '{count} stránok registra'
+      one: 'Stránka registra'
+      other: '{count} stránok registra'
+    PageLengthFieldLabel: 'Dĺžka stránky s výsledkami'
+    ResultsFor: 'Výsledky vyhľadávania pre'
+    SINGULARNAME: 'Stránka registra'
+    SelectDropdownDefault: 'Vyberte jeden'
+    ViewHistory: 'Zobraziť históriu importovaných údajov'
+    ViewNext: 'Zobraziť ďalšiu stránku'
+    ViewPageNum: 'Zobraziť číslo stránky'
+    ViewPrev: 'Zobraziť predchádzajúcu stránku'
+    db_DataClass: 'Dátová trieda'
+    db_PageLength: 'Dĺžka stránky'
+  SilverStripe\Registry\RegistryPageController:
+    UNWANTEDCOLUMNPARAMETERS: 'Stĺpce neakceptujú parametre'
