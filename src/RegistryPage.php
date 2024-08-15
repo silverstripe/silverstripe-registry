@@ -6,6 +6,7 @@ use Page;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
@@ -75,16 +76,16 @@ class RegistryPage extends Page
 
     public function getCMSFields()
     {
-        $fields = parent::getCMSFields();
-        $classDropdown = DropdownField::create('DataClass', $this->fieldLabel('DataClass'), $this->getDataClasses());
-        $classDropdown->setEmptyString(_t(__CLASS__ . '.SelectDropdownDefault', 'Select one'));
-        $fields->addFieldToTab('Root.Main', $classDropdown, 'Content');
-        $fields->addFieldToTab(
-            'Root.Main',
-            NumericField::create('PageLength', $this->fieldLabel('PageLength')),
-            'Content'
-        );
-        return $fields;
+        $this->beforeUpdateCMSFields(function (FieldList $fields) {
+            $classDropdown = DropdownField::create(
+                'DataClass',
+                $this->fieldLabel('DataClass'),
+                $this->getDataClasses()
+            );
+            $classDropdown->setEmptyString(_t(__CLASS__ . '.SelectDropdownDefault', 'Select one'));
+            $fields->replaceField('DataClass', $classDropdown);
+        });
+        return parent::getCMSFields();
     }
 
     public function LastUpdated()
