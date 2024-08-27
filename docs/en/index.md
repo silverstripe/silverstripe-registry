@@ -205,7 +205,7 @@ $Entry
 
 StaffMember.php
 ```php
-public function forTemplate()
+public function forTemplate(): string
 {
     return $this->renderWith(static::class);
 }
