@@ -2,9 +2,9 @@
 
 namespace SilverStripe\Registry;
 
-use SilverStripe\View\ViewableData;
+use SilverStripe\Model\ModelData;
 
-class RegistryImportFeedEntry extends ViewableData
+class RegistryImportFeedEntry extends ModelData
 {
     protected $title;
     protected $description;

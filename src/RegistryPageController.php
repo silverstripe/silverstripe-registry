@@ -10,13 +10,13 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\PaginatedList;
-use SilverStripe\ORM\SS_List;
+use SilverStripe\Model\List\PaginatedList;
+use SilverStripe\Model\List\SS_List;
 use SilverStripe\Registry\Exception\RegistryException;
-use SilverStripe\View\ArrayData;
-use SilverStripe\View\ViewableData;
+use SilverStripe\Model\ArrayData;
+use SilverStripe\Model\ModelData;
 
 /**
  * @extends PageController<RegistryPage>
@@ -235,7 +235,7 @@ class RegistryPageController extends PageController
             // Increment properties for value
             $context = $result;
             foreach ($properties as $property) {
-                if ($context instanceof ViewableData) {
+                if ($context instanceof ModelData) {
                     $context = $context->obj($property);
                 }
             }
