@@ -6,7 +6,7 @@ use SilverStripe\Assets\Storage\GeneratedAssetHandler;
 use SilverStripe\Control\RSS\RSSFeed;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\FieldType\DBDatetime;
 
 class RegistryImportFeed
