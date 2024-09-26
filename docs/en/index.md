@@ -57,7 +57,7 @@ class StaffMember extends DataObject implements RegistryDataInterface
 
 **NOTE Nested fields cannot be used in `$searchable_fields` ([see display results with nested values](#display-results-with-nested-values))**
 
-Once that's defined, we run `dev/build` to build the database with the new class.
+Once that's defined, we run `sake db:build --flush` to build the database with the new class.
 
 ### Managing the data
 
