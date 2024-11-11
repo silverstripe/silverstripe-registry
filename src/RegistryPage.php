@@ -16,7 +16,12 @@ use SilverStripe\View\ArrayData;
 
 class RegistryPage extends Page
 {
+    /**
+     * @deprecated 5.4.0 use class_description instead.
+     */
     private static $description = 'Shows large series of data in a filterable, searchable, and paginated list';
+
+    private static $class_description = 'Shows large series of data in a filterable, searchable, and paginated list';
 
     private static $table_name = 'RegistryPage';
 
