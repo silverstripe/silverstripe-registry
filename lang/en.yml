@@ -2,6 +2,7 @@ en:
   SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Registry
   SilverStripe\Registry\RegistryPage:
+    CLASS_DESCRIPTION: 'Shows large series of data in a filterable, searchable, and paginated list'
     DESCRIPTION: 'Shows large series of data in a filterable, searchable, and paginated list'
     DataClassFieldLabel: 'Data Class'
     ExportAll: 'Export results to CSV'
