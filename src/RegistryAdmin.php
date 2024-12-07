@@ -123,6 +123,6 @@ class RegistryAdmin extends ModelAdmin
         }
 
         $form->sessionMessage($message, 'good');
-        $this->redirectBack();
+        return $this->redirectBack();
     }
 }
