@@ -25,6 +25,9 @@ class RegistryPage extends Page
 
     private static $table_name = 'RegistryPage';
 
+    /**
+     * @deprecated 5.4.0 Will be renamed to cms_icon_class
+     */
     private static $icon_class = 'font-icon-p-data';
 
     private static $db = [
