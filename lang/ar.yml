@@ -2,6 +2,7 @@ ar:
   SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: التسجيل
   SilverStripe\Registry\RegistryPage:
+    CLASS_DESCRIPTION: 'يقوم بعرض سلسلة كبيرة من البيانات فى قائمة قائمة قابلة للتصنيف, البحث و ترقيم الصفحات'
     DESCRIPTION: 'يقوم بعرض سلسلة كبيرة من البيانات فى قائمة قائمة قابلة للتصنيف, البحث و ترقيم الصفحات'
     DataClassFieldLabel: 'تصنيف البيانات'
     ExportAll: 'تصدير النتائج لملف إس سى فى'

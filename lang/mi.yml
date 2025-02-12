@@ -2,6 +2,7 @@ mi:
   SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Rēhita
   SilverStripe\Registry\RegistryPage:
+    CLASS_DESCRIPTION: 'Ka whakaatu i te rārangi rahi o ngā raraunga mā te rārangi ka taea te tātari, te rapu, kua whakawhārangitia hoki'
     DESCRIPTION: 'Ka whakaatu i te rārangi rahi o ngā raraunga mā te rārangi ka taea te tātari, te rapu, kua whakawhārangitia hoki'
     DataClassFieldLabel: 'Tauaha Raraunga'
     ExportAll: 'Kawea ake ngā hua ki CSV'

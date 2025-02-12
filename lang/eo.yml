@@ -2,6 +2,7 @@ eo:
   SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Registrejo
   SilverStripe\Registry\RegistryPage:
+    CLASS_DESCRIPTION: 'Vidigas grandan serion de datumoj en filtrebla, serĉebla, kaj enpaĝigita listo.'
     DESCRIPTION: 'Vidigas grandan serion de datumoj en filtrebla, serĉebla, kaj enpaĝigita listo.'
     DataClassFieldLabel: 'Klaso de datumoj'
     ExportAll: 'Eksporti rezultojn al CSV'
