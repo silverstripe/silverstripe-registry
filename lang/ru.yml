@@ -2,6 +2,7 @@ ru:
   SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Регистр
   SilverStripe\Registry\RegistryPage:
+    CLASS_DESCRIPTION: 'Показывает большие списки данных в фильтрованных, постраничных списках с возможностью поиска.'
     DESCRIPTION: 'Показывает большие списки данных в фильтрованных, постраничных списках с возможностью поиска.'
     DataClassFieldLabel: 'Тип Данных'
     ExportAll: 'Экспорт в CSV'

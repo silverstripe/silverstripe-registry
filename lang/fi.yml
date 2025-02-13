@@ -2,6 +2,7 @@ fi:
   SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Rekisteri
   SilverStripe\Registry\RegistryPage:
+    CLASS_DESCRIPTION: 'Näytä laajat data-sarjat suodatettavana, haettavana ja sivutettuna listana'
     DESCRIPTION: 'Näytä laajat data-sarjat suodatettavana, haettavana ja sivutettuna listana'
     DataClassFieldLabel: Dataluokka
     ExportAll: 'Vie tulokset CSV-tiedostoksi'

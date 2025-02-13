@@ -2,6 +2,7 @@ it:
   SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Registro
   SilverStripe\Registry\RegistryPage:
+    CLASS_DESCRIPTION: 'Mostra grandi serie di dati in una lista filtrabile, ricercabile e paginata'
     DESCRIPTION: 'Mostra grandi serie di dati in una lista filtrabile, ricercabile e paginata'
     DataClassFieldLabel: 'Classe Dati'
     ExportAll: 'Esportare risultati in CSV'
@@ -20,5 +21,7 @@ it:
     ViewNext: 'Vedere pagina successiva'
     ViewPageNum: 'Vedere numero pagina'
     ViewPrev: 'Vedere pagina precedente'
+    db_DataClass: 'Classe dati'
+    db_PageLength: 'Lunghezza pagina'
   SilverStripe\Registry\RegistryPageController:
     UNWANTEDCOLUMNPARAMETERS: 'Le colonne non accettano parametri'
