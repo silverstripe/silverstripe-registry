@@ -2,6 +2,7 @@ fa_IR:
   SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: رجیستری
   SilverStripe\Registry\RegistryPage:
+    CLASS_DESCRIPTION: 'سری بلندی از داده‌ها را در یک لیست قابل پالایش، قابل جستجو و براساس شماره صفحه نمایش می‌دهد'
     DESCRIPTION: 'سری بلندی از داده‌ها را در یک لیست قابل پالایش، قابل جستجو و براساس شماره صفحه نمایش می‌دهد'
     DataClassFieldLabel: 'کلاس داده'
     ExportAll: 'فرستادن نتایج به CSV'

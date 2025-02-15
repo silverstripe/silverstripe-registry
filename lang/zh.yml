@@ -2,6 +2,7 @@ zh:
   SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: 注册
   SilverStripe\Registry\RegistryPage:
+    CLASS_DESCRIPTION: 通过可筛选，可搜索，可分页的列表显示大量数据
     DESCRIPTION: 通过可筛选，可搜索，可分页的列表显示大量数据
     DataClassFieldLabel: 数据类
     ExportAll: '导出结果至 CSV'

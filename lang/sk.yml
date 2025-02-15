@@ -2,6 +2,7 @@ sk:
   SilverStripe\Registry\RegistryAdmin:
     MENUTITLE: Register
   SilverStripe\Registry\RegistryPage:
+    CLASS_DESCRIPTION: 'Zobrazuje veľké série údajov vo filtrovateľnom, prehľadávateľnom a stránkovanom zozname'
     DESCRIPTION: 'Zobrazuje veľké série údajov vo filtrovateľnom, prehľadávateľnom a stránkovanom zozname'
     DataClassFieldLabel: 'Dátová trieda'
     ExportAll: 'Export výsledkov do CSV'
